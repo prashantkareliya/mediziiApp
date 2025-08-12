@@ -1,14 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:medizii/components/context_extension.dart';
+import 'package:medizii/components/custom_button.dart';
+import 'package:medizii/components/cutom_textfield.dart';
 import 'package:medizii/constants/app_colours/app_colors.dart';
 import 'package:medizii/constants/fonts/font_weight.dart';
 import 'package:medizii/constants/strings.dart';
+import 'package:medizii/gen/assets.gen.dart';
 import 'package:medizii/main.dart';
+import 'package:medizii/module/authentication/otp_verification_screen.dart';
+import 'package:medizii/module/dashboards/patient/patient_dashboard_setup.dart';
+
+import 'forgot_password_screeen.dart';
 
 
 class AuthScreen extends StatefulWidget {
-  const AuthScreen({super.key});
+  bool check = true;
+
+  AuthScreen(this.check, {super.key});
 
   @override
   State<AuthScreen> createState() => _AuthScreenState();
@@ -34,9 +44,15 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
 
   double getContainerHeight(BuildContext context) {
     if (_tabController.index == 0) {
-      return MediaQuery.of(context).size.height * 0.3;
+      return MediaQuery
+          .of(context)
+          .size
+          .height * 0.32;
     } else {
-      return MediaQuery.of(context).size.height * 0.5;
+      return MediaQuery
+          .of(context)
+          .size
+          .height * 0.58;
     }
   }
 
@@ -45,78 +61,85 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: AppColors.white,
-        body: Column(
+        backgroundColor: AppColors.whiteColor,
+        body: Stack(
+          fit: StackFit.expand,
           children: [
-            30.verticalSpace,
-            Align(
-              alignment: Alignment.centerLeft,
-              child: IconButton(
-                icon: Icon(Icons.arrow_back_ios),
-                onPressed: () {
-                  navigationService.pop();
-                },
-              ),
-            ),
-            50.verticalSpace,
-            Text(
-              LabelString.labelWelcomeTo,
-              style: GoogleFonts.dmSans(color: AppColors.redColor, fontSize: 22.sp, fontWeight: GoogleFontWeight.semiBold),
-            ),
-            20.verticalSpace,
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 18.sp),
-              padding: EdgeInsets.zero,
-              decoration: BoxDecoration(
-                color: AppColors.grey.shade100,
-                borderRadius: BorderRadius.circular(14.r),
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    height: 65.sp,
-                    margin: EdgeInsets.symmetric(horizontal: 18.sp, vertical: 10.sp),
-                    padding: EdgeInsets.zero,
-                    decoration: BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.circular(30.r),
+            Assets.images.bg.image(fit: BoxFit.fill),
+            Column(
+              children: [
+                30.verticalSpace,
+                if(widget.check)
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: IconButton(
+                      icon: Icon(Icons.arrow_back_ios),
+                      onPressed: () {
+                        navigationService.pop();
+                      },
                     ),
-                    child: TabBar(
-                      controller: _tabController,
-                      dividerColor:AppColors.transparent,
-                      labelStyle: GoogleFonts.dmSans(fontSize: 14.sp, fontWeight: GoogleFontWeight.semiBold),
-                      labelColor: AppColors.redColor,
-                      unselectedLabelColor: Colors.black,
-                      indicator: BoxDecoration(
-                        color: AppColors.redColor.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(30.r),
+                  ),
+                50.verticalSpace,
+                Text(
+                  LabelString.labelWelcomeTo,
+                  style: GoogleFonts.dmSans(color: AppColors.redColor, fontSize: 22.sp, fontWeight: GoogleFontWeight.semiBold),
+                ),
+                20.verticalSpace,
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 18.sp),
+                  padding: EdgeInsets.zero,
+                  decoration: BoxDecoration(
+                    color: AppColors.grey.shade100,
+                    borderRadius: BorderRadius.circular(14.r),
+                  ),
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 65.sp,
+                        margin: EdgeInsets.symmetric(horizontal: 18.sp, vertical: 10.sp),
+                        padding: EdgeInsets.zero,
+                        decoration: BoxDecoration(
+                          color: AppColors.whiteColor,
+                          borderRadius: BorderRadius.circular(30.r),
+                        ),
+                        child: TabBar(
+                          controller: _tabController,
+                          dividerColor: AppColors.transparent,
+                          labelStyle: GoogleFonts.dmSans(fontSize: 14.sp, fontWeight: GoogleFontWeight.semiBold),
+                          labelColor: AppColors.redColor,
+                          unselectedLabelColor: Colors.black,
+                          indicator: BoxDecoration(
+                            color: AppColors.redColor.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(30.r),
+                          ),
+                          indicatorSize: TabBarIndicatorSize.tab,
+                          indicatorPadding: EdgeInsets.all(6.sp),
+                          tabs: [
+                            Tab(text: LabelString.labelLogin),
+                            Tab(text: LabelString.labelRegister),
+                          ],
+                        ),
                       ),
-                      indicatorSize: TabBarIndicatorSize.tab,
-                      indicatorPadding: EdgeInsets.all(6.sp),
-                      tabs: [
-                        Tab(text: LabelString.labelLogin),
-                        Tab(text: LabelString.labelRegister),
-                      ],
-                    ),
-                  ),
-                  AnimatedContainer(
-                    duration: Duration(milliseconds: 300),
-                    height: getContainerHeight(context),
-                    margin: EdgeInsets.symmetric(horizontal: 0.sp, vertical: 10),
+                      AnimatedContainer(
+                        duration: Duration(milliseconds: 300),
+                        height: getContainerHeight(context),
+                        margin: EdgeInsets.symmetric(horizontal: 0.sp, vertical: 10),
 
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: [
-                        LoginTab(),
-                        RegisterTab(),
-                      ],
-                    ),
+                        child: TabBarView(
+                          controller: _tabController,
+                          children: [
+                            LoginTab(),
+                            RegisterTab(),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+
+
+              ],
             ),
-
-
           ],
         ),
       ),
@@ -126,57 +149,103 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
 
 // ----------------- Login Tab ----------------- //
 
-class LoginTab extends StatelessWidget {
-  final TextEditingController emailCtrl = TextEditingController();
-  final TextEditingController passCtrl = TextEditingController();
-
+class LoginTab extends StatefulWidget {
   LoginTab({super.key});
+
+  @override
+  State<LoginTab> createState() => _LoginTabState();
+}
+
+class _LoginTabState extends State<LoginTab> {
+  TextEditingController emailCtrl = TextEditingController();
+  TextEditingController passCtrl = TextEditingController();
+  final ValueNotifier<bool> _obscureTextNotifier = ValueNotifier<bool>(true);
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    super.dispose();
+    emailCtrl.dispose();
+    passCtrl.dispose();
+    _obscureTextNotifier.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: emailCtrl,
-            decoration: InputDecoration(
-              labelText: 'Email Address',
-              hintText: 'Enter Email Address',
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-            ),
+      child: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CustomTextField(
+                label: LabelString.labelEmailAddress,
+                hintText: LabelString.labelEnterEmailAddress,
+                controller: emailCtrl,
+                textInputType: TextInputType.emailAddress,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return ErrorString.emailAddressErr;
+                  } else if (!emailCtrl.text.isValidEmail) {
+                    return ErrorString.emailAddressValidErr;
+                  }
+                  return null;
+                },
+              ),
+              ValueListenableBuilder<bool>(
+                  valueListenable: _obscureTextNotifier,
+                  builder: (BuildContext context, bool isObscured, Widget? child) {
+                    return CustomTextField(
+                      label: LabelString.labelPassword,
+                      controller: passCtrl,
+                      hintText: LabelString.labelEnterPassword,
+                      textInputType: TextInputType.name,
+                      obscureText: isObscured,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return ErrorString.passwordErr;
+                        }
+                        return null;
+                      },
+                      suffixIcon: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        child: GestureDetector(
+                            onTap: () {
+                              _obscureTextNotifier.value = !isObscured;
+                            },
+                            child: Icon(Icons.remove_red_eye_rounded, color: isObscured ? Color(0xFFBABBBE) : AppColors.primaryColor)
+                        ),
+                      ),
+                    );
+                  }
+              ),
+
+              Align(
+                alignment: Alignment.centerRight,
+                child: GestureDetector(
+                  onTap: () {
+                    navigationService.push(ForgotPassword());
+                  },
+                  child: Text(LabelString.labelForgotPassword,
+                      style: GoogleFonts.dmSans(
+                          textStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 12.sp, color: AppColors.textSecondary))
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              CustomButton(
+                onPressed: () {
+                 /* if (_formKey.currentState!.validate()) {
+
+                  }*/
+                  navigationService.push(PatientDashboard());
+                }, text: LabelString.labelLogin,
+              )
+            ],
           ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: passCtrl,
-            obscureText: true,
-            decoration: InputDecoration(
-              labelText: 'Password',
-              hintText: 'Enter Password',
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-              suffixIcon: Icon(Icons.visibility_off),
-            ),
-          ),
-          const SizedBox(height: 10),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              "Forgot Password?",
-              style: TextStyle(color: Colors.grey),
-            ),
-          ),
-          const SizedBox(height: 24),
-          ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
-              shape: StadiumBorder(),
-              minimumSize: Size(double.infinity, 50),
-            ),
-            child: Text("Login"),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -184,14 +253,34 @@ class LoginTab extends StatelessWidget {
 
 // ----------------- Register Tab ----------------- //
 
-class RegisterTab extends StatelessWidget {
+class RegisterTab extends StatefulWidget {
+
+  RegisterTab({super.key});
+
+  @override
+  State<RegisterTab> createState() => _RegisterTabState();
+}
+
+class _RegisterTabState extends State<RegisterTab> {
   final List<String> roles = ['Doctor', 'Patient', 'Technician'];
+
   final TextEditingController nameCtrl = TextEditingController();
   final TextEditingController emailCtrl = TextEditingController();
   final TextEditingController phoneCtrl = TextEditingController();
   final TextEditingController passCtrl = TextEditingController();
+  final ValueNotifier<bool> _obscureTextNotifier = ValueNotifier<bool>(true);
 
-  RegisterTab({super.key});
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    super.dispose();
+    nameCtrl.dispose();
+    emailCtrl.dispose();
+    phoneCtrl.dispose();
+    passCtrl.dispose();
+    _obscureTextNotifier.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -221,52 +310,75 @@ class RegisterTab extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 16),
-              TextField(
+              CustomTextField(
+                label: LabelString.labelFullName,
+                hintText: LabelString.labelEnterName,
                 controller: nameCtrl,
-                decoration: InputDecoration(
-                  labelText: 'Full Name',
-                  hintText: 'Enter Name',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                ),
+                textInputType: TextInputType.name,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return ErrorString.emailAddressErr;
+                  }
+                  return null;
+                },
               ),
-              const SizedBox(height: 16),
-              TextField(
+              CustomTextField(
+                label: LabelString.labelEmailAddress,
+                hintText: LabelString.labelEnterEmailAddress,
                 controller: emailCtrl,
-                decoration: InputDecoration(
-                  labelText: 'Email Address',
-                  hintText: 'Enter Email Address',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                ),
+                textInputType: TextInputType.emailAddress,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return ErrorString.emailAddressErr;
+                  } else if (!emailCtrl.text.isValidEmail) {
+                    return ErrorString.emailAddressValidErr;
+                  }
+                  return null;
+                },
               ),
-              const SizedBox(height: 16),
-              TextField(
+              CustomTextField(
+                label: LabelString.labelPhoneNumber,
+                hintText: LabelString.labelEnterPhoneNumber,
                 controller: phoneCtrl,
-                decoration: InputDecoration(
-                  labelText: 'Phone Number',
-                  hintText: 'Enter Phone Number',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                ),
+                textInputType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return ErrorString.emailAddressErr;
+                  }
+                  return null;
+                },
               ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: passCtrl,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  hintText: 'Enter Password',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                  suffixIcon: Icon(Icons.visibility_off),
-                ),
+              ValueListenableBuilder<bool>(
+                  valueListenable: _obscureTextNotifier,
+                  builder: (BuildContext context, bool isObscured, Widget? child) {
+                    return CustomTextField(
+                      label: LabelString.labelPassword,
+                      controller: passCtrl,
+                      hintText: LabelString.labelEnterPassword,
+                      textInputType: TextInputType.name,
+                      obscureText: isObscured,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return ErrorString.passwordErr;
+                        }
+                        return null;
+                      },
+                      suffixIcon: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        child: GestureDetector(
+                            onTap: () {
+                              _obscureTextNotifier.value = !isObscured;
+                            },
+                            child: Icon(Icons.remove_red_eye_rounded, color: isObscured ? Color(0xFFBABBBE) : AppColors.primaryColor)
+                        ),
+                      ),
+                    );
+                  }
               ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  shape: StadiumBorder(),
-                  minimumSize: Size(double.infinity, 50),
-                ),
-                child: Text("Register Now"),
+              CustomButton(
+                onPressed: () {
+                  navigationService.push(OtpVerification());
+                }, text: "${LabelString.labelRegister} Now",
               ),
               const SizedBox(height: 20),
             ],

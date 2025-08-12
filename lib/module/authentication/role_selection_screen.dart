@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:medizii/components/context_extension.dart';
+import 'package:medizii/components/custom_button.dart';
 import 'package:medizii/constants/app_colours/app_colors.dart';
 import 'package:medizii/constants/fonts/font_weight.dart';
 import 'package:medizii/constants/strings.dart';
@@ -48,6 +50,15 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
               children: roles.map((role) => Padding(padding: EdgeInsets.symmetric(vertical: 6.sp), child: _buildRoleOption(role))).toList(),
             ),
           ),
+          20.verticalSpace,
+          CustomButton(
+            width: context.width() * 0.8,
+            height: 45.h,
+            text: LabelString.labelContinue,
+            onPressed: () {
+              navigationService.push(AuthScreen(true));
+            },
+          )
         ],
       ),
     );
@@ -90,6 +101,5 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
     setState(() {
       _selectedRole = value!;
     });
-    navigationService.push(AuthScreen());
   }
 }

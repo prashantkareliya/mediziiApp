@@ -9,7 +9,122 @@
 // ignore_for_file: type=lint
 // ignore_for_file: deprecated_member_use,directives_ordering,implicit_dynamic_list_literal,unnecessary_import
 
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart' as _svg;
+import 'package:vector_graphics/vector_graphics.dart' as _vg;
+
+class $AssetsIcIconsGen {
+  const $AssetsIcIconsGen();
+
+  /// File path: assets/ic_icons/Amulance.svg
+  SvgGenImage get amulance => const SvgGenImage('assets/ic_icons/Amulance.svg');
+
+  /// File path: assets/ic_icons/Call-Doc.svg
+  SvgGenImage get callDoc => const SvgGenImage('assets/ic_icons/Call-Doc.svg');
+
+  /// File path: assets/ic_icons/Call.svg
+  SvgGenImage get call => const SvgGenImage('assets/ic_icons/Call.svg');
+
+  /// File path: assets/ic_icons/Chat.svg
+  SvgGenImage get chat => const SvgGenImage('assets/ic_icons/Chat.svg');
+
+  /// File path: assets/ic_icons/Delete.svg
+  SvgGenImage get delete => const SvgGenImage('assets/ic_icons/Delete.svg');
+
+  /// File path: assets/ic_icons/Exit.svg
+  SvgGenImage get exit => const SvgGenImage('assets/ic_icons/Exit.svg');
+
+  /// File path: assets/ic_icons/Eye.svg
+  SvgGenImage get eye => const SvgGenImage('assets/ic_icons/Eye.svg');
+
+  /// File path: assets/ic_icons/Filter.svg
+  SvgGenImage get filter => const SvgGenImage('assets/ic_icons/Filter.svg');
+
+  /// File path: assets/ic_icons/Group.svg
+  SvgGenImage get group => const SvgGenImage('assets/ic_icons/Group.svg');
+
+  /// File path: assets/ic_icons/Home.svg
+  SvgGenImage get home => const SvgGenImage('assets/ic_icons/Home.svg');
+
+  /// File path: assets/ic_icons/Image.svg
+  SvgGenImage get image => const SvgGenImage('assets/ic_icons/Image.svg');
+
+  /// File path: assets/ic_icons/Location-1.svg
+  SvgGenImage get location1 =>
+      const SvgGenImage('assets/ic_icons/Location-1.svg');
+
+  /// File path: assets/ic_icons/Location.svg
+  SvgGenImage get location => const SvgGenImage('assets/ic_icons/Location.svg');
+
+  /// File path: assets/ic_icons/Notification.svg
+  SvgGenImage get notification =>
+      const SvgGenImage('assets/ic_icons/Notification.svg');
+
+  /// File path: assets/ic_icons/PDF.svg
+  SvgGenImage get pdf => const SvgGenImage('assets/ic_icons/PDF.svg');
+
+  /// File path: assets/ic_icons/Patient.svg
+  SvgGenImage get patient => const SvgGenImage('assets/ic_icons/Patient.svg');
+
+  /// File path: assets/ic_icons/Search.svg
+  SvgGenImage get search => const SvgGenImage('assets/ic_icons/Search.svg');
+
+  /// File path: assets/ic_icons/Setting.svg
+  SvgGenImage get setting => const SvgGenImage('assets/ic_icons/Setting.svg');
+
+  /// File path: assets/ic_icons/Single.svg
+  SvgGenImage get single => const SvgGenImage('assets/ic_icons/Single.svg');
+
+  /// File path: assets/ic_icons/Time.svg
+  SvgGenImage get time => const SvgGenImage('assets/ic_icons/Time.svg');
+
+  /// File path: assets/ic_icons/Upload.svg
+  SvgGenImage get upload => const SvgGenImage('assets/ic_icons/Upload.svg');
+
+  /// File path: assets/ic_icons/Video.svg
+  SvgGenImage get video => const SvgGenImage('assets/ic_icons/Video.svg');
+
+  /// File path: assets/ic_icons/close.svg
+  SvgGenImage get close => const SvgGenImage('assets/ic_icons/close.svg');
+
+  /// File path: assets/ic_icons/ic_placeholder.svg
+  SvgGenImage get icPlaceholder =>
+      const SvgGenImage('assets/ic_icons/ic_placeholder.svg');
+
+  /// File path: assets/ic_icons/upload_file.svg
+  SvgGenImage get uploadFile =>
+      const SvgGenImage('assets/ic_icons/upload_file.svg');
+
+  /// List of all assets
+  List<SvgGenImage> get values => [
+    amulance,
+    callDoc,
+    call,
+    chat,
+    delete,
+    exit,
+    eye,
+    filter,
+    group,
+    home,
+    image,
+    location1,
+    location,
+    notification,
+    pdf,
+    patient,
+    search,
+    setting,
+    single,
+    time,
+    upload,
+    video,
+    close,
+    icPlaceholder,
+    uploadFile,
+  ];
+}
 
 class $AssetsImagesGen {
   const $AssetsImagesGen();
@@ -17,13 +132,17 @@ class $AssetsImagesGen {
   /// File path: assets/images/bg.png
   AssetGenImage get bg => const AssetGenImage('assets/images/bg.png');
 
+  /// File path: assets/images/home_bg.png
+  AssetGenImage get homeBg => const AssetGenImage('assets/images/home_bg.png');
+
   /// List of all assets
-  List<AssetGenImage> get values => [bg];
+  List<AssetGenImage> get values => [bg, homeBg];
 }
 
 class Assets {
   const Assets._();
 
+  static const $AssetsIcIconsGen icIcons = $AssetsIcIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
 }
 
@@ -113,4 +232,78 @@ class AssetGenImageAnimation {
   final bool isAnimation;
   final Duration duration;
   final int frames;
+}
+
+class SvgGenImage {
+  const SvgGenImage(this._assetName, {this.size, this.flavors = const {}})
+    : _isVecFormat = false;
+
+  const SvgGenImage.vec(this._assetName, {this.size, this.flavors = const {}})
+    : _isVecFormat = true;
+
+  final String _assetName;
+  final Size? size;
+  final Set<String> flavors;
+  final bool _isVecFormat;
+
+  _svg.SvgPicture svg({
+    Key? key,
+    bool matchTextDirection = false,
+    AssetBundle? bundle,
+    String? package,
+    double? width,
+    double? height,
+    BoxFit fit = BoxFit.contain,
+    AlignmentGeometry alignment = Alignment.center,
+    bool allowDrawingOutsideViewBox = false,
+    WidgetBuilder? placeholderBuilder,
+    String? semanticsLabel,
+    bool excludeFromSemantics = false,
+    _svg.SvgTheme? theme,
+    _svg.ColorMapper? colorMapper,
+    ColorFilter? colorFilter,
+    Clip clipBehavior = Clip.hardEdge,
+    @deprecated Color? color,
+    @deprecated BlendMode colorBlendMode = BlendMode.srcIn,
+    @deprecated bool cacheColorFilter = false,
+  }) {
+    final _svg.BytesLoader loader;
+    if (_isVecFormat) {
+      loader = _vg.AssetBytesLoader(
+        _assetName,
+        assetBundle: bundle,
+        packageName: package,
+      );
+    } else {
+      loader = _svg.SvgAssetLoader(
+        _assetName,
+        assetBundle: bundle,
+        packageName: package,
+        theme: theme,
+        colorMapper: colorMapper,
+      );
+    }
+    return _svg.SvgPicture(
+      loader,
+      key: key,
+      matchTextDirection: matchTextDirection,
+      width: width,
+      height: height,
+      fit: fit,
+      alignment: alignment,
+      allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
+      placeholderBuilder: placeholderBuilder,
+      semanticsLabel: semanticsLabel,
+      excludeFromSemantics: excludeFromSemantics,
+      colorFilter:
+          colorFilter ??
+          (color == null ? null : ColorFilter.mode(color, colorBlendMode)),
+      clipBehavior: clipBehavior,
+      cacheColorFilter: cacheColorFilter,
+    );
+  }
+
+  String get path => _assetName;
+
+  String get keyName => _assetName;
 }

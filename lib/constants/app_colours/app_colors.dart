@@ -7,14 +7,15 @@ class AppColors {
   static Color errorRed = const Color(0xFFFF0000);
   static Color redColor = const Color(0xFFFF3C45);
   static Color buttonBlueColor = const Color(0xFF0066E3);
+  static Color blueColor = const Color(0xFF0066E3);
   static Color gray = const Color(0xFF989898);
 
 
   static const Color transparent = Colors.transparent;
-  static const Color white = Colors.white;
+  static const Color iconBgColor = Color(0xFFF5F5F5);
 
   static const Color textPrimary = Color(0xFFFFFFFF);
-  static const Color textSecondary = Color(0xCC000000);
+  static const Color textSecondary = Color(0xFF1F2125);
   static const Color green = Color(0xFF059D14);
 
   static const red = Colors.red;
