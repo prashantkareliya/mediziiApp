@@ -56,7 +56,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
             height: 45.h,
             text: LabelString.labelContinue,
             onPressed: () {
-              navigationService.push(AuthScreen(true));
+              navigationService.push(AuthScreen(true, selectedRole: _selectedRole));
             },
           )
         ],

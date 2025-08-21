@@ -9,15 +9,20 @@ import 'package:medizii/gen/assets.gen.dart';
 
 import 'bloc_doctor_dash_setup/dr_navigation_bloc.dart';
 import 'bloc_doctor_dash_setup/dr_navigation_state.dart';
+import 'dr_home/dr_home_pg.dart';
+import 'dr_patient/dr_patient_pg.dart';
+import 'dr_setting/dr_setting_pg.dart';
+import 'dr_upload_reports/dr_search_patient_pg.dart';
+import 'dr_upload_reports/dr_upload_reports_pg.dart';
 
 class DoctorDashboard extends StatelessWidget {
   DoctorDashboard({super.key});
 
   final List<Widget> _screens = [
-    Container(color: Colors.red),
-    Container(color: Colors.yellow),
-    Container(color: Colors.greenAccent),
-    Container(color: Colors.blue),
+    DoctorHomePage(),
+    DoctorPatientPage(),
+    DoctorSearchPatientPage(),
+    DoctorSettingPage(),
   ];
 
   @override

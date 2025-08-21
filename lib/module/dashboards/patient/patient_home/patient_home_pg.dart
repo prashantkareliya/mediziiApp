@@ -6,6 +6,7 @@ import 'package:medizii/constants/strings.dart';
 import 'package:medizii/gen/assets.gen.dart';
 import 'package:medizii/main.dart';
 import 'package:medizii/module/dashboards/patient/patient_home/pt_reposts_upload_pg.dart';
+import 'package:medizii/notification.dart';
 
 class PatientHomePage extends StatelessWidget {
   const PatientHomePage({super.key});
@@ -42,13 +43,18 @@ class PatientHomePage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: AppColors.textSecondary.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(25),
+                    GestureDetector(
+                      onTap: () {
+                        navigationService.push(NotificationPage());
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: AppColors.textSecondary.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        child: Assets.icIcons.notification.svg(colorFilter: ColorFilter.mode(AppColors.whiteColor, BlendMode.srcIn)),
                       ),
-                      child: Assets.icIcons.notification.svg(colorFilter: ColorFilter.mode(AppColors.whiteColor, BlendMode.srcIn)),
                     ),
                   ],
                 ),

@@ -67,7 +67,18 @@ class LabelString {
   static const String labelEnterDropLocation = "Enter Drop Location";
   static const String labelNearbyHospital = "Nearby Hospital";
   static const String labelDeleteAccount = "Delete Account";
-
+  static const String labelPatientsSummary = "Patients Summary";
+  static const String labelViewAll = "View All";
+  static const String labelSearchPatient = "Search Patient";
+  static const String labelActiveRide = "Active Ride";
+  static const String labelDistance = "Distance";
+  static const String labelHistory = "History";
+  static const String labelNewRequest = "New Request";
+  static const String labelAccept = "Accept";
+  static const String labelReject = "Reject";
+  static const String labelProfile = "Profile";
+  static const String labelUpdate = "Update";
+  static const String labelNotification = "Notification";
 
 }
 

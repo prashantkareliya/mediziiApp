@@ -6,11 +6,9 @@ import 'package:medizii/components/custom_appbar.dart';
 import 'package:medizii/constants/app_colours/app_colors.dart';
 import 'package:medizii/constants/strings.dart';
 import 'package:medizii/gen/assets.gen.dart';
-import 'package:medizii/main.dart';
-import 'package:medizii/module/dashboards/patient/patient_setting/pt_profile_pg.dart';
 
-class PatientSettingPage extends StatelessWidget {
-  PatientSettingPage({super.key});
+class TechnicianSettingPage extends StatelessWidget {
+  TechnicianSettingPage({super.key});
 
   final List<String> options = [
     'Profile',
@@ -76,11 +74,7 @@ class SettingTile extends StatelessWidget {
         ),
         trailing: Icon(Icons.arrow_forward_ios, color: AppColors.redColor, size: 16.sp),
         onTap: () {
-          switch(title){
-            case 'Profile':
-              navigationService.push(PatientProfilePage());
-              break;
-          }
+          // Handle tap
         },
       ),
     );

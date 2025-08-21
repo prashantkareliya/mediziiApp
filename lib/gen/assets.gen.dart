@@ -132,11 +132,28 @@ class $AssetsImagesGen {
   /// File path: assets/images/bg.png
   AssetGenImage get bg => const AssetGenImage('assets/images/bg.png');
 
+  /// File path: assets/images/dr_home_bg.png
+  AssetGenImage get drHomeBg =>
+      const AssetGenImage('assets/images/dr_home_bg.png');
+
   /// File path: assets/images/home_bg.png
   AssetGenImage get homeBg => const AssetGenImage('assets/images/home_bg.png');
 
+  /// File path: assets/images/no_ride.png
+  AssetGenImage get noRide => const AssetGenImage('assets/images/no_ride.png');
+
+  /// File path: assets/images/technician_bg.png
+  AssetGenImage get technicianBg =>
+      const AssetGenImage('assets/images/technician_bg.png');
+
   /// List of all assets
-  List<AssetGenImage> get values => [bg, homeBg];
+  List<AssetGenImage> get values => [
+    bg,
+    drHomeBg,
+    homeBg,
+    noRide,
+    technicianBg,
+  ];
 }
 
 class Assets {

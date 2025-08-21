@@ -10,6 +10,8 @@ import 'package:medizii/constants/strings.dart';
 import 'package:medizii/gen/assets.gen.dart';
 import 'package:medizii/main.dart';
 import 'package:medizii/module/authentication/otp_verification_screen.dart';
+import 'package:medizii/module/dashboards/Technician/technician_dashboard_setup.dart';
+import 'package:medizii/module/dashboards/doctor/dr_dashboard_setup.dart';
 import 'package:medizii/module/dashboards/patient/patient_dashboard_setup.dart';
 
 import 'forgot_password_screeen.dart';
@@ -18,7 +20,9 @@ import 'forgot_password_screeen.dart';
 class AuthScreen extends StatefulWidget {
   bool check = true;
 
-  AuthScreen(this.check, {super.key});
+  String? selectedRole;
+
+  AuthScreen(this.check, {super.key, this.selectedRole});
 
   @override
   State<AuthScreen> createState() => _AuthScreenState();
@@ -128,7 +132,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                         child: TabBarView(
                           controller: _tabController,
                           children: [
-                            LoginTab(),
+                            LoginTab(widget.selectedRole),
                             RegisterTab(),
                           ],
                         ),
@@ -150,7 +154,9 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
 // ----------------- Login Tab ----------------- //
 
 class LoginTab extends StatefulWidget {
-  LoginTab({super.key});
+  String? selectedRole;
+
+  LoginTab(this.selectedRole, {super.key});
 
   @override
   State<LoginTab> createState() => _LoginTabState();
@@ -240,7 +246,20 @@ class _LoginTabState extends State<LoginTab> {
                  /* if (_formKey.currentState!.validate()) {
 
                   }*/
-                  navigationService.push(PatientDashboard());
+                  switch (widget.selectedRole) {
+                    case 'Doctor':
+                      navigationService.push(DoctorDashboard());
+                      break;
+                    case 'Patient':
+                      navigationService.push(PatientDashboard());
+                      break;
+                    case 'Technician':
+                      navigationService.push(TechnicianDashboard());
+                      break;
+                    default:
+                      print('Unknown role: ${widget.selectedRole}');
+                  }
+
                 }, text: LabelString.labelLogin,
               )
             ],

@@ -6,16 +6,16 @@ import 'package:medizii/components/custom_appbar.dart';
 import 'package:medizii/constants/app_colours/app_colors.dart';
 import 'package:medizii/constants/strings.dart';
 import 'package:medizii/gen/assets.gen.dart';
-import 'package:medizii/module/dashboards/patient/patient_home/pt_medical_report_dialog.dart';
+import 'package:medizii/module/dashboards/doctor/dr_upload_reports/dr_reports_upload_dialog.dart';
 
-class PtReportsUploadPage extends StatelessWidget {
-  const PtReportsUploadPage({super.key});
+class DoctorReportsUploadPage extends StatelessWidget {
+  const DoctorReportsUploadPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
-      appBar: CustomAppBar(title: LabelString.labelReports, isBack: true),
+      appBar: CustomAppBar(title: "Patient Name", isBack: true),
       body: Padding(
         padding: EdgeInsets.all(16.sp),
         child: Column(
@@ -94,11 +94,11 @@ class PtReportsUploadPage extends StatelessWidget {
                 itemCount: 5,
                 itemBuilder: (context, index) {
                   return GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return PtMedicalReportDialog();
+                          return DoctorMedicalReportDialog();
                         },
                       );
                     },

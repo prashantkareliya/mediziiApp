@@ -47,11 +47,7 @@ class _PatientCallDrPageState extends State<PatientCallDrPage> {
       backgroundColor: AppColors.whiteColor,
       appBar: CustomAppBar(
         title: LabelString.labelCallDoctor,
-        rightWidget: Container(
-          padding: EdgeInsets.all(8.sp),
-          decoration: BoxDecoration(color: AppColors.greyBg, shape: BoxShape.circle),
-          child: Assets.icIcons.notification.svg(),
-        ),
+        isNotification: true,
       ),
       body: Padding(
         padding: EdgeInsets.all(16.sp),

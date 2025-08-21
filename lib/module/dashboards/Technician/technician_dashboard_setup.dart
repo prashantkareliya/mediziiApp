@@ -6,6 +6,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:medizii/constants/app_colours/app_colors.dart';
 import 'package:medizii/constants/strings.dart';
 import 'package:medizii/gen/assets.gen.dart';
+import 'package:medizii/module/dashboards/Technician/tc_home/tc_home_pg.dart';
+import 'package:medizii/module/dashboards/Technician/tc_patient/tc_patient_pg.dart';
+import 'package:medizii/module/dashboards/Technician/tc_setting/tc_setting_pg.dart';
+import 'package:medizii/module/dashboards/Technician/tc_upload_reports/tc_search_patient_pg.dart';
 
 import 'bloc_dash_setup/technician_navigation_bloc.dart';
 import 'bloc_dash_setup/technician_navigation_state.dart';
@@ -14,10 +18,10 @@ class TechnicianDashboard extends StatelessWidget {
   TechnicianDashboard({super.key});
 
   final List<Widget> _screens = [
-    Container(color: Colors.red),
-    Container(color: Colors.yellow),
-    Container(color: Colors.greenAccent),
-    Container(color: Colors.blue),
+    TechnicianHomePage(),
+    TechnicianPatientPage(),
+    TechnicianSearchPatientPage(),
+    TechnicianSettingPage(),
   ];
 
   @override
