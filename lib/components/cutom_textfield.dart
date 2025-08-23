@@ -54,6 +54,7 @@ class CustomTextField extends StatelessWidget {
           keyboardType: textInputType,
           onTap: onTap,
           readOnly: readOnly,
+          style: GoogleFonts.dmSans(textStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 12.sp, color: AppColors.textSecondary)),
           onTapOutside: (d) {
             FocusScope.of(context).requestFocus(FocusNode());
           },
