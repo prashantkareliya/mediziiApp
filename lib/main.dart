@@ -2,14 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:medizii/components/navigation_service.dart';
+import 'package:provider/provider.dart';
 
 import 'constants/app_colours/app_colors.dart';
+import 'module/authentication/provider/auth_provider.dart';
 import 'module/authentication/role_selection_screen.dart';
+import 'module/dashboards/provider/bottom_bav_provider.dart';
 
 final NavigationService navigationService = NavigationService();
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => AuthProvider()),
+      ChangeNotifierProvider(create: (_) => BottomNavProvider()),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -45,7 +54,7 @@ class MyApp extends StatelessWidget {
           home: child,
         );
       },
-      child: const RoleSelectionScreen(),
+      child: RoleSelectionScreen(),
     );
   }
 }

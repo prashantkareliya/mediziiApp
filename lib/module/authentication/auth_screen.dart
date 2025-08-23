@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medizii/components/context_extension.dart';
@@ -15,6 +16,7 @@ import 'package:medizii/module/dashboards/doctor/dr_dashboard_setup.dart';
 import 'package:medizii/module/dashboards/patient/patient_dashboard_setup.dart';
 
 import 'forgot_password_screeen.dart';
+import 'provider/auth_provider.dart';
 
 
 class AuthScreen extends StatefulWidget {
@@ -313,10 +315,12 @@ class _RegisterTabState extends State<RegisterTab> {
             children: [
               DropdownButtonFormField<String>(
                 decoration: InputDecoration(
-                  labelText: 'Choose Role',
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                 ),
-                value: selectedRole == 'Select' ? null : selectedRole,
+                value: context.watch<AuthProvider>().selectedRole == 'Select'
+                    ? null
+                    : context.watch<AuthProvider>().selectedRole,
+                style: GoogleFonts.dmSans(textStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 12.sp, color: AppColors.textSecondary)),
                 hint: Text('Select'),
                 items: roles.map((role) {
                   return DropdownMenuItem(
@@ -325,9 +329,12 @@ class _RegisterTabState extends State<RegisterTab> {
                   );
                 }).toList(),
                 onChanged: (value) {
-                  setState(() => selectedRole = value ?? 'Select');
+                  if (value != null) {
+                    context.read<AuthProvider>().setSelectedRole(value);
+                  }
                 },
               ),
+
               const SizedBox(height: 16),
               CustomTextField(
                 label: LabelString.labelFullName,
