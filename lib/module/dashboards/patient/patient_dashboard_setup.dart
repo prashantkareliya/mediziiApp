@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,8 +9,8 @@ import 'package:medizii/module/dashboards/patient/patient_book_ems/patient_book_
 import 'package:medizii/module/dashboards/patient/patient_call_dr/patient_call_dr_pg.dart';
 import 'package:medizii/module/dashboards/patient/patient_home/patient_home_pg.dart';
 import 'package:medizii/module/dashboards/patient/patient_setting/patient_setting_pg.dart';
-
-import '../provider/bottom_bav_provider.dart';
+import 'package:medizii/module/dashboards/provider/bottom_bav_provider.dart';
+import 'package:provider/provider.dart';
 
 class PatientDashboard extends StatelessWidget {
   PatientDashboard({super.key});

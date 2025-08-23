@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medizii/components/context_extension.dart';
@@ -9,6 +8,7 @@ import 'package:medizii/constants/fonts/font_weight.dart';
 import 'package:medizii/constants/strings.dart';
 import 'package:medizii/gen/assets.gen.dart';
 import 'package:medizii/main.dart';
+import 'package:provider/provider.dart';
 
 import 'auth_screen.dart';
 import 'provider/auth_provider.dart';
