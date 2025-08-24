@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:medizii/components/navigation_service.dart';
+import 'package:medizii/screens/dashboards/doctor/dr_dashboard_setup.dart';
 import 'package:provider/provider.dart';
 
 import 'constants/app_colours/app_colors.dart';
-import 'module/authentication/provider/auth_provider.dart';
-import 'module/authentication/role_selection_screen.dart';
-import 'module/dashboards/provider/bottom_bav_provider.dart';
+import 'providers/auth_provider.dart';
+import 'screens/authentication/role_selection_screen.dart';
+import 'screens/dashboards/provider/bottom_bav_provider.dart';
 
 final NavigationService navigationService = NavigationService();
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  await Hive.openBox('authBox');
+
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider(create: (_) => AuthProvider()),
+      ChangeNotifierProvider(create: (_) => AuthProvider()..loadToken()),
       ChangeNotifierProvider(create: (_) => BottomNavProvider()),
     ],
     child: const MyApp(),
@@ -43,10 +49,6 @@ class MyApp extends StatelessWidget {
             useMaterial3: true,
             highlightColor: Colors.transparent,
             splashColor: Colors.transparent,
-            /*pageTransitionsTheme: const PageTransitionsTheme(builders: {
-              TargetPlatform.android: ZoomPageTransitionsBuilder(),
-              TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-            }),*/
             scaffoldBackgroundColor: AppColors.whiteColor,
             colorScheme: ColorScheme.fromSwatch()
                 .copyWith(primary: AppColors.primaryColor, secondary: AppColors.whiteColor),
@@ -54,7 +56,11 @@ class MyApp extends StatelessWidget {
           home: child,
         );
       },
-      child: RoleSelectionScreen(),
+      child: Consumer<AuthProvider>(
+          builder: (context, auth, _) {
+            return auth.token != null ? DoctorDashboard() : RoleSelectionScreen();
+          }
+      ),
     );
   }
 }

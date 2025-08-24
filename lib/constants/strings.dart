@@ -4,6 +4,8 @@ class ErrorString {
   static const String emailAddressErr = "Please enter email address";
   static const String emailAddressValidErr = "Please enter valid email address";
   static const String passwordErr = "Please enter password";
+  static const String internetErr = "No Internet Connection";
+  static const String checkInternetErr = "Please check your connection and try again.";
 }
 
 //Messages
@@ -79,6 +81,7 @@ class LabelString {
   static const String labelProfile = "Profile";
   static const String labelUpdate = "Update";
   static const String labelNotification = "Notification";
+  static const String labelRetry = "Retry";
 
 }
 
