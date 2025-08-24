@@ -1,18 +1,15 @@
-import 'package:flutter/material.dart';
 import 'package:medizii/constants/api_constants.dart';
 import 'package:medizii/constants/strings.dart';
 import 'package:medizii/local/hive_service.dart';
 import 'package:medizii/main.dart';
-import 'package:medizii/network/api_service.dart';
-import 'package:medizii/network/app_exception.dart';
+import 'package:medizii/network/enhanced_api_service.dart';
+import 'package:medizii/providers/base_provider.dart';
 import 'package:medizii/screens/authentication/auth_screen.dart';
 
-class AuthProvider extends ChangeNotifier {
-  final ApiService _apiService = ApiService();
+class AuthProvider extends BaseProvider {
+  final EnhancedApiService _apiService = EnhancedApiService();
   final HiveService _hiveService = HiveService();
 
-  bool isLoading = false;
-  String? errorMessage;
   String? token;
 
   String _selectedRole = LabelString.labelDoctor;
@@ -25,45 +22,32 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<bool> login(String email, String password) async {
-    isLoading = true;
-    errorMessage = null;
-    notifyListeners();
+    return await executeAsyncBool(() async {
+      final data = {"email": email, "password": password};
 
-    final data = {
-      "email": email,
-      "password": password,
-    };
+      final result = await _apiService.post(ApiConstants.loginEndpoint, data: data);
 
-    try {
-      final response = await _apiService.post(ApiConstants.loginEndpoint, data: data);
-      token = response['token'];
-      if (token != null) {
-        await _hiveService.saveToken(token!);
-        return true;
-      } else {
-        errorMessage = "Invalid response from server";
-        return false;
-      }
-      return true;
-    } on AppException catch (e) {
-      errorMessage = e.message;
-      return false;
-    } catch (_) {
-      errorMessage = "Unexpected error occurred";
-      return false;
-    } finally {
-      isLoading = false;
-      notifyListeners();
-    }
+      return result.fold((response) {
+        if (response['token'] != null) {
+          token = response['token'];
+          _hiveService.saveToken(token!);
+          return true;
+        } else {
+          throw Exception(response['message'] ?? "Invalid response from server");
+        }
+      }, (error) => throw Exception(error));
+    });
   }
 
   Future<void> logout() async {
-    await _hiveService.deleteToken();
-    token = null;
-    notifyListeners();
-    if(token == null){
-      navigationService.pushAndRemoveUntil(AuthScreen(false));
-    }
+    await executeAsyncVoid(() async {
+      await _hiveService.deleteToken();
+      token = null;
+      notifyListeners();
+      if (token == null) {
+        navigationService.pushAndRemoveUntil(AuthScreen(false));
+      }
+    });
   }
 
   void loadToken() {
