@@ -54,4 +54,5 @@ class AuthProvider extends BaseProvider {
     token = _hiveService.getToken();
     notifyListeners();
   }
+
 }
