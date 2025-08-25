@@ -6,6 +6,8 @@ import 'package:medizii/network/enhanced_api_service.dart';
 import 'package:medizii/providers/base_provider.dart';
 import 'package:medizii/screens/authentication/auth_screen.dart';
 
+import '../screens/dashboards/doctor/dr_dashboard_setup.dart';
+
 class AuthProvider extends BaseProvider {
   final EnhancedApiService _apiService = EnhancedApiService();
   final HiveService _hiveService = HiveService();
@@ -21,7 +23,7 @@ class AuthProvider extends BaseProvider {
     notifyListeners();
   }
 
-  Future<bool> login(String email, String password) async {
+  login(String email, String password) async {
     return await executeAsyncBool(() async {
       final data = {"email": email, "password": password};
 
@@ -34,7 +36,8 @@ class AuthProvider extends BaseProvider {
         if (response['token'] != null) {
           token = response['token'];
           _hiveService.saveToken(token!);
-          return true;
+          navigationService.pushAndRemoveUntil(DoctorDashboard());
+          return response;
         } else {
           throw Exception(
             response['message'] ?? "Invalid response from server",

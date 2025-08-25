@@ -12,7 +12,6 @@ import 'package:medizii/gen/assets.gen.dart';
 import 'package:medizii/main.dart';
 import 'package:medizii/providers/auth_provider.dart';
 import 'package:medizii/screens/authentication/otp_verification_screen.dart';
-import 'package:medizii/screens/dashboards/doctor/dr_dashboard_setup.dart';
 import 'package:provider/provider.dart';
 
 import 'forgot_password_screeen.dart';
@@ -263,18 +262,10 @@ class _LoginTabState extends State<LoginTab> {
                   }
 
                   if (_formKey.currentState!.validate()) {
-                    final success = await auth.login(
+                    await auth.login(
                       emailCtrl.text.trim(),
                       passCtrl.text.trim(),
                     );
-
-                    if (success) {
-                      navigationService.pushAndRemoveUntil(DoctorDashboard());
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(auth.errorMessage ?? 'Login failed')),
-                      );
-                    }
                   }
 
                   /*switch (widget.selectedRole) {
