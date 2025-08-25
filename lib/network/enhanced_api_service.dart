@@ -9,13 +9,17 @@ class EnhancedApiService {
   final Dio _dio = DioClient.dio;
 
   /// GET request with ApiResult
-  Future<ApiResult<T>> get<T>(String endpoint, {Map<String, dynamic>? queryParams}) async {
+  Future<ApiResult<T>> get<T>(
+    String endpoint, {
+    Map<String, dynamic>? queryParams,
+  }) async {
     try {
       final response = await _dio.get(endpoint, queryParameters: queryParams);
       debugPrint("$endpoint API =================> $response");
       final data = ApiResponseHandler.handleResponse<T>(response);
       return ApiResult.success(data);
     } on DioException catch (e) {
+      // Let the ApiResponseHandler decide if it should show no internet screen
       ApiResponseHandler.handleDioError(e);
       return ApiResult.error("Network error occurred");
     } catch (e) {
@@ -24,13 +28,22 @@ class EnhancedApiService {
   }
 
   /// POST request with ApiResult
-  Future<ApiResult<T>> post<T>(String endpoint, {dynamic data, Map<String, String>? headers}) async {
+  Future<ApiResult<T>> post<T>(
+    String endpoint, {
+    dynamic data,
+    Map<String, String>? headers,
+  }) async {
     try {
-      final response = await _dio.post(endpoint, data: data, options: headers != null ? Options(headers: headers) : null);
+      final response = await _dio.post(
+        endpoint,
+        data: data,
+        options: headers != null ? Options(headers: headers) : null,
+      );
       debugPrint("$endpoint API =================> $response");
       final result = ApiResponseHandler.handleResponse<T>(response);
       return ApiResult.success(result);
     } on DioException catch (e) {
+      // Let the ApiResponseHandler decide if it should show no internet screen
       ApiResponseHandler.handleDioError(e);
       return ApiResult.error("Network error occurred");
     } catch (e) {
@@ -46,6 +59,7 @@ class EnhancedApiService {
       final result = ApiResponseHandler.handleResponse<T>(response);
       return ApiResult.success(result);
     } on DioException catch (e) {
+      // Let the ApiResponseHandler decide if it should show no internet screen
       ApiResponseHandler.handleDioError(e);
       return ApiResult.error("Network error occurred");
     } catch (e) {
@@ -61,6 +75,7 @@ class EnhancedApiService {
       final result = ApiResponseHandler.handleResponse<T>(response);
       return ApiResult.success(result);
     } on DioException catch (e) {
+      // Let the ApiResponseHandler decide if it should show no internet screen
       ApiResponseHandler.handleDioError(e);
       return ApiResult.error("Network error occurred");
     } catch (e) {
@@ -76,6 +91,7 @@ class EnhancedApiService {
       final result = ApiResponseHandler.handleResponse<T>(response);
       return ApiResult.success(result);
     } on DioException catch (e) {
+      // Let the ApiResponseHandler decide if it should show no internet screen
       ApiResponseHandler.handleDioError(e);
       return ApiResult.error("Network error occurred");
     } catch (e) {

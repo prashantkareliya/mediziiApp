@@ -25,7 +25,10 @@ class AuthProvider extends BaseProvider {
     return await executeAsyncBool(() async {
       final data = {"email": email, "password": password};
 
-      final result = await _apiService.post(ApiConstants.loginEndpoint, data: data);
+      final result = await _apiService.post(
+        ApiConstants.loginEndpoint,
+        data: data,
+      );
 
       return result.fold((response) {
         if (response['token'] != null) {
@@ -33,7 +36,9 @@ class AuthProvider extends BaseProvider {
           _hiveService.saveToken(token!);
           return true;
         } else {
-          throw Exception(response['message'] ?? "Invalid response from server");
+          throw Exception(
+            response['message'] ?? "Invalid response from server",
+          );
         }
       }, (error) => throw Exception(error));
     });
@@ -50,9 +55,20 @@ class AuthProvider extends BaseProvider {
     });
   }
 
+  /// Test method to demonstrate network error handling
+  Future<bool> testNetworkError() async {
+    return await executeAsyncBool(() async {
+      // This will fail and trigger the NoInternetScreen
+      final result = await _apiService.get(
+        'https://unreachable-server.com/api/test',
+      );
+
+      return result.fold((response) => true, (error) => throw Exception(error));
+    });
+  }
+
   void loadToken() {
     token = _hiveService.getToken();
     notifyListeners();
   }
-
 }

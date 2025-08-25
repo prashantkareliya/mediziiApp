@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:medizii/network/interceptors/network_error_interceptor.dart';
 
 class ConnectivityService {
   static final ConnectivityService _instance = ConnectivityService._internal();
@@ -11,6 +12,8 @@ class ConnectivityService {
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
   final StreamController<bool> _connectivityController =
       StreamController<bool>.broadcast();
+  final NetworkErrorInterceptor _networkErrorInterceptor =
+      NetworkErrorInterceptor();
 
   /// Stream to listen to connectivity changes
   Stream<bool> get connectivityStream => _connectivityController.stream;
@@ -33,6 +36,11 @@ class ConnectivityService {
       );
       _isConnected = hasConnection;
       _connectivityController.add(_isConnected);
+
+      // Reset network error interceptor flag when internet comes back
+      if (hasConnection) {
+        _networkErrorInterceptor.resetNoInternetScreenFlag();
+      }
 
       debugPrint(
         'Connectivity changed: ${results.map((r) => r.name).join(', ')}',

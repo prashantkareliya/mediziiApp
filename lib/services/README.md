@@ -37,6 +37,14 @@ This system automatically detects when there's no internet connection and shows 
   - Rejects requests when offline
   - Prevents unnecessary network calls
 
+### 5. NetworkErrorInterceptor
+- **Location**: `lib/network/interceptors/network_error_interceptor.dart`
+- **Purpose**: Shows NoInternetScreen when API calls fail due to network issues
+- **Features**:
+  - Catches network-related errors from API calls
+  - Automatically shows NoInternetScreen on network failures
+  - Prevents multiple screens from showing simultaneously
+
 ## How It Works
 
 ### 1. Initialization
@@ -62,6 +70,11 @@ ConnectivityWrapper(
 - All API calls are intercepted
 - Requests are rejected if no internet
 - Prevents app crashes from network errors
+
+### 5. Network Error Handling
+- API calls that fail due to network issues show NoInternetScreen
+- Automatic detection of network-related errors
+- Seamless user experience during network failures
 
 ## Usage Examples
 
@@ -98,6 +111,12 @@ ConnectivityWrapper.showNoInternetScreen(context);
 ### Simulate No Internet
 1. Turn off WiFi and mobile data
 2. The app will automatically show `NoInternetScreen`
+3. Turn internet back on
+4. The app will automatically return to normal
+
+### Test API Network Errors
+1. Keep internet on but make API calls to an unreachable server
+2. The app will show `NoInternetScreen` when API calls fail
 3. Turn internet back on
 4. The app will automatically return to normal
 
