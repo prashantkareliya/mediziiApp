@@ -1,16 +1,33 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:medizii/main.dart';
-import 'package:medizii/screens/no_internet_screen.dart';
+import 'package:medizii/services/connectivity_service.dart';
 
 class InternetCheckInterceptor extends Interceptor {
-  @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    final connectivity = await Connectivity().checkConnectivity();
+  bool _isNoInternetScreenShown = false;
+  final ConnectivityService _connectivityService = ConnectivityService();
 
-    if (connectivity == ConnectivityResult.none) {
-      navigationService.pushReplacement(const NoInternetScreen());
-      return handler.reject(DioException(requestOptions: options, type: DioExceptionType.unknown, error: "No internet connection"));
+  @override
+  void onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
+    final isConnected = await _connectivityService.checkConnectivity();
+
+    if (!isConnected) {
+      if (!_isNoInternetScreenShown) {
+        _isNoInternetScreenShown = true;
+        // The ConnectivityWrapper will handle showing the NoInternetScreen
+      }
+      return handler.reject(
+        DioException(
+          requestOptions: options,
+          type: DioExceptionType.unknown,
+          error: "No internet connection",
+        ),
+      );
+    } else {
+      // Internet is available, reset the flag
+      _isNoInternetScreenShown = false;
     }
 
     super.onRequest(options, handler);

@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:medizii/components/navigation_service.dart';
+import 'package:medizii/components/connectivity_wrapper.dart';
 import 'package:medizii/screens/dashboards/doctor/dr_dashboard_setup.dart';
+import 'package:medizii/services/connectivity_service.dart';
 import 'package:provider/provider.dart';
 
 import 'constants/app_colours/app_colors.dart';
@@ -18,13 +20,18 @@ void main() async {
   await Hive.initFlutter();
   await Hive.openBox('authBox');
 
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (_) => AuthProvider()..loadToken()),
-      ChangeNotifierProvider(create: (_) => BottomNavProvider()),
-    ],
-    child: const MyApp(),
-  ));
+  // Initialize connectivity service
+  await ConnectivityService().initialize();
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()..loadToken()),
+        ChangeNotifierProvider(create: (_) => BottomNavProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -50,16 +57,22 @@ class MyApp extends StatelessWidget {
             highlightColor: Colors.transparent,
             splashColor: Colors.transparent,
             scaffoldBackgroundColor: AppColors.whiteColor,
-            colorScheme: ColorScheme.fromSwatch()
-                .copyWith(primary: AppColors.primaryColor, secondary: AppColors.whiteColor),
+            colorScheme: ColorScheme.fromSwatch().copyWith(
+              primary: AppColors.primaryColor,
+              secondary: AppColors.whiteColor,
+            ),
           ),
           home: child,
         );
       },
-      child: Consumer<AuthProvider>(
+      child: ConnectivityWrapper(
+        child: Consumer<AuthProvider>(
           builder: (context, auth, _) {
-            return auth.token != null ? DoctorDashboard() : RoleSelectionScreen();
-          }
+            return auth.token != null
+                ? DoctorDashboard()
+                : RoleSelectionScreen();
+          },
+        ),
       ),
     );
   }
