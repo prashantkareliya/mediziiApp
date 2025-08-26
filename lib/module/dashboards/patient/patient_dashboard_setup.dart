@@ -11,7 +11,7 @@ import 'package:medizii/module/dashboards/patient/patient_call_dr/patient_call_d
 import 'package:medizii/module/dashboards/patient/patient_home/patient_home_pg.dart';
 import 'package:medizii/module/dashboards/patient/patient_setting/patient_setting_pg.dart';
 
-import '../provider/bottom_bav_provider.dart';
+import '../bottom_bav_provider.dart';
 
 class PatientDashboard extends StatelessWidget {
   PatientDashboard({super.key});
@@ -54,16 +54,12 @@ class PatientDashboard extends StatelessWidget {
             BottomNavigationBarItem(
               icon: _buildInActiveIcon(Assets.icIcons.home.svg()),
               label: LabelString.labelHome,
-              activeIcon: _buildActiveIcon(
-                Assets.icIcons.home.svg(colorFilter: ColorFilter.mode(AppColors.blueColor, BlendMode.srcIn)),
-              ),
+              activeIcon: _buildActiveIcon(Assets.icIcons.home.svg(colorFilter: ColorFilter.mode(AppColors.blueColor, BlendMode.srcIn))),
             ),
             BottomNavigationBarItem(
               icon: _buildInActiveIcon(Assets.icIcons.callDoc.svg()),
               label: LabelString.labelCallDoctor,
-              activeIcon: _buildActiveIcon(
-                Assets.icIcons.callDoc.svg(colorFilter: ColorFilter.mode(AppColors.blueColor, BlendMode.srcIn)),
-              ),
+              activeIcon: _buildActiveIcon(Assets.icIcons.callDoc.svg(colorFilter: ColorFilter.mode(AppColors.blueColor, BlendMode.srcIn))),
             ),
             BottomNavigationBarItem(
               icon: _buildInActiveIcon(Assets.icIcons.amulance.svg()),
@@ -75,9 +71,7 @@ class PatientDashboard extends StatelessWidget {
             BottomNavigationBarItem(
               icon: _buildInActiveIcon(Assets.icIcons.setting.svg()),
               label: LabelString.labelSetting,
-              activeIcon: _buildActiveIcon(
-                Assets.icIcons.setting.svg(colorFilter: ColorFilter.mode(AppColors.blueColor, BlendMode.srcIn)),
-              ),
+              activeIcon: _buildActiveIcon(Assets.icIcons.setting.svg(colorFilter: ColorFilter.mode(AppColors.blueColor, BlendMode.srcIn))),
             ),
           ],
         ),

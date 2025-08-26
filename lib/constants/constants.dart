@@ -13,8 +13,7 @@ class Constants {
   factory Constants._prd() {
     return const Constants(
       ///Base URl
-      endpoint: 'https://shuddhdesiradio.globaltechnosys.com/api/v1/', //  staging server
-      //endpoint: 'https://shuddhdesiradio.globaltechnosys.com/api/v1/', //  live server
+      endpoint: 'https://medizii.onrender.com/', //  staging server
     );
   }
 
@@ -29,16 +28,9 @@ class ResponseStatus {
 
 class ApiEndPoint {
   //POST API endpoint
-  static const String contactForm= "contactform/submit";
-  static const String advtWithUs= "boomtechform/submit";
-  static const String songRequest= "songrequestform/submit";
+  static const String createUser = "user/login";
 
   //GET API endpoint
-  static const String getSponsors = "collections/sponsors";
-  static const String getTeam = "collections/teams";
-  static const String getCity = "collections/cities";
-  static const String getCitySchedule = "collections/cities/schedules";
 
   //PUT API endpoint
-  static const String profileUpdate = "user/profile/update";
 }

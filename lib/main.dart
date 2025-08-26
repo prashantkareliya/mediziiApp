@@ -5,20 +5,19 @@ import 'package:medizii/components/navigation_service.dart';
 import 'package:provider/provider.dart';
 
 import 'constants/app_colours/app_colors.dart';
-import 'module/authentication/provider/auth_provider.dart';
+import 'module/authentication/auth_provider.dart';
 import 'module/authentication/role_selection_screen.dart';
-import 'module/dashboards/provider/bottom_bav_provider.dart';
+import 'module/dashboards/bottom_bav_provider.dart';
 
 final NavigationService navigationService = NavigationService();
 
 void main() {
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (_) => AuthProvider()),
-      ChangeNotifierProvider(create: (_) => BottomNavProvider()),
-    ],
-    child: const MyApp(),
-  ));
+  runApp(
+    MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => AuthProvider()), ChangeNotifierProvider(create: (_) => BottomNavProvider())],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -26,10 +25,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return ScreenUtilInit(
       designSize: const Size(360, 690),
       useInheritedMediaQuery: true,
@@ -48,8 +44,7 @@ class MyApp extends StatelessWidget {
               TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
             }),*/
             scaffoldBackgroundColor: AppColors.whiteColor,
-            colorScheme: ColorScheme.fromSwatch()
-                .copyWith(primary: AppColors.primaryColor, secondary: AppColors.whiteColor),
+            colorScheme: ColorScheme.fromSwatch().copyWith(primary: AppColors.primaryColor, secondary: AppColors.whiteColor),
           ),
           home: child,
         );

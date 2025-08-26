@@ -10,8 +10,8 @@ import 'package:medizii/constants/strings.dart';
 import 'package:medizii/gen/assets.gen.dart';
 import 'package:medizii/main.dart';
 
+import 'auth_provider.dart';
 import 'auth_screen.dart';
-import 'provider/auth_provider.dart';
 
 class RoleSelectionScreen extends StatelessWidget {
   RoleSelectionScreen({super.key});
@@ -24,13 +24,7 @@ class RoleSelectionScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          Assets.images.bg.image(fit: BoxFit.fill),
-          _buildRoleSelection(context, selectedRole),
-        ],
-      ),
+      body: Stack(fit: StackFit.expand, children: [Assets.images.bg.image(fit: BoxFit.fill), _buildRoleSelection(context, selectedRole)]),
     );
   }
 
@@ -42,27 +36,21 @@ class RoleSelectionScreen extends StatelessWidget {
           105.verticalSpace,
           Text(
             LabelString.labelJoinAs,
-            style: GoogleFonts.dmSans(
-              color: AppColors.redColor,
-              fontSize: 22.sp,
-              fontWeight: GoogleFontWeight.semiBold,
-            ),
+            style: GoogleFonts.dmSans(color: AppColors.redColor, fontSize: 22.sp, fontWeight: GoogleFontWeight.semiBold),
           ),
           20.verticalSpace,
           Container(
             padding: EdgeInsets.symmetric(horizontal: 14.sp, vertical: 14.sp),
-            decoration: BoxDecoration(
-              color: Colors.grey.shade100,
-              borderRadius: BorderRadius.circular(14.r),
-            ),
+            decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: BorderRadius.circular(14.r)),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              children: roles
-                  .map((role) => Padding(
-                padding: EdgeInsets.symmetric(vertical: 6.sp),
-                child: _buildRoleOption(context, role, selectedRole),
-              ))
-                  .toList(),
+              children:
+                  roles
+                      .map(
+                        (role) =>
+                            Padding(padding: EdgeInsets.symmetric(vertical: 6.sp), child: _buildRoleOption(context, role, selectedRole)),
+                      )
+                      .toList(),
             ),
           ),
           20.verticalSpace,
@@ -73,7 +61,7 @@ class RoleSelectionScreen extends StatelessWidget {
             onPressed: () {
               navigationService.push(AuthScreen(true, selectedRole: selectedRole));
             },
-          )
+          ),
         ],
       ),
     );

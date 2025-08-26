@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:medizii/constants/app_colours/app_colors.dart';
 import 'package:medizii/constants/strings.dart';
 import 'package:medizii/gen/assets.gen.dart';
-import 'package:medizii/module/dashboards/provider/bottom_bav_provider.dart';
+import 'package:medizii/module/dashboards/bottom_bav_provider.dart';
 
 import 'dr_home/dr_home_pg.dart';
 import 'dr_patient/dr_patient_pg.dart';
@@ -16,12 +16,7 @@ import 'dr_upload_reports/dr_search_patient_pg.dart';
 class DoctorDashboard extends StatelessWidget {
   DoctorDashboard({super.key});
 
-  final List<Widget> _screens = [
-    DoctorHomePage(),
-    DoctorPatientPage(),
-    DoctorSearchPatientPage(),
-    DoctorSettingPage(),
-  ];
+  final List<Widget> _screens = [DoctorHomePage(), DoctorPatientPage(), DoctorSearchPatientPage(), DoctorSettingPage()];
 
   @override
   Widget build(BuildContext context) {
@@ -57,30 +52,22 @@ class DoctorDashboard extends StatelessWidget {
             BottomNavigationBarItem(
               icon: _buildInActiveIcon(Assets.icIcons.home.svg()),
               label: LabelString.labelHome,
-              activeIcon: _buildActiveIcon(
-                Assets.icIcons.home.svg(colorFilter: ColorFilter.mode(AppColors.blueColor, BlendMode.srcIn)),
-              ),
+              activeIcon: _buildActiveIcon(Assets.icIcons.home.svg(colorFilter: ColorFilter.mode(AppColors.blueColor, BlendMode.srcIn))),
             ),
             BottomNavigationBarItem(
               icon: _buildInActiveIcon(Assets.icIcons.call.svg()),
               label: LabelString.labelPatients,
-              activeIcon: _buildActiveIcon(
-                Assets.icIcons.call.svg(colorFilter: ColorFilter.mode(AppColors.blueColor, BlendMode.srcIn)),
-              ),
+              activeIcon: _buildActiveIcon(Assets.icIcons.call.svg(colorFilter: ColorFilter.mode(AppColors.blueColor, BlendMode.srcIn))),
             ),
             BottomNavigationBarItem(
               icon: _buildInActiveIcon(Assets.icIcons.upload.svg()),
               label: LabelString.labelUploadReport,
-              activeIcon: _buildActiveIcon(
-                Assets.icIcons.upload.svg(colorFilter: ColorFilter.mode(AppColors.blueColor, BlendMode.srcIn)),
-              ),
+              activeIcon: _buildActiveIcon(Assets.icIcons.upload.svg(colorFilter: ColorFilter.mode(AppColors.blueColor, BlendMode.srcIn))),
             ),
             BottomNavigationBarItem(
               icon: _buildInActiveIcon(Assets.icIcons.setting.svg()),
               label: LabelString.labelSetting,
-              activeIcon: _buildActiveIcon(
-                Assets.icIcons.setting.svg(colorFilter: ColorFilter.mode(AppColors.blueColor, BlendMode.srcIn)),
-              ),
+              activeIcon: _buildActiveIcon(Assets.icIcons.setting.svg(colorFilter: ColorFilter.mode(AppColors.blueColor, BlendMode.srcIn))),
             ),
           ],
         ),

@@ -10,23 +10,16 @@ import 'package:medizii/module/dashboards/Technician/tc_home/tc_home_pg.dart';
 import 'package:medizii/module/dashboards/Technician/tc_patient/tc_patient_pg.dart';
 import 'package:medizii/module/dashboards/Technician/tc_setting/tc_setting_pg.dart';
 import 'package:medizii/module/dashboards/Technician/tc_upload_reports/tc_search_patient_pg.dart';
-import 'package:medizii/module/dashboards/provider/bottom_bav_provider.dart';
+import 'package:medizii/module/dashboards/bottom_bav_provider.dart';
 
 class TechnicianDashboard extends StatelessWidget {
   TechnicianDashboard({super.key});
 
-  final List<Widget> _screens = [
-    TechnicianHomePage(),
-    TechnicianPatientPage(),
-    TechnicianSearchPatientPage(),
-    TechnicianSettingPage(),
-  ];
+  final List<Widget> _screens = [TechnicianHomePage(), TechnicianPatientPage(), TechnicianSearchPatientPage(), TechnicianSettingPage()];
 
   @override
   Widget build(BuildContext context) {
-    final int currentIndex = context
-        .watch<BottomNavProvider>()
-        .currentIndex;
+    final int currentIndex = context.watch<BottomNavProvider>().currentIndex;
 
     return Scaffold(
       body: _screens[currentIndex],
@@ -59,30 +52,22 @@ class TechnicianDashboard extends StatelessWidget {
             BottomNavigationBarItem(
               icon: _buildInActiveIcon(Assets.icIcons.home.svg()),
               label: LabelString.labelHome,
-              activeIcon: _buildActiveIcon(
-                Assets.icIcons.home.svg(colorFilter: ColorFilter.mode(AppColors.blueColor, BlendMode.srcIn)),
-              ),
+              activeIcon: _buildActiveIcon(Assets.icIcons.home.svg(colorFilter: ColorFilter.mode(AppColors.blueColor, BlendMode.srcIn))),
             ),
             BottomNavigationBarItem(
               icon: _buildInActiveIcon(Assets.icIcons.call.svg()),
               label: LabelString.labelPatients,
-              activeIcon: _buildActiveIcon(
-                Assets.icIcons.call.svg(colorFilter: ColorFilter.mode(AppColors.blueColor, BlendMode.srcIn)),
-              ),
+              activeIcon: _buildActiveIcon(Assets.icIcons.call.svg(colorFilter: ColorFilter.mode(AppColors.blueColor, BlendMode.srcIn))),
             ),
             BottomNavigationBarItem(
               icon: _buildInActiveIcon(Assets.icIcons.upload.svg()),
               label: LabelString.labelUploadReport,
-              activeIcon: _buildActiveIcon(
-                Assets.icIcons.upload.svg(colorFilter: ColorFilter.mode(AppColors.blueColor, BlendMode.srcIn)),
-              ),
+              activeIcon: _buildActiveIcon(Assets.icIcons.upload.svg(colorFilter: ColorFilter.mode(AppColors.blueColor, BlendMode.srcIn))),
             ),
             BottomNavigationBarItem(
               icon: _buildInActiveIcon(Assets.icIcons.setting.svg()),
               label: LabelString.labelSetting,
-              activeIcon: _buildActiveIcon(
-                Assets.icIcons.setting.svg(colorFilter: ColorFilter.mode(AppColors.blueColor, BlendMode.srcIn)),
-              ),
+              activeIcon: _buildActiveIcon(Assets.icIcons.setting.svg(colorFilter: ColorFilter.mode(AppColors.blueColor, BlendMode.srcIn))),
             ),
           ],
         ),

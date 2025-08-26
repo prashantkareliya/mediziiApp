@@ -1,6 +1,8 @@
 //Error messages
 class ErrorString {
   static const String internalSeverError = "Internal sever error";
+  static const String noInternet = "No Internet";
+  static const String somethingWentWrong = "Something Went Wrong";
   static const String emailAddressErr = "Please enter email address";
   static const String emailAddressValidErr = "Please enter valid email address";
   static const String passwordErr = "Please enter password";
@@ -79,7 +81,6 @@ class LabelString {
   static const String labelProfile = "Profile";
   static const String labelUpdate = "Update";
   static const String labelNotification = "Notification";
-
 }
 
 //Button Strings
@@ -93,5 +94,3 @@ class ImageString {
 }
 
 class HtmlContent {}
-
-

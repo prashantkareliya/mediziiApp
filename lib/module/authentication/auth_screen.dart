@@ -15,9 +15,8 @@ import 'package:medizii/module/dashboards/Technician/technician_dashboard_setup.
 import 'package:medizii/module/dashboards/doctor/dr_dashboard_setup.dart';
 import 'package:medizii/module/dashboards/patient/patient_dashboard_setup.dart';
 
+import 'auth_provider.dart';
 import 'forgot_password_screeen.dart';
-import 'provider/auth_provider.dart';
-
 
 class AuthScreen extends StatefulWidget {
   bool check = true;
@@ -30,7 +29,7 @@ class AuthScreen extends StatefulWidget {
   State<AuthScreen> createState() => _AuthScreenState();
 }
 
-class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateMixin{
+class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -50,15 +49,9 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
 
   double getContainerHeight(BuildContext context) {
     if (_tabController.index == 0) {
-      return MediaQuery
-          .of(context)
-          .size
-          .height * 0.32;
+      return MediaQuery.of(context).size.height * 0.32;
     } else {
-      return MediaQuery
-          .of(context)
-          .size
-          .height * 0.58;
+      return MediaQuery.of(context).size.height * 0.58;
     }
   }
 
@@ -75,7 +68,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
             Column(
               children: [
                 30.verticalSpace,
-                if(widget.check)
+                if (widget.check)
                   Align(
                     alignment: Alignment.centerLeft,
                     child: IconButton(
@@ -94,20 +87,14 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 18.sp),
                   padding: EdgeInsets.zero,
-                  decoration: BoxDecoration(
-                    color: AppColors.grey.shade100,
-                    borderRadius: BorderRadius.circular(14.r),
-                  ),
+                  decoration: BoxDecoration(color: AppColors.grey.shade100, borderRadius: BorderRadius.circular(14.r)),
                   child: Column(
                     children: [
                       Container(
                         height: 65.sp,
                         margin: EdgeInsets.symmetric(horizontal: 18.sp, vertical: 10.sp),
                         padding: EdgeInsets.zero,
-                        decoration: BoxDecoration(
-                          color: AppColors.whiteColor,
-                          borderRadius: BorderRadius.circular(30.r),
-                        ),
+                        decoration: BoxDecoration(color: AppColors.whiteColor, borderRadius: BorderRadius.circular(30.r)),
                         child: TabBar(
                           controller: _tabController,
                           dividerColor: AppColors.transparent,
@@ -120,10 +107,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                           ),
                           indicatorSize: TabBarIndicatorSize.tab,
                           indicatorPadding: EdgeInsets.all(6.sp),
-                          tabs: [
-                            Tab(text: LabelString.labelLogin),
-                            Tab(text: LabelString.labelRegister),
-                          ],
+                          tabs: [Tab(text: LabelString.labelLogin), Tab(text: LabelString.labelRegister)],
                         ),
                       ),
                       AnimatedContainer(
@@ -131,19 +115,11 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                         height: getContainerHeight(context),
                         margin: EdgeInsets.symmetric(horizontal: 0.sp, vertical: 10),
 
-                        child: TabBarView(
-                          controller: _tabController,
-                          children: [
-                            LoginTab(widget.selectedRole),
-                            RegisterTab(),
-                          ],
-                        ),
+                        child: TabBarView(controller: _tabController, children: [LoginTab(widget.selectedRole), RegisterTab()]),
                       ),
                     ],
                   ),
                 ),
-
-
               ],
             ),
           ],
@@ -203,31 +179,31 @@ class _LoginTabState extends State<LoginTab> {
                 },
               ),
               ValueListenableBuilder<bool>(
-                  valueListenable: _obscureTextNotifier,
-                  builder: (BuildContext context, bool isObscured, Widget? child) {
-                    return CustomTextField(
-                      label: LabelString.labelPassword,
-                      controller: passCtrl,
-                      hintText: LabelString.labelEnterPassword,
-                      textInputType: TextInputType.name,
-                      obscureText: isObscured,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return ErrorString.passwordErr;
-                        }
-                        return null;
-                      },
-                      suffixIcon: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                        child: GestureDetector(
-                            onTap: () {
-                              _obscureTextNotifier.value = !isObscured;
-                            },
-                            child: Icon(Icons.remove_red_eye_rounded, color: isObscured ? Color(0xFFBABBBE) : AppColors.primaryColor)
-                        ),
+                valueListenable: _obscureTextNotifier,
+                builder: (BuildContext context, bool isObscured, Widget? child) {
+                  return CustomTextField(
+                    label: LabelString.labelPassword,
+                    controller: passCtrl,
+                    hintText: LabelString.labelEnterPassword,
+                    textInputType: TextInputType.name,
+                    obscureText: isObscured,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return ErrorString.passwordErr;
+                      }
+                      return null;
+                    },
+                    suffixIcon: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          _obscureTextNotifier.value = !isObscured;
+                        },
+                        child: Icon(Icons.remove_red_eye_rounded, color: isObscured ? Color(0xFFBABBBE) : AppColors.primaryColor),
                       ),
-                    );
-                  }
+                    ),
+                  );
+                },
               ),
 
               Align(
@@ -236,16 +212,18 @@ class _LoginTabState extends State<LoginTab> {
                   onTap: () {
                     navigationService.push(ForgotPassword());
                   },
-                  child: Text(LabelString.labelForgotPassword,
-                      style: GoogleFonts.dmSans(
-                          textStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 12.sp, color: AppColors.textSecondary))
+                  child: Text(
+                    LabelString.labelForgotPassword,
+                    style: GoogleFonts.dmSans(
+                      textStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 12.sp, color: AppColors.textSecondary),
+                    ),
                   ),
                 ),
               ),
               const SizedBox(height: 16),
               CustomButton(
                 onPressed: () {
-                 /* if (_formKey.currentState!.validate()) {
+                  /* if (_formKey.currentState!.validate()) {
 
                   }*/
                   switch (widget.selectedRole) {
@@ -261,9 +239,9 @@ class _LoginTabState extends State<LoginTab> {
                     default:
                       print('Unknown role: ${widget.selectedRole}');
                   }
-
-                }, text: LabelString.labelLogin,
-              )
+                },
+                text: LabelString.labelLogin,
+              ),
             ],
           ),
         ),
@@ -275,7 +253,6 @@ class _LoginTabState extends State<LoginTab> {
 // ----------------- Register Tab ----------------- //
 
 class RegisterTab extends StatefulWidget {
-
   RegisterTab({super.key});
 
   @override
@@ -309,72 +286,69 @@ class _RegisterTabState extends State<RegisterTab> {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32),
-      child: StatefulBuilder(builder: (context, setState) {
-        return SingleChildScrollView(
-          child: Column(
-            children: [
-              DropdownButtonFormField<String>(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+      child: StatefulBuilder(
+        builder: (context, setState) {
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                DropdownButtonFormField<String>(
+                  decoration: InputDecoration(border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
+                  value: context.watch<AuthProvider>().selectedRole == 'Select' ? null : context.watch<AuthProvider>().selectedRole,
+                  style: GoogleFonts.dmSans(
+                    textStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 12.sp, color: AppColors.textSecondary),
+                  ),
+                  hint: Text('Select'),
+                  items:
+                      roles.map((role) {
+                        return DropdownMenuItem(value: role, child: Text(role));
+                      }).toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      context.read<AuthProvider>().setSelectedRole(value);
+                    }
+                  },
                 ),
-                value: context.watch<AuthProvider>().selectedRole == 'Select'
-                    ? null
-                    : context.watch<AuthProvider>().selectedRole,
-                style: GoogleFonts.dmSans(textStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 12.sp, color: AppColors.textSecondary)),
-                hint: Text('Select'),
-                items: roles.map((role) {
-                  return DropdownMenuItem(
-                    value: role,
-                    child: Text(role),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  if (value != null) {
-                    context.read<AuthProvider>().setSelectedRole(value);
-                  }
-                },
-              ),
 
-              const SizedBox(height: 16),
-              CustomTextField(
-                label: LabelString.labelFullName,
-                hintText: LabelString.labelEnterName,
-                controller: nameCtrl,
-                textInputType: TextInputType.name,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return ErrorString.emailAddressErr;
-                  }
-                  return null;
-                },
-              ),
-              CustomTextField(
-                label: LabelString.labelEmailAddress,
-                hintText: LabelString.labelEnterEmailAddress,
-                controller: emailCtrl,
-                textInputType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return ErrorString.emailAddressErr;
-                  } else if (!emailCtrl.text.isValidEmail) {
-                    return ErrorString.emailAddressValidErr;
-                  }
-                  return null;
-                },
-              ),
-              CustomTextField(
-                label: LabelString.labelPhoneNumber,
-                hintText: LabelString.labelEnterPhoneNumber,
-                controller: phoneCtrl,
-                textInputType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return ErrorString.emailAddressErr;
-                  }
-                  return null;
-                },
-              ),
-              ValueListenableBuilder<bool>(
+                const SizedBox(height: 16),
+                CustomTextField(
+                  label: LabelString.labelFullName,
+                  hintText: LabelString.labelEnterName,
+                  controller: nameCtrl,
+                  textInputType: TextInputType.name,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return ErrorString.emailAddressErr;
+                    }
+                    return null;
+                  },
+                ),
+                CustomTextField(
+                  label: LabelString.labelEmailAddress,
+                  hintText: LabelString.labelEnterEmailAddress,
+                  controller: emailCtrl,
+                  textInputType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return ErrorString.emailAddressErr;
+                    } else if (!emailCtrl.text.isValidEmail) {
+                      return ErrorString.emailAddressValidErr;
+                    }
+                    return null;
+                  },
+                ),
+                CustomTextField(
+                  label: LabelString.labelPhoneNumber,
+                  hintText: LabelString.labelEnterPhoneNumber,
+                  controller: phoneCtrl,
+                  textInputType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return ErrorString.emailAddressErr;
+                    }
+                    return null;
+                  },
+                ),
+                ValueListenableBuilder<bool>(
                   valueListenable: _obscureTextNotifier,
                   builder: (BuildContext context, bool isObscured, Widget? child) {
                     return CustomTextField(
@@ -392,25 +366,27 @@ class _RegisterTabState extends State<RegisterTab> {
                       suffixIcon: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15.0),
                         child: GestureDetector(
-                            onTap: () {
-                              _obscureTextNotifier.value = !isObscured;
-                            },
-                            child: Icon(Icons.remove_red_eye_rounded, color: isObscured ? Color(0xFFBABBBE) : AppColors.primaryColor)
+                          onTap: () {
+                            _obscureTextNotifier.value = !isObscured;
+                          },
+                          child: Icon(Icons.remove_red_eye_rounded, color: isObscured ? Color(0xFFBABBBE) : AppColors.primaryColor),
                         ),
                       ),
                     );
-                  }
-              ),
-              CustomButton(
-                onPressed: () {
-                  navigationService.push(OtpVerification());
-                }, text: "${LabelString.labelRegister} Now",
-              ),
-              const SizedBox(height: 20),
-            ],
-          ),
-        );
-      }),
+                  },
+                ),
+                CustomButton(
+                  onPressed: () {
+                    navigationService.push(OtpVerification());
+                  },
+                  text: "${LabelString.labelRegister} Now",
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }
