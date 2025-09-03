@@ -7,9 +7,6 @@ import 'package:medizii/constants/app_colours/app_colors.dart';
 import 'package:medizii/constants/fonts/font_weight.dart';
 import 'package:medizii/constants/strings.dart';
 import 'package:medizii/gen/assets.gen.dart';
-import 'package:medizii/main.dart';
-
-import 'dr_patient_summery_pg.dart';
 
 class DoctorPatientPage extends StatefulWidget {
   const DoctorPatientPage({super.key});
@@ -73,9 +70,7 @@ class _DoctorPatientPageState extends State<DoctorPatientPage> {
                 itemCount: profiles.length,
                 itemBuilder: (context, index) {
                   return GestureDetector(
-                    onTap: (){
-                      navigationService.push(DoctorPatientSummeryPage());
-                    },
+                    onTap: (){},
                     child: Column(
                       children: [
                         ClipOval(child: Image.network(profiles[index]["image"]!, height: 80, width: 80, fit: BoxFit.cover)),

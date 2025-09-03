@@ -4,13 +4,14 @@ import 'dart:developer';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:medizii/components/sharedPreferences_service.dart';
 
 import '../constants/constants.dart';
 import '../constants/strings.dart';
 
 class HttpActions {
   String endPoint = Constants.of().endpoint;
-
+  final prefs = PreferenceService().prefs;
   http.Client _client = http.Client();
 
   Future<dynamic> postMethod(String url, {dynamic data, Map<String, String>? headers}) async {
@@ -29,9 +30,12 @@ class HttpActions {
     }
   }
 
-  Future<dynamic> getMethod(String url) async {
+  Future<dynamic> getMethod(String url, {Map<String, String>? headers}) async {
     if ((await checkConnection()) != ConnectivityResult.none) {
-      http.Response response = await http.get(Uri.parse(endPoint + url));
+      headers = getSessionData(headers ?? {}, prefs.getString(PreferenceString.prefsToken));
+
+      http.Response response = await http.get(Uri.parse(endPoint + url), headers: headers);
+
       return jsonDecode(utf8.decode(response.bodyBytes));
     } else {
       Future.error(ErrorString.noInternet);
@@ -45,6 +49,7 @@ class HttpActions {
         bool shouldCancelRequest = false,
       }) async {
     if ((await checkConnection()) != ConnectivityResult.none) {
+      headers = getSessionData(headers ?? {}, prefs.getString(PreferenceString.prefsToken));
       String finalUrl = endPoint + url;
       if (queryParams != null) {
         queryParams.forEach((key, value) {
@@ -74,9 +79,10 @@ class HttpActions {
     }
   }
 
-  Map<String, String> getSessionData(Map<String, String> headers) {
+  Map<String, String> getSessionData(Map<String, String> headers, [String? token]) {
     headers["content-type"] = "application/json";
     headers["Accept"] = "application/json";
+    headers["Authorization"] = "Bearer $token";
     return headers;
   }
 

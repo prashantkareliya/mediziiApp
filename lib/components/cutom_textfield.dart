@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:medizii/constants/app_colours/app_colors.dart';
 
 class CustomTextField extends StatelessWidget {
-  final String label;
+  final String? label;
   final String? hintText;
   final String? Function(String?)? validator;
   final TextEditingController controller;
@@ -16,10 +16,11 @@ class CustomTextField extends StatelessWidget {
   final TextInputType? textInputType;
   final Function()? onTap;
   final bool readOnly;
+  final FocusNode? focus;
 
   const CustomTextField({
     super.key,
-    required this.label,
+    this.label,
     this.hintText,
     required this.controller,
     this.validator,
@@ -31,6 +32,7 @@ class CustomTextField extends StatelessWidget {
     this.textInputType = TextInputType.text,
     this.onTap,
     this.readOnly = false,
+    this.focus
   });
 
   @override
@@ -40,16 +42,18 @@ class CustomTextField extends StatelessWidget {
       children: [
         if(label != "")
           Text(
-          label,
+            label ?? "",
           style: GoogleFonts.dmSans(textStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 12.sp, color: AppColors.textSecondary)),
         ),
         SizedBox(height: 5.sp),
         TextFormField(
+
           controller: controller,
           obscureText: obscureText,
           validator: validator,
           cursorColor: AppColors.primaryColor,
           maxLines: maxLine,
+          focusNode: focus,
           maxLength: maxLength,
           keyboardType: textInputType,
           onTap: onTap,
@@ -58,6 +62,7 @@ class CustomTextField extends StatelessWidget {
           onTapOutside: (d) {
             FocusScope.of(context).requestFocus(FocusNode());
           },
+
           decoration: InputDecoration(
             counter: SizedBox.shrink(),
             hintText: hintText ?? "",

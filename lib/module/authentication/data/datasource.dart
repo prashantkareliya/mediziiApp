@@ -2,11 +2,40 @@ import 'package:flutter/rendering.dart';
 import 'package:medizii/constants/constants.dart';
 import 'package:medizii/http_actions/app_http.dart';
 import 'package:medizii/module/authentication/model/create_user_request.dart';
+import 'package:medizii/module/authentication/model/login_request.dart';
 
 class AuthDatasource extends HttpActions {
-  Future<dynamic> createUser({required CreateUserRequest createUserRequest}) async {
-    final response = await postMethod(ApiEndPoint.createUser, data: createUserRequest.toJson());
-    debugPrint("crate user ==== > $response");
+  Future<dynamic> createUser({
+    required CreateUserRequest createUserRequest,
+    required String endpoint,
+  }) async {
+    final response = await postMethod(endpoint, data: createUserRequest.toJson());
+    debugPrint("Create user response: $response");
+    return response;
+  }
+
+  Future<dynamic> loginUser({
+    required LoginRequest loginRequest,
+    required String endpoint,
+  }) async {
+    final response = await postMethod(endpoint, data: loginRequest.toJson());
+    debugPrint("Login response: $response");
+    return response;
+  }
+
+
+  Future<dynamic> forgetPassword({
+    required Map<String, dynamic> requestData,
+    required String endpoint,
+  }) async {
+    final response = await postMethod(endpoint, data: requestData);
+    debugPrint("Forget password response: $response");
+    return response;
+  }
+
+  getAllHospitals() async {
+    final response = await getMethod(ApiEndPoint.getAllHospital);
+    debugPrint("get Hospitals ==== > $response");
     return response;
   }
 }

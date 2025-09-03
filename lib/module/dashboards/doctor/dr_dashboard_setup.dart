@@ -3,20 +3,32 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:medizii/components/sharedPreferences_service.dart';
 import 'package:medizii/constants/app_colours/app_colors.dart';
 import 'package:medizii/constants/strings.dart';
 import 'package:medizii/gen/assets.gen.dart';
 import 'package:medizii/module/dashboards/bottom_bav_provider.dart';
+import 'package:medizii/module/dashboards/doctor/bloc/doctor_bloc.dart';
+import 'package:medizii/module/dashboards/doctor/bloc/doctor_event.dart';
+import 'package:medizii/module/dashboards/doctor/data/doctor_datasource.dart';
+import 'package:medizii/module/dashboards/doctor/data/doctor_repository.dart';
 
 import 'dr_home/dr_home_pg.dart';
 import 'dr_patient/dr_patient_pg.dart';
 import 'dr_setting/dr_setting_pg.dart';
 import 'dr_upload_reports/dr_search_patient_pg.dart';
 
-class DoctorDashboard extends StatelessWidget {
-  DoctorDashboard({super.key});
+class DoctorDashboard extends StatefulWidget {
+  const DoctorDashboard({super.key});
 
+  @override
+  State<DoctorDashboard> createState() => _DoctorDashboardState();
+}
+
+class _DoctorDashboardState extends State<DoctorDashboard> {
   final List<Widget> _screens = [DoctorHomePage(), DoctorPatientPage(), DoctorSearchPatientPage(), DoctorSettingPage()];
+
+
 
   @override
   Widget build(BuildContext context) {

@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medizii/components/context_extension.dart';
 import 'package:medizii/components/custom_appbar.dart';
+import 'package:medizii/components/custom_dialog.dart';
+import 'package:medizii/components/sharedPreferences_service.dart';
 import 'package:medizii/constants/app_colours/app_colors.dart';
+import 'package:medizii/constants/helpers.dart';
 import 'package:medizii/constants/strings.dart';
 import 'package:medizii/gen/assets.gen.dart';
 import 'package:medizii/main.dart';
+import 'package:medizii/module/dashboards/patient/bloc/patient_bloc.dart';
+import 'package:medizii/module/dashboards/patient/data/patient_datasource.dart';
+import 'package:medizii/module/dashboards/patient/data/patient_repository.dart';
 import 'package:medizii/module/dashboards/patient/patient_setting/pt_profile_pg.dart';
+import 'package:medizii/notification.dart';
 
 class PatientSettingPage extends StatelessWidget {
   PatientSettingPage({super.key});
+
+  final prefs = PreferenceService().prefs;
+
 
   final List<String> options = [
     'Profile',
@@ -26,10 +37,15 @@ class PatientSettingPage extends StatelessWidget {
       backgroundColor: AppColors.whiteColor,
       appBar: CustomAppBar(
         title: LabelString.labelSetting,
-        rightWidget: Container(
-          padding: EdgeInsets.all(8.sp),
-          decoration: BoxDecoration(color: AppColors.greyBg, shape: BoxShape.circle),
-          child: Assets.icIcons.exit.svg(),
+        rightWidget: GestureDetector(
+          onTap: () {
+            prefs.clear();
+          },
+          child: Container(
+            padding: EdgeInsets.all(8.sp),
+            decoration: BoxDecoration(color: AppColors.greyBg, shape: BoxShape.circle),
+            child: Assets.icIcons.exit.svg(),
+          ),
         ),
       ),
       body: SafeArea(
@@ -42,7 +58,29 @@ class PatientSettingPage extends StatelessWidget {
                 separatorBuilder: (_, __) => SizedBox(height: 14.sp),
                 itemBuilder: (context, index) {
                   if (index < options.length) {
-                    return SettingTile(title: options[index]);
+                    return SettingTile(title: options[index],
+                        onTap: () {
+                          switch (options[index]) {
+                            case 'Profile':
+                              navigationService.push(PatientProfilePage());
+                              break;
+                            case 'Notification':
+                              navigationService.push(NotificationPage());
+                              break;
+                            case 'About Us':
+                              print('About Us');
+                              break;
+                            case 'Contact Us':
+                              print('Contact Us');
+                              break;
+                            case 'Privacy Policy':
+                              print('Privacy Policy');
+                              break;
+                            default:
+                            // fallback
+                              break;
+                          }
+                        });
                   } else {
                     return DeleteAccountTile();
                   }
@@ -62,49 +100,80 @@ class PatientSettingPage extends StatelessWidget {
 
 class SettingTile extends StatelessWidget {
   final String title;
+  final VoidCallback onTap;
 
-  const SettingTile({super.key, required this.title});
+  const SettingTile({super.key, required this.title, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(color: AppColors.greyBg, borderRadius: BorderRadius.circular(15)),
       child: ListTile(
-        title: Padding(
-          padding: EdgeInsets.symmetric(vertical: 14.sp),
-          child: Text(title, style: GoogleFonts.dmSans(color: AppColors.blackColor, fontSize: 15.sp, fontWeight: FontWeight.w500)),
-        ),
-        trailing: Icon(Icons.arrow_forward_ios, color: AppColors.redColor, size: 16.sp),
-        onTap: () {
-          switch(title){
-            case 'Profile':
-              navigationService.push(PatientProfilePage());
-              break;
-          }
-        },
+          title: Padding(
+            padding: EdgeInsets.symmetric(vertical: 14.sp),
+            child: Text(title, style: GoogleFonts.dmSans(color: AppColors.blackColor, fontSize: 15.sp, fontWeight: FontWeight.w500)),
+          ),
+          trailing: Icon(Icons.arrow_forward_ios, color: AppColors.redColor, size: 16.sp),
+          onTap: onTap
       ),
     );
   }
 }
 
 class DeleteAccountTile extends StatelessWidget {
-  const DeleteAccountTile({super.key});
+  DeleteAccountTile({super.key});
+
+  final prefs = PreferenceService().prefs;
+  PatientBloc patientBloc = PatientBloc(PatientRepository(patientDatasource: PatientDatasource()));
+  bool showSpinner = false;
+
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: context.width(),
-      decoration: BoxDecoration(
-        image: DecorationImage(image: AssetImage("assets/images/home_bg.png"), fit: BoxFit.fill),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: ListTile(
-        title: Text(
-          LabelString.labelDeleteAccount,
-          style: GoogleFonts.dmSans(color: AppColors.blackColor, fontSize: 15.sp, fontWeight: FontWeight.w500),
-        ),
-        onTap: () {},
-      ),
+    return BlocConsumer<PatientBloc, PatientState>(
+      bloc: patientBloc,
+      listener: (context, state) {
+        if (state is FailureState) {
+          showSpinner = false;
+          Helpers.showSnackBar(context, state.error);
+        }
+        if (state is LoadingState) {
+          showSpinner = true;
+        }
+        if (state is LoadedState) {
+          showSpinner = false;
+        }
+      },
+      builder: (context, state) {
+        return Container(
+          width: context.width(),
+          decoration: BoxDecoration(
+            image: DecorationImage(image: AssetImage("assets/images/home_bg.png"), fit: BoxFit.fill),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: ListTile(
+            title: Text(
+              LabelString.labelDeleteAccount,
+              style: GoogleFonts.dmSans(color: AppColors.blackColor, fontSize: 15.sp, fontWeight: FontWeight.w500),
+            ),
+            onTap: () {
+              PlatformAwareDialog.show(
+                context: context,
+                title: 'Delete',
+                content: 'Are you sure you want to Delete Account?',
+                confirmText: 'Yes',
+                cancelText: 'No',
+                onConfirm: () {
+                  patientBloc.add(DeletePatientEvent(prefs.getString(PreferenceString.prefsUserId).toString()));
+                },
+                onCancel: () {
+
+                },
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

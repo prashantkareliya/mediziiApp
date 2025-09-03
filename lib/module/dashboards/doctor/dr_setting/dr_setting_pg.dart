@@ -1,14 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medizii/components/context_extension.dart';
 import 'package:medizii/components/custom_appbar.dart';
+import 'package:medizii/components/custom_dialog.dart';
+import 'package:medizii/components/sharedPreferences_service.dart';
 import 'package:medizii/constants/app_colours/app_colors.dart';
+import 'package:medizii/constants/helpers.dart';
 import 'package:medizii/constants/strings.dart';
 import 'package:medizii/gen/assets.gen.dart';
+import 'package:medizii/main.dart';
+import 'package:medizii/module/dashboards/doctor/bloc/doctor_bloc.dart';
+import 'package:medizii/module/dashboards/doctor/bloc/doctor_event.dart';
+import 'package:medizii/module/dashboards/doctor/data/doctor_datasource.dart';
+import 'package:medizii/module/dashboards/doctor/data/doctor_repository.dart';
+import 'package:medizii/notification.dart';
+
+import 'dr_profile_pg.dart';
 
 class DoctorSettingPage extends StatelessWidget {
   DoctorSettingPage({super.key});
+
+  final prefs = PreferenceService().prefs;
 
   final List<String> options = [
     'Profile',
@@ -24,12 +38,28 @@ class DoctorSettingPage extends StatelessWidget {
       backgroundColor: AppColors.whiteColor,
       appBar: CustomAppBar(
         title: LabelString.labelSetting,
-        rightWidget: Container(
-          padding: EdgeInsets.all(8.sp),
-          decoration: BoxDecoration(color: AppColors.greyBg, shape: BoxShape.circle),
-          child: Assets.icIcons.exit.svg(),
-        ),
-      ),
+          rightWidget: GestureDetector(
+            onTap: () {
+              PlatformAwareDialog.show(
+                context: context,
+                title: 'Logout',
+                content: 'Are you sure you want to log out?',
+                confirmText: 'Yes',
+                cancelText: 'No',
+                onConfirm: () {
+                  prefs.clear();
+                },
+                onCancel: () {
+                  print('User cancelled');
+                },
+              );
+            },
+            child: Container(
+              padding: EdgeInsets.all(8.sp),
+              decoration: BoxDecoration(color: AppColors.greyBg, shape: BoxShape.circle),
+              child: Assets.icIcons.exit.svg(),
+            ),
+          )),
       body: SafeArea(
         child: Column(
           children: [
@@ -40,7 +70,29 @@ class DoctorSettingPage extends StatelessWidget {
                 separatorBuilder: (_, __) => SizedBox(height: 14.sp),
                 itemBuilder: (context, index) {
                   if (index < options.length) {
-                    return SettingTile(title: options[index]);
+                    return SettingTile(title: options[index],
+                        onTap: () {
+                          switch (options[index]) {
+                            case 'Profile':
+                              navigationService.push(DoctorProfilePage());
+                              break;
+                            case 'Notification':
+                              navigationService.push(NotificationPage());
+                              break;
+                            case 'About Us':
+                              print('About Us');
+                              break;
+                            case 'Contact Us':
+                              print('Contact Us');
+                              break;
+                            case 'Privacy Policy':
+                              print('Privacy Policy');
+                              break;
+                            default:
+                            // fallback
+                              break;
+                          }
+                        });
                   } else {
                     return DeleteAccountTile();
                   }
@@ -60,8 +112,9 @@ class DoctorSettingPage extends StatelessWidget {
 
 class SettingTile extends StatelessWidget {
   final String title;
+  final VoidCallback onTap;
 
-  const SettingTile({super.key, required this.title});
+  SettingTile({super.key, required this.title, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -73,19 +126,36 @@ class SettingTile extends StatelessWidget {
           child: Text(title, style: GoogleFonts.dmSans(color: AppColors.blackColor, fontSize: 15.sp, fontWeight: FontWeight.w500)),
         ),
         trailing: Icon(Icons.arrow_forward_ios, color: AppColors.redColor, size: 16.sp),
-        onTap: () {
-          // Handle tap
-        },
+        onTap: onTap,
       ),
     );
   }
 }
 
 class DeleteAccountTile extends StatelessWidget {
-  const DeleteAccountTile({super.key});
+  DeleteAccountTile({super.key});
+
+  final prefs = PreferenceService().prefs;
+  DoctorBloc doctorBloc = DoctorBloc(DoctorRepository(doctorDatasource: DoctorDatasource()));
+  bool showSpinner = false;
 
   @override
   Widget build(BuildContext context) {
+    return BlocConsumer<DoctorBloc, DoctorState>(
+      bloc: doctorBloc,
+      listener: (context, state) {
+        if (state is FailureState) {
+          showSpinner = false;
+          Helpers.showSnackBar(context, state.error);
+        }
+        if (state is LoadingState) {
+          showSpinner = true;
+        }
+        if (state is LoadedState) {
+          showSpinner = false;
+        }
+      },
+      builder: (context, state) {
     return Container(
       width: context.width(),
       decoration: BoxDecoration(
@@ -97,8 +167,24 @@ class DeleteAccountTile extends StatelessWidget {
           LabelString.labelDeleteAccount,
           style: GoogleFonts.dmSans(color: AppColors.blackColor, fontSize: 15.sp, fontWeight: FontWeight.w500),
         ),
-        onTap: () {},
+        onTap: () {
+          PlatformAwareDialog.show(
+            context: context,
+            title: 'Delete',
+            content: 'Are you sure you want to Delete Account?',
+            confirmText: 'Yes',
+            cancelText: 'No',
+            onConfirm: () {
+              doctorBloc.add(DeleteDoctorEvent(prefs.getString(PreferenceString.prefsUserId).toString()));
+            },
+            onCancel: () {
+
+            },
+          );
+        },
       ),
+    );
+      },
     );
   }
 }

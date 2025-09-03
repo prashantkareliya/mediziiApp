@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medizii/constants/app_colours/app_colors.dart';
 import 'package:medizii/constants/strings.dart';
 import 'package:medizii/gen/assets.gen.dart';
 import 'package:medizii/main.dart';
+import 'package:medizii/module/dashboards/bottom_bav_provider.dart';
 import 'package:medizii/module/dashboards/patient/patient_home/pt_reposts_upload_pg.dart';
 import 'package:medizii/notification.dart';
 
@@ -60,7 +62,7 @@ class PatientHomePage extends StatelessWidget {
                 ),
                 20.verticalSpace,
                 Text(
-                  LabelString.labelGoodMorning,
+                  GreetingMessage.getGreetingMessage(),
                   style: GoogleFonts.dmSans(color: AppColors.blackColor, fontSize: 14.sp, fontWeight: FontWeight.w400),
                 ),
                 3.verticalSpace,
@@ -76,6 +78,7 @@ class PatientHomePage extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.fromLTRB(18.sp, 20.sp, 18.sp, 5.sp),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     width: double.infinity,
@@ -147,7 +150,9 @@ class PatientHomePage extends StatelessWidget {
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.whiteColor,
                               foregroundColor: AppColors.primaryColor,
@@ -168,24 +173,33 @@ class PatientHomePage extends StatelessWidget {
                     ),
                   ),
                   20.verticalSpace,
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _buildHealthCard(
-                          LabelString.labelReports,
-                          'https://www.shutterstock.com/image-photo/indian-senior-doctor-watching-medical-260nw-2274219827.jpg',
-                          const Color(0xFFE8F4FD),
+                  _buildHealthCard(
+                    LabelString.labelReports,
+                    'https://www.shutterstock.com/image-photo/indian-senior-doctor-watching-medical-260nw-2274219827.jpg',
+                    const Color(0xFFE8F4FD),
+                  ),
+                  20.verticalSpace,
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        context.read<BottomNavProvider>().setIndex(2);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.whiteColor,
+                        foregroundColor: AppColors.primaryColor,
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          side: const BorderSide(color: AppColors.grey, width: 1.2),
                         ),
+                        elevation: 0,
                       ),
-                      const SizedBox(width: 15),
-                      Expanded(
-                        child: _buildHealthCard(
-                          LabelString.labelBloodData,
-                          'https://iprocess.net/wp-content/uploads/2022/08/testing-blood.jpg',
-                          const Color(0xFFE1F5FE),
-                        ),
+                      child: Text(
+                        LabelString.labelBookAmbulance,
+                        style: GoogleFonts.dmSans(fontSize: 16.sp, fontWeight: FontWeight.w600, color: AppColors.redColor),
                       ),
-                    ],
+                    ),
                   ),
                 ],
               ),
@@ -205,6 +219,7 @@ class PatientHomePage extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(color: AppColors.greyBg, borderRadius: BorderRadius.circular(20)),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               width: 85.sp,

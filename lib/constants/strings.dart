@@ -1,11 +1,22 @@
 //Error messages
 class ErrorString {
-  static const String internalSeverError = "Internal sever error";
-  static const String noInternet = "No Internet";
-  static const String somethingWentWrong = "Something Went Wrong";
-  static const String emailAddressErr = "Please enter email address";
-  static const String emailAddressValidErr = "Please enter valid email address";
-  static const String passwordErr = "Please enter password";
+  static const String internalSeverError = "ⓘ Internal sever error";
+  static const String noInternet = "ⓘ No Internet";
+  static const String somethingWentWrong = "ⓘ Something Went Wrong";
+  static const String fullNameErr = "ⓘ Please enter full name";
+  static const String emailAddressErr = "ⓘ Please enter email address";
+  static const String emailAddressValidErr = "ⓘ Please enter valid email address";
+  static const String phoneErr = "ⓘ Please enter phone number";
+  static const String passwordErr = "ⓘ Please enter password";
+  static const String passwordErr1 = "ⓘ Password & Confirm Password do not match";
+  static const String hospitalErr = "ⓘ Please select hospital";
+  static const String occupationErr = "ⓘ Select occupation";
+  static const String bloodErr = "ⓘ Select blood";
+  static const String genderErr = "ⓘ Select gender";
+  static const String doctorTypeErr = "ⓘ Please Select doctor type";
+  static const String otpErr = "ⓘ Please enter OTP";
+  static const String experienceErr = "ⓘ Enter experience";
+  static const String ageErr = "ⓘ Enter age";
 }
 
 //Messages
@@ -22,6 +33,7 @@ class LabelString {
   static const String labelWelcomeTo = "Welcome to";
   static const String labelLogin = "Login";
   static const String labelRegister = "Register";
+  static const String labelConfirmOtp = "Confirm OTP";
   static const String labelContinue = "Continue";
   static const String labelEmailAddress = "Email Address";
   static const String labelEnterEmailAddress = "Enter Email Address";
@@ -41,10 +53,13 @@ class LabelString {
   static const String labelFullName = "Full Name";
   static const String labelEnterName = "Enter Name";
   static const String labelPhoneNumber = "Phone Number";
+  static const String labelAge = "Age";
+  static const String labelExperience = "Experience";
   static const String labelEnterPhoneNumber = "Enter Phone Number";
   static const String labelHome = "Home";
   static const String labelCallDoctor = "Call Doctor";
   static const String labelBookEms = "Book EMS";
+  static const String labelBookAmbulance = "Book Ambulance";
   static const String labelSetting = "Setting";
   static const String labelPatients = "Patients";
   static const String labelUploadReport = "Upload Report";
@@ -57,10 +72,10 @@ class LabelString {
   static const String labelUploadedFiles = "Uploaded Files";
   static const String labelLookingDoctor = "Looking for a Doctor?";
   static const String labelSearchHint = "Search Doctor or Service Here...";
-  static const String labelCallEms = "Calling an Ambulance for";
-  static const String labelYourself = "Yourself";
-  static const String labelOthers = "Others";
-  static const String labelNext = "Next";
+  static const String labelCallEms = "Calling an Ambulance";
+  static const String labelYourself = "For Yourself";
+  static const String labelOthers = "For Others";
+  static const String labelNext = "Confirm Location";
   static const String labelSelectAddress = "Select Address";
   static const String labelConfirmLocation = "Confirm Location";
   static const String labelPickupLocation = "Pickup Location";
@@ -69,7 +84,7 @@ class LabelString {
   static const String labelEnterDropLocation = "Enter Drop Location";
   static const String labelNearbyHospital = "Nearby Hospital";
   static const String labelDeleteAccount = "Delete Account";
-  static const String labelPatientsSummary = "Patients Summary";
+  static const String labelPatientsSummary = "Recent Patients";
   static const String labelViewAll = "View All";
   static const String labelSearchPatient = "Search Patient";
   static const String labelActiveRide = "Active Ride";
@@ -91,6 +106,95 @@ class ButtonString {
 //Button Strings
 class ImageString {
   static const String icPlaceHolder = "";
+  static const String imgProfile = "assets/images/profile.png";
+
 }
 
-class HtmlContent {}
+class PreferenceString {
+  static const String prefsToken = "token";
+  static const String prefsRole = "role";
+  static const String prefsUserId = "userId";
+  static const String prefsName = "name";
+  static const String userResponse = "userData";
+}
+
+class StaticList {
+  static const List<String> occupations  = [
+    'MBBS',
+    'MBChB',
+    'BDS',
+    'BAMS',
+    'BHMS',
+    'BUMS',
+    'BNYS',
+    'BPT',
+    'BPharm'
+  ];
+
+  static const List<String> doctorType  = [
+    'General Physician / Family Doctor',
+    'Pediatrician',
+    'Gynecologist / Obstetrician',
+    'Cardiologist',
+    'Dermatologist',
+    'Orthopedic Doctor',
+    'Neurologist',
+    'Psychiatrist',
+    'Psychologist / Therapist',
+    'ENT Specialist',
+    'Ophthalmologist',
+    'Dentist',
+    'Endocrinologist',
+    'Gastroenterologist',
+    'Pulmonologist',
+    'Nephrologist',
+    'Oncologist',
+    'Hematologist',
+    'Rheumatologist',
+    'Surgeon (General Surgery)',
+    'Plastic / Cosmetic Surgeon',
+    'Radiologist',
+    'Pathologist',
+    'Emergency Medicine Doctor',
+    'Urologist',
+    'Geriatrician',
+    'Allergist / Immunologist',
+    'Anesthesiologist',
+  ];
+
+  static const List<String> sexList = [
+    "Male",
+    "Female",
+    "Other",
+    "Prefer not to say",
+  ];
+
+  static const List<String> bloodGroup = [
+    "A+",
+    "A−",
+    "B+",
+    "B−",
+    "AB+",
+    "AB−",
+    "O+",
+    "O−",
+  ];
+}
+
+
+
+class GreetingMessage {
+  static String getGreetingMessage() {
+    final hour = DateTime.now().hour;
+
+    if (hour >= 5 && hour < 12) {
+      return 'Good Morning';
+    } else if (hour >= 12 && hour < 17) {
+      return 'Good Afternoon';
+    } else if (hour >= 17 && hour < 21) {
+      return 'Good Evening';
+    } else {
+      return 'Good Night';
+    }
+  }
+}

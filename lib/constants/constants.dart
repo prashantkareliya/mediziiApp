@@ -23,14 +23,49 @@ class Constants {
 
 class ResponseStatus {
   static const bool failed = true;
-  static const bool success = true;
+  static const bool success = false;
 }
 
 class ApiEndPoint {
   //POST API endpoint
-  static const String createUser = "user/login";
+
+  static const String createDoctor = "doctor/create";
+  static const String createPatient = "patient/create";
+  static const String createTechnician = "technician/create";
+
+  static const String loginDoctor = "doctor/login";
+  static const String loginPatient = "patient/login";
+  static const String loginTechnician = "technician/login";
+
+  static const String forgetPasswordDoctor = "doctor/forget";
+  static const String forgetPasswordPatient = "patient/forget";
+  static const String forgetPasswordTechnician = "technician/forget";
+
+  static const String updateDoctor = "doctor/update/id";
+  static const String updatePatient = "patient/update/id";
+  static const String updateTechnician = "technician/update/id";
+
+  //DELETE API endpoint
+  static const String deleteDoctor = "doctor/delete/id";
+  static const String deletePatient = "patient/delete/id";
+  static const String deleteTechnician = "technician/delete/id";
 
   //GET API endpoint
 
-  //PUT API endpoint
+
+  static String getDoctorDetail(String id) => "doctor/detail/$id";
+  static String getPatientDetail(String id) => "patient/detail/$id";
+  static String doctorDelete(String id) => "doctor/delete/$id";
+  static String patientDelete(String id) => "patient/delete/$id";
+
+
+  static const String getTechnicianById = "technician/detail/id";
+
+
+  static const String getAllDoctor = "doctor/detail/all";
+  static const String getAllHospital = "hospital/all";
+  static const String getAllPatient = "patient/detail/all";
+  static const String getAllTechnician = "technician/detail/all";
+
+  static const String nearestHospital = "patient/nearest-hospital?lat=28.5686992&lng=77.2043418&type=government";
 }

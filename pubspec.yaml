@@ -42,6 +42,8 @@ dependencies:
   shared_preferences: ^2.5.3
   http: ^1.4.0
   freezed_annotation: ^3.0.0
+  fluttertoast: ^8.2.12
+  modal_progress_hud_nsn: ^0.5.1
   flutter_bloc: ^9.1.1
   bloc: ^9.0.0
   flutter_svg: ^2.2.0
@@ -50,6 +52,7 @@ dependencies:
   google_maps_flutter: ^2.12.3
   dio: ^5.9.0
   connectivity_plus: ^6.1.5
+  url_launcher: ^6.3.2
 
 
 

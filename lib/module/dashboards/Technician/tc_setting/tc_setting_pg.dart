@@ -3,12 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medizii/components/context_extension.dart';
 import 'package:medizii/components/custom_appbar.dart';
+import 'package:medizii/components/sharedPreferences_service.dart';
 import 'package:medizii/constants/app_colours/app_colors.dart';
 import 'package:medizii/constants/strings.dart';
 import 'package:medizii/gen/assets.gen.dart';
 
 class TechnicianSettingPage extends StatelessWidget {
   TechnicianSettingPage({super.key});
+  final prefs = PreferenceService().prefs;
 
   final List<String> options = [
     'Profile',
@@ -24,10 +26,15 @@ class TechnicianSettingPage extends StatelessWidget {
       backgroundColor: AppColors.whiteColor,
       appBar: CustomAppBar(
         title: LabelString.labelSetting,
-        rightWidget: Container(
-          padding: EdgeInsets.all(8.sp),
-          decoration: BoxDecoration(color: AppColors.greyBg, shape: BoxShape.circle),
-          child: Assets.icIcons.exit.svg(),
+        rightWidget: GestureDetector(
+          onTap: (){
+            prefs.clear();
+          },
+          child: Container(
+            padding: EdgeInsets.all(8.sp),
+            decoration: BoxDecoration(color: AppColors.greyBg, shape: BoxShape.circle),
+            child: Assets.icIcons.exit.svg(),
+          ),
         ),
       ),
       body: SafeArea(

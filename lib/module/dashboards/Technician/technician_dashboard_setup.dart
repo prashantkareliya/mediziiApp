@@ -30,6 +30,8 @@ class TechnicianDashboard extends StatelessWidget {
         child: BottomNavigationBar(
           iconSize: 25.r,
           currentIndex: currentIndex,
+          type: BottomNavigationBarType.fixed,
+
           onTap: (index) {
             // Refresh logic: Even if the same index is tapped, force refresh
             final provider = context.read<BottomNavProvider>();
