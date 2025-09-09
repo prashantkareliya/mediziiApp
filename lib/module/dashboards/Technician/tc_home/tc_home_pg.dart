@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:medizii/components/sharedPreferences_service.dart';
 import 'package:medizii/constants/app_colours/app_colors.dart';
 import 'package:medizii/constants/strings.dart';
 import 'package:medizii/gen/assets.gen.dart';
@@ -16,6 +17,7 @@ class TechnicianHomePage extends StatefulWidget {
 }
 
 class _TechnicianHomePageState extends State<TechnicianHomePage> {
+  final prefs = PreferenceService().prefs;
 
   @override
   Widget build(BuildContext context) {
@@ -58,11 +60,11 @@ class _TechnicianHomePageState extends State<TechnicianHomePage> {
                 ),
                 20.verticalSpace,
                 Text(
-                  LabelString.labelGoodMorning,
+                  GreetingMessage.getGreetingMessage(),
                   style: GoogleFonts.dmSans(color: AppColors.whiteColor, fontSize: 14.sp, fontWeight: FontWeight.w400),
                 ),
                 3.verticalSpace,
-                Text('Nina Decosta', style: GoogleFonts.dmSans(color: AppColors.whiteColor, fontSize: 24.sp, fontWeight: FontWeight.w600)),
+                Text(prefs.getString(PreferenceString.prefsName) ?? "", style: GoogleFonts.dmSans(color: AppColors.whiteColor, fontSize: 24.sp, fontWeight: FontWeight.w600)),
               ],
             ),
           ),

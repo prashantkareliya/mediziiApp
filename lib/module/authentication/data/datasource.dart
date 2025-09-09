@@ -38,4 +38,10 @@ class AuthDatasource extends HttpActions {
     debugPrint("get Hospitals ==== > $response");
     return response;
   }
+
+  Future<dynamic> getNearestHospital(String lat, String lang) async {
+    final response = await getMethodWithQueryParam(ApiEndPoint.getNearestHospital(lat, lang));
+    debugPrint("Nearest Hospital -  $response");
+    return response;
+  }
 }

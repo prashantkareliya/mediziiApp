@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medizii/constants/constants.dart';
 import 'package:medizii/http_actions/app_http.dart';
+import 'package:medizii/module/dashboards/patient/model/upload_report_request.dart';
 
 class PatientDatasource extends HttpActions {
   Future<dynamic> getAllDoctor() async {
@@ -16,8 +17,14 @@ class PatientDatasource extends HttpActions {
   }
 
   Future<dynamic> deletePatient(String id) async {
-    final response = await getMethodWithQueryParam(ApiEndPoint.patientDelete(id));
+    final response = await deleteMethodWithQueryParam(ApiEndPoint.patientDelete(id));
     debugPrint("Patient delete -  $response");
+    return response;
+  }
+
+  Future<dynamic> uploadReport(String id, UploadReportRequest? uploadReportRequest) async {
+    final response = await postMultiPartMethod(ApiEndPoint.uploadReport(id), data: await uploadReportRequest!.toJson());
+    debugPrint("Upload Report -  $response");
     return response;
   }
 }

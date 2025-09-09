@@ -31,3 +31,10 @@ class SendOtpEvent extends AuthEvent {
 class FetchHospitalsEvent extends AuthEvent {
   FetchHospitalsEvent();
 }
+
+
+class NearestHospitalEvent extends AuthEvent {
+  String lat;
+  String lang;
+  NearestHospitalEvent({required this.lat, required this.lang});
+}

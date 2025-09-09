@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medizii/components/custom_loader.dart';
+import 'package:medizii/components/custom_loading_wrapper.dart';
 import 'package:medizii/components/sharedPreferences_service.dart';
 import 'package:medizii/constants/app_colours/app_colors.dart';
 import 'package:medizii/constants/helpers.dart';
@@ -114,10 +115,8 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
             },
             builder: (context, state) {
               return Expanded(
-                child: ModalProgressHUD(
-                  blur: 2.0,
-                  inAsyncCall: showSpinner,
-                  progressIndicator: CustomLoader(),
+                child:LoadingWrapper(
+                  showSpinner: showSpinner,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

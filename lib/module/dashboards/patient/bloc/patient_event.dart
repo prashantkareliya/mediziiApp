@@ -17,3 +17,10 @@ class DeletePatientEvent extends PatientEvent {
   String id;
   DeletePatientEvent(this.id);
 }
+
+class UploadReportImagesEvent extends PatientEvent {
+  UploadReportRequest uploadReportRequest;
+  final String id;
+
+  UploadReportImagesEvent(this.id, this.uploadReportRequest);
+}

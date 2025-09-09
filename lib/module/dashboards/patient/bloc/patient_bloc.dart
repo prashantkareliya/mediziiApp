@@ -1,7 +1,10 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:medizii/module/dashboards/doctor/model/delete_doctor_response.dart';
 import 'package:medizii/module/dashboards/patient/data/patient_repository.dart';
 import 'package:medizii/module/dashboards/patient/model/get_all_doctor_response.dart';
+import 'package:medizii/module/dashboards/patient/model/upload_document_response.dart';
+import 'package:medizii/module/dashboards/patient/model/upload_report_request.dart';
 import 'package:meta/meta.dart';
 
 part 'patient_event.dart';
@@ -15,8 +18,7 @@ class PatientBloc extends Bloc<PatientEvent, PatientState> {
     on<GetAllDoctorEvent>((event, emit) => _getAllDoctor(event, emit));
 
     on<DeletePatientEvent>((event, emit) => _deletePatient(event, emit));
-
-
+    on<UploadReportImagesEvent>((event, emit) => _uploadReport(event, emit));
   }
 
   _getAllDoctor(GetAllDoctorEvent event, Emitter<PatientState> emit) async {
@@ -41,6 +43,23 @@ class PatientBloc extends Bloc<PatientEvent, PatientState> {
       success: (success) {
         emit(LoadingState(false));
         emit(LoadedState<DeleteDoctorResponse>(data: success));
+      },
+      failure: (failure) {
+        emit(LoadingState(false));
+        emit(FailureState(failure.toString()));
+      },
+    );
+  }
+
+  _uploadReport(UploadReportImagesEvent event, Emitter<PatientState> emit) async {
+    emit(LoadingState(true));
+
+    final response = await patientRepository.uploadReport(event.id, event.uploadReportRequest);
+
+    response.when(
+      success: (success) {
+        emit(LoadingState(false));
+        emit(LoadedState<UploadDocumentResponse>(data: success));
       },
       failure: (failure) {
         emit(LoadingState(false));

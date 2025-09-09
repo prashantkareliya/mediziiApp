@@ -11,6 +11,7 @@ import 'package:medizii/constants/helpers.dart';
 import 'package:medizii/constants/strings.dart';
 import 'package:medizii/gen/assets.gen.dart';
 import 'package:medizii/main.dart';
+import 'package:medizii/module/authentication/auth_screen.dart';
 import 'package:medizii/module/dashboards/patient/bloc/patient_bloc.dart';
 import 'package:medizii/module/dashboards/patient/data/patient_datasource.dart';
 import 'package:medizii/module/dashboards/patient/data/patient_repository.dart';
@@ -39,7 +40,20 @@ class PatientSettingPage extends StatelessWidget {
         title: LabelString.labelSetting,
         rightWidget: GestureDetector(
           onTap: () {
-            prefs.clear();
+            PlatformAwareDialog.show(
+              context: context,
+              title: 'Logout',
+              content: 'Are you sure you want to log out?',
+              confirmText: 'Yes',
+              cancelText: 'No',
+              onConfirm: () {
+                prefs.clear();
+                navigationService.pushAndRemoveUntil(AuthScreen(false));
+              },
+              onCancel: () {
+                print('User cancelled');
+              },
+            );
           },
           child: Container(
             padding: EdgeInsets.all(8.sp),
@@ -142,6 +156,7 @@ class DeleteAccountTile extends StatelessWidget {
         }
         if (state is LoadedState) {
           showSpinner = false;
+          navigationService.pushAndRemoveUntil(AuthScreen(false));
         }
       },
       builder: (context, state) {

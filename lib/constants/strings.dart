@@ -99,8 +99,8 @@ class LabelString {
 }
 
 //Button Strings
-class ButtonString {
-  static const String btnDemo = "";
+class AgoraString {
+  static const String agoraAppId = "cde997b7f2a34b32b6876604c28725d9";
 }
 
 //Button Strings

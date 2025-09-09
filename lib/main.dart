@@ -101,3 +101,12 @@ class _SplashScreenState extends State<SplashScreen> {
     return const Scaffold(body: Center(child: CustomLoader()));
   }
 }
+///Add this in pod file for permission handler
+/*
+post_install do |installer|
+installer.pods_project.targets.each do |target|
+target.build_configurations.each do |config|
+config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)', 'PERMISSION_CAMERA=1', 'PERMISSION_PHOTOS=1', 'PERMISSION_MEDIA_LIBRARY=1']
+end
+end
+end*/

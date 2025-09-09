@@ -16,6 +16,7 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../components/custom_appbar.dart';
+import '../../../../components/custom_loading_wrapper.dart';
 
 class DoctorPatientDetailPg extends StatefulWidget {
   String? sId;
@@ -89,10 +90,8 @@ class _DoctorPatientDetailPgState extends State<DoctorPatientDetailPg> {
           }
         },
         builder: (context, state) {
-          return ModalProgressHUD(
-            blur: 2.0,
-            inAsyncCall: showSpinner,
-            progressIndicator: CustomLoader(),
+          return LoadingWrapper(
+            showSpinner: showSpinner,
             child: SingleChildScrollView(
               padding: EdgeInsets.all(23.sp),
               child: Column(

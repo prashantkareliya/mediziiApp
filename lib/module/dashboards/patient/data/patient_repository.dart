@@ -5,6 +5,8 @@ import 'package:medizii/http_actions/handle_api_error.dart';
 import 'package:medizii/module/dashboards/doctor/model/delete_doctor_response.dart';
 import 'package:medizii/module/dashboards/patient/data/patient_datasource.dart';
 import 'package:medizii/module/dashboards/patient/model/get_all_doctor_response.dart';
+import 'package:medizii/module/dashboards/patient/model/upload_document_response.dart';
+import 'package:medizii/module/dashboards/patient/model/upload_report_request.dart';
 
 import '../../doctor/model/get_patient_detail.dart';
 
@@ -54,6 +56,23 @@ class PatientRepository {
 
       if (deleteDoctorResponse.error == ResponseStatus.success) {
         return ApiResult.success(data: deleteDoctorResponse);
+      } else {
+        return ApiResult.failure(error: ErrorString.somethingWentWrong);
+      }
+    } catch (e) {
+      final message = HandleAPI.handleAPIError(e);
+      return ApiResult.failure(error: message);
+    }
+  }
+
+  Future<ApiResult<UploadDocumentResponse>> uploadReport(String id, UploadReportRequest uploadReportRequest) async {
+    try {
+      final result = await _patientDatasource.uploadReport(id, uploadReportRequest);
+
+      UploadDocumentResponse uploadDocumentResponse = UploadDocumentResponse.fromJson(result);
+
+      if (uploadDocumentResponse.error == ResponseStatus.success) {
+        return ApiResult.success(data: uploadDocumentResponse);
       } else {
         return ApiResult.failure(error: ErrorString.somethingWentWrong);
       }

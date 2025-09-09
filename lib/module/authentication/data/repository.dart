@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:medizii/constants/constants.dart';
 import 'package:medizii/constants/strings.dart';
 import 'package:medizii/http_actions/api_result.dart';
@@ -9,6 +10,7 @@ import 'package:medizii/module/authentication/model/forget_password_response.dar
 import 'package:medizii/module/authentication/model/hospitals_response.dart';
 import 'package:medizii/module/authentication/model/login_request.dart';
 import 'package:medizii/module/authentication/model/login_response.dart';
+import 'package:medizii/module/authentication/model/nearest_hospital_response.dart';
 
 class AuthRepository {
   AuthRepository({required AuthDatasource authDatasource}) : _authDatasource = authDatasource;
@@ -144,6 +146,24 @@ class AuthRepository {
       }
     } catch(e){
       final message = HandleAPI.handleAPIError(e);
+      return ApiResult.failure(error: message);
+    }
+  }
+
+  Future<ApiResult<GetNearestHospitalResponse>> getNearestHospital(String lat, String lang) async {
+    try {
+      final result = await _authDatasource.getNearestHospital(lat, lang);
+
+      GetNearestHospitalResponse getNearestHospitalResponse = GetNearestHospitalResponse.fromJson(result);
+
+      if (ResponseStatus.success == ResponseStatus.success) {
+        return ApiResult.success(data: getNearestHospitalResponse);
+      } else {
+        return ApiResult.failure(error: ErrorString.somethingWentWrong);
+      }
+    } catch (e, stack) {
+      final message = HandleAPI.handleAPIError(e);
+      debugPrintStack(stackTrace: stack, label: "@@@@@@@@@@@@@@@@@@@@$e", maxFrames: 5);
       return ApiResult.failure(error: message);
     }
   }

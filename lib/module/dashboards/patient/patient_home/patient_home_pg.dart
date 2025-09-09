@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:medizii/components/sharedPreferences_service.dart';
 import 'package:medizii/constants/app_colours/app_colors.dart';
 import 'package:medizii/constants/strings.dart';
 import 'package:medizii/gen/assets.gen.dart';
@@ -11,7 +12,9 @@ import 'package:medizii/module/dashboards/patient/patient_home/pt_reposts_upload
 import 'package:medizii/notification.dart';
 
 class PatientHomePage extends StatelessWidget {
-  const PatientHomePage({super.key});
+   PatientHomePage({super.key});
+
+  final prefs = PreferenceService().prefs;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +70,7 @@ class PatientHomePage extends StatelessWidget {
                 ),
                 3.verticalSpace,
                 Text(
-                  'Nina Decosta',
+                  prefs.getString(PreferenceString.prefsName) ?? "",
                   style: GoogleFonts.dmSans(color: AppColors.blackColor, fontSize: 24.sp, fontWeight: FontWeight.w600),
                 ),
               ],
@@ -178,7 +181,7 @@ class PatientHomePage extends StatelessWidget {
                     'https://www.shutterstock.com/image-photo/indian-senior-doctor-watching-medical-260nw-2274219827.jpg',
                     const Color(0xFFE8F4FD),
                   ),
-                  20.verticalSpace,
+                  Spacer(),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(

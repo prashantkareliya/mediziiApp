@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medizii/components/custom_button.dart';
 import 'package:medizii/components/custom_loader.dart';
+import 'package:medizii/components/custom_loading_wrapper.dart';
 import 'package:medizii/components/cutom_textfield.dart';
 import 'package:medizii/constants/app_colours/app_colors.dart';
 import 'package:medizii/constants/fonts/font_weight.dart';
@@ -81,10 +82,8 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
               }
             },
             builder: (context, state) {
-              return ModalProgressHUD(
-                  blur: 2.0,
-                  inAsyncCall: showSpinner,
-                  progressIndicator: CustomLoader(),
+              return LoadingWrapper(
+                showSpinner: showSpinner,
                 child: SingleChildScrollView(
                   child: Form(
                     key: _formKey,

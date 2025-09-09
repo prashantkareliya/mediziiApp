@@ -4,6 +4,7 @@ import 'package:medizii/module/authentication/model/create_user_response.dart';
 import 'package:medizii/module/authentication/model/forget_password_response.dart';
 import 'package:medizii/module/authentication/model/hospitals_response.dart';
 import 'package:medizii/module/authentication/model/login_response.dart';
+import 'package:medizii/module/authentication/model/nearest_hospital_response.dart';
 
 import 'auth_event.dart';
 import 'auth_state.dart';
@@ -19,6 +20,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
 
     on<FetchHospitalsEvent>((event, emit) => getHospitals(event, emit));
+    on<NearestHospitalEvent>((event, emit) => getNearestHospitals(event, emit));
   }
 
 
@@ -90,6 +92,23 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       success: (success) {
         emit(LoadingState(false));
         emit(LoadedState<HospitalResponse>(data: success));
+      },
+      failure: (failure) {
+        emit(LoadingState(false));
+        emit(FailureState(failure.toString()));
+      },
+    );
+  }
+
+
+
+  getNearestHospitals(NearestHospitalEvent event, Emitter<AuthState> emit) async {
+    emit(LoadingState(true));
+    final response = await authRepository.getNearestHospital(event.lat, event.lang);
+    response.when(
+      success: (success) {
+        emit(LoadingState(false));
+        emit(LoadedState<GetNearestHospitalResponse>(data: success));
       },
       failure: (failure) {
         emit(LoadingState(false));

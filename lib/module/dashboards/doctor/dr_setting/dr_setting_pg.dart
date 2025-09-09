@@ -11,6 +11,7 @@ import 'package:medizii/constants/helpers.dart';
 import 'package:medizii/constants/strings.dart';
 import 'package:medizii/gen/assets.gen.dart';
 import 'package:medizii/main.dart';
+import 'package:medizii/module/authentication/auth_screen.dart';
 import 'package:medizii/module/dashboards/doctor/bloc/doctor_bloc.dart';
 import 'package:medizii/module/dashboards/doctor/bloc/doctor_event.dart';
 import 'package:medizii/module/dashboards/doctor/data/doctor_datasource.dart';
@@ -48,6 +49,7 @@ class DoctorSettingPage extends StatelessWidget {
                 cancelText: 'No',
                 onConfirm: () {
                   prefs.clear();
+                  navigationService.pushAndRemoveUntil(AuthScreen(false));
                 },
                 onCancel: () {
                   print('User cancelled');
@@ -153,6 +155,7 @@ class DeleteAccountTile extends StatelessWidget {
         }
         if (state is LoadedState) {
           showSpinner = false;
+          navigationService.pushAndRemoveUntil(AuthScreen(false));
         }
       },
       builder: (context, state) {

@@ -23,7 +23,7 @@ class DoctorDatasource extends HttpActions {
   }
 
   Future<dynamic> deleteDoctor(String id) async {
-    final response = await getMethodWithQueryParam(ApiEndPoint.doctorDelete(id));
+    final response = await deleteMethodWithQueryParam(ApiEndPoint.doctorDelete(id));
     debugPrint("doctor delete -  $response");
     return response;
   }

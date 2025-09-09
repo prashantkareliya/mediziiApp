@@ -22,6 +22,7 @@ import 'package:medizii/module/dashboards/doctor/dr_dashboard_setup.dart';
 import 'package:medizii/module/dashboards/patient/patient_dashboard_setup.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
+import '../../components/custom_loading_wrapper.dart';
 import 'bloc/auth_bloc.dart';
 import 'bloc/auth_state.dart';
 import 'data/datasource.dart';
@@ -157,10 +158,8 @@ class _OtpVerificationState extends State<OtpVerification> {
             fit: StackFit.expand,
             children: [
               Assets.images.bg.image(fit: BoxFit.fill),
-              ModalProgressHUD(
-                blur: 2.0,
-                inAsyncCall: showSpinner,
-                progressIndicator: CustomLoader(),
+              LoadingWrapper(
+                showSpinner: showSpinner,
                 child: Column(
                   children: [
                     30.verticalSpace,

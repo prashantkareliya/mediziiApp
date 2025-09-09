@@ -18,6 +18,8 @@ import 'package:medizii/module/dashboards/doctor/data/doctor_repository.dart';
 import 'package:medizii/module/dashboards/doctor/model/get_doctor_by_id_response.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
+import '../../../../components/custom_loading_wrapper.dart';
+
 class DoctorProfilePage extends StatefulWidget {
   const DoctorProfilePage({super.key});
 
@@ -72,10 +74,8 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
           }
         },
         builder: (context, state) {
-          return ModalProgressHUD(
-            blur: 2.0,
-            inAsyncCall: showSpinner,
-            progressIndicator: CustomLoader(),
+          return LoadingWrapper(
+            showSpinner: showSpinner,
             child: Padding(
               padding: EdgeInsets.all(18.sp),
               child: SingleChildScrollView(

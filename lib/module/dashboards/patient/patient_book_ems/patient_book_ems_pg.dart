@@ -154,7 +154,6 @@ class _PatientBookEmsPageState extends State<PatientBookEmsPage> {
           CustomButton(
             width: context.width() * 0.7,
             onPressed: () {
-              navigationService.pop();
               navigationService.push(PtConfirmLocationPage());
             },
             text: LabelString.labelNext,

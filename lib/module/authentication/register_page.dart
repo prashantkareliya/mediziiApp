@@ -20,6 +20,7 @@ import 'package:medizii/module/authentication/model/hospitals_response.dart';
 import 'package:medizii/module/authentication/otp_verification_screen.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
+import '../../components/custom_loading_wrapper.dart';
 import 'bloc/auth_state.dart';
 import 'model/create_user_response.dart';
 
@@ -106,10 +107,8 @@ class _RegisterTabState extends State<RegisterTab> {
         }
       },
       builder: (context, state) {
-        return ModalProgressHUD(
-          blur: 2.0,
-          inAsyncCall: showSpinner,
-          progressIndicator: CustomLoader(),
+        return LoadingWrapper(
+          showSpinner: showSpinner,
           child: Form(
             key: _formKey,
             child: ListView(

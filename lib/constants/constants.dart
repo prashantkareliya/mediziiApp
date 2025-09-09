@@ -55,11 +55,15 @@ class ApiEndPoint {
 
   static String getDoctorDetail(String id) => "doctor/detail/$id";
   static String getPatientDetail(String id) => "patient/detail/$id";
+  static String getTechnicianDetail(String id) => "technician/detail/$id";
   static String doctorDelete(String id) => "doctor/delete/$id";
   static String patientDelete(String id) => "patient/delete/$id";
+  static String technicianDelete(String id) => "technician/delete/$id";
 
 
-  static const String getTechnicianById = "technician/detail/id";
+  static String uploadReport(String id) => "report/upload/$id";
+
+
 
 
   static const String getAllDoctor = "doctor/detail/all";
@@ -67,5 +71,5 @@ class ApiEndPoint {
   static const String getAllPatient = "patient/detail/all";
   static const String getAllTechnician = "technician/detail/all";
 
-  static const String nearestHospital = "patient/nearest-hospital?lat=28.5686992&lng=77.2043418&type=government";
+  static String getNearestHospital(String lat, String lang) => "patient/nearest-hospital?lng=$lat&lat=$lang";
 }
