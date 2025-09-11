@@ -44,6 +44,9 @@ class ApiEndPoint {
   static const String updateDoctor = "doctor/update/id";
   static const String updatePatient = "patient/update/id";
   static const String updateTechnician = "technician/update/id";
+  static const String emsBooking = "booking/request";
+  static const String emsBookingAccept = "booking/accept";
+  static const String emsBookingReject = "booking/reject";
 
   //DELETE API endpoint
   static const String deleteDoctor = "doctor/delete/id";

@@ -14,3 +14,13 @@ class DeleteTechnicianEvent extends TechnicianEvent {
 
   DeleteTechnicianEvent(this.id);
 }
+
+class EmsBookingAcceptEvent extends TechnicianEvent {
+  final TechnicianAcceptRejectRequest technicianAcceptRejectRequest;
+  EmsBookingAcceptEvent(this.technicianAcceptRejectRequest);
+}
+
+class EmsBookingRejectEvent extends TechnicianEvent {
+  final TechnicianAcceptRejectRequest technicianAcceptRejectRequest;
+  EmsBookingRejectEvent(this.technicianAcceptRejectRequest);
+}

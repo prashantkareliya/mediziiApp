@@ -17,6 +17,13 @@ class ErrorString {
   static const String otpErr = "ⓘ Please enter OTP";
   static const String experienceErr = "ⓘ Enter experience";
   static const String ageErr = "ⓘ Enter age";
+  static const String pickupLocationErr = "ⓘ Please enter pickup location";
+  static const String dropLocationErr = "ⓘ Please enter drop location";
+  static const String emsErr = "ⓘ Select ambulance type";
+
+  static const String reasonErr = "ⓘ Select reason";
+  static const String pickTimeErr = "ⓘ Please select pickup time";
+
 }
 
 //Messages
@@ -28,7 +35,7 @@ class Message {
 class LabelString {
   static const String labelJoinAs = "Join As a";
   static const String labelDoctor = "Doctor";
-  static const String labelPatient = "Patient";
+  static const String labelPatient = "Patients";
   static const String labelTechnician = "Technician";
   static const String labelWelcomeTo = "Welcome to";
   static const String labelLogin = "Login";
@@ -59,6 +66,7 @@ class LabelString {
   static const String labelHome = "Home";
   static const String labelCallDoctor = "Call Doctor";
   static const String labelBookEms = "Book EMS";
+  static const String labelBookNow = "Book Now";
   static const String labelBookAmbulance = "Book Ambulance";
   static const String labelSetting = "Setting";
   static const String labelPatients = "Patients";
@@ -75,14 +83,16 @@ class LabelString {
   static const String labelCallEms = "Calling an Ambulance";
   static const String labelYourself = "For Yourself";
   static const String labelOthers = "For Others";
-  static const String labelNext = "Confirm Location";
+  static const String labelNext = "Next";
   static const String labelSelectAddress = "Select Address";
   static const String labelConfirmLocation = "Confirm Location";
   static const String labelPickupLocation = "Pickup Location";
+  static const String labelPickupTime = "Pickup Time";
   static const String labelEnterPickupLocation = "Enter Pickup Location";
   static const String labelDropLocation = "Drop Location";
   static const String labelEnterDropLocation = "Enter Drop Location";
   static const String labelNearbyHospital = "Nearby Hospital";
+  static const String labelAllHospital = "All Hospital";
   static const String labelDeleteAccount = "Delete Account";
   static const String labelPatientsSummary = "Recent Patients";
   static const String labelViewAll = "View All";
@@ -96,11 +106,16 @@ class LabelString {
   static const String labelProfile = "Profile";
   static const String labelUpdate = "Update";
   static const String labelNotification = "Notification";
+  static const String labelEmsType = "Ambulance type";
+  static const String labelReason = "Reason";
+  static const String labelSelectReason = "Select Reason";
+
 }
 
 //Button Strings
-class AgoraString {
+class OtherString {
   static const String agoraAppId = "cde997b7f2a34b32b6876604c28725d9";
+  static const  String googleAPIKey = 'AIzaSyBp-1NYcHYog3J6naBgltG6ggaIHRPvnzo';
 }
 
 //Button Strings
@@ -115,7 +130,9 @@ class PreferenceString {
   static const String prefsRole = "role";
   static const String prefsUserId = "userId";
   static const String prefsName = "name";
+  static const String prefsPhone = "phone";
   static const String userResponse = "userData";
+  //static const String userRole = "userRole";
 }
 
 class StaticList {
@@ -178,6 +195,47 @@ class StaticList {
     "AB−",
     "O+",
     "O−",
+  ];
+
+  static const List<String> ambulanceTypes = [
+    "Basic Life Support (BLS)",
+    "Advanced Life Support (ALS)",
+    "Critical Care Transport (CCT)",
+    "Patient Transport",
+    "Neonatal Ambulance",
+    "Air Ambulance",
+    "Bariatric Ambulance",
+    "Mobile ICU",
+    /*"Type I",
+    "Type II",
+    "Type III",*/
+    "Military Ambulance",
+    "Water Ambulance",
+    "Bike Ambulance",
+    "Golf Cart Ambulance",
+  ];
+
+  static const List<String> emergencyHealthReasons = [
+    "Cardiac Arrest",
+    "Chest Pain",
+    "Stroke Symptoms",
+    "Severe Bleeding",
+    "Unconsciousness",
+    "Difficulty Breathing",
+    "Seizure",
+    "Severe Trauma",
+    "Burn Injuries",
+    "Pregnancy Complications",
+    "Allergic Reaction",
+    "Poisoning or Overdose",
+    "Psychiatric Emergency",
+    "High Fever (in children)",
+    "Road Traffic Accident",
+    "Fall Injury",
+    "Drowning Incident",
+    "Electric Shock",
+    "Animal Bite",
+    "Gunshot or Stab Wound",
   ];
 }
 

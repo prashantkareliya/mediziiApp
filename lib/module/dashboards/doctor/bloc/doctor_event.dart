@@ -10,7 +10,19 @@ class GetPatientByIdEvent extends DoctorEvent {
 }
 
 class GetAllPatientEvent extends DoctorEvent {
-  GetAllPatientEvent();
+  final String? name;
+  final String? sex;
+  final String? blood;
+  final int? minAge;
+  final int? maxAge;
+
+  GetAllPatientEvent({
+    this.name,
+    this.sex,
+    this.blood,
+    this.minAge,
+    this.maxAge,
+  });
 }
 
 class GetDoctorByIdEvent extends DoctorEvent {

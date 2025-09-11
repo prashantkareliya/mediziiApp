@@ -16,7 +16,7 @@ import 'package:medizii/module/dashboards/Technician/bloc/technician_bloc.dart';
 import 'package:medizii/module/dashboards/Technician/data/technician_datasource.dart';
 import 'package:medizii/module/dashboards/Technician/data/technician_repository.dart';
 import 'package:medizii/module/dashboards/Technician/tc_setting/tc_profile_pg.dart';
-import 'package:medizii/notification.dart';
+import 'package:medizii/notification_pg.dart';
 
 class TechnicianSettingPage extends StatelessWidget {
   TechnicianSettingPage({super.key});

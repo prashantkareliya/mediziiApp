@@ -79,6 +79,7 @@ class _LoginTabState extends State<LoginTab> {
               prefs.setString(PreferenceString.prefsRole, user!.data!.role.toString());
               prefs.setString(PreferenceString.prefsUserId, user!.data!.sId.toString());
               prefs.setString(PreferenceString.prefsName, user!.data!.name.toString());
+              prefs.setString(PreferenceString.prefsPhone, user!.data!.phone.toString());
               switch (user?.data?.role) {
                 case 'doctor':
                   navigationService.pushReplacement(DoctorDashboard());

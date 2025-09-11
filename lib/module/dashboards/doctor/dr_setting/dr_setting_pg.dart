@@ -16,7 +16,7 @@ import 'package:medizii/module/dashboards/doctor/bloc/doctor_bloc.dart';
 import 'package:medizii/module/dashboards/doctor/bloc/doctor_event.dart';
 import 'package:medizii/module/dashboards/doctor/data/doctor_datasource.dart';
 import 'package:medizii/module/dashboards/doctor/data/doctor_repository.dart';
-import 'package:medizii/notification.dart';
+import 'package:medizii/notification_pg.dart';
 
 import 'dr_profile_pg.dart';
 

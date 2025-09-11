@@ -18,6 +18,7 @@ import 'package:medizii/module/dashboards/doctor/bloc/doctor_bloc.dart';
 import 'package:medizii/module/dashboards/doctor/bloc/doctor_event.dart';
 import 'package:medizii/module/dashboards/doctor/data/doctor_datasource.dart';
 import 'package:medizii/module/dashboards/doctor/data/doctor_repository.dart';
+import 'package:medizii/module/dashboards/doctor/dr_patient/dr_patient_pg.dart';
 import 'package:medizii/module/dashboards/doctor/model/get_all_doctor_response.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
@@ -38,11 +39,13 @@ class _TechnicianPatientPageState extends State<TechnicianPatientPage> {
   bool showSpinner = false;
   GetAllPatientResponse? patientResponse;
   List<PatientData>? patients = [];
+  final debounce = Debounce(milliseconds: 800);
+  Key _gridKey = UniqueKey();
 
   @override
   void initState() {
     super.initState();
-    doctorBloc.add(GetAllPatientEvent());
+    doctorBloc.add(GetAllPatientEvent(name: searchController.text));
   }
 
   @override
@@ -70,6 +73,14 @@ class _TechnicianPatientPageState extends State<TechnicianPatientPage> {
                 child: Assets.icIcons.search.svg(colorFilter: ColorFilter.mode(AppColors.redColor, BlendMode.srcIn)),
               ),
               hintText: LabelString.labelSearchHint,
+              onChange: (value) {
+                debounce.run(() {
+                  setState(() {
+                    _gridKey = UniqueKey(); // Forces GridView to rebuild
+                  });
+                  doctorBloc.add(GetAllPatientEvent(name: searchController.text));
+                });
+              },
             ),
             8.verticalSpace,
             BlocConsumer<DoctorBloc, DoctorState>(
@@ -95,6 +106,7 @@ class _TechnicianPatientPageState extends State<TechnicianPatientPage> {
                   child: LoadingWrapper(
                     showSpinner: showSpinner,
                     child: GridView.builder(
+                      key: _gridKey,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
                         crossAxisSpacing: 10.sp,

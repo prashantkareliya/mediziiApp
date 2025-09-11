@@ -4,9 +4,27 @@ import 'package:medizii/http_actions/app_http.dart';
 
 class DoctorDatasource extends HttpActions {
 
-  Future<dynamic> getAllPatient() async {
-    final response = await getMethod(ApiEndPoint.getAllPatient);
-    debugPrint("Get All Patient -  $response");
+  Future<dynamic> getAllPatient({
+    String? name,
+    String? sex,
+    String? blood,
+    int? minAge,
+    int? maxAge,
+  }) async {
+    final Map<String, dynamic> queryParams = {};
+
+    if (name != null && name.isNotEmpty) queryParams['name'] = name;
+    if (sex != null && sex.isNotEmpty) queryParams['sex'] = sex;
+    if (blood != null && blood.isNotEmpty) queryParams['blood'] = blood;
+    if (minAge != null) queryParams['minAge'] = minAge.toString();
+    if (maxAge != null) queryParams['maxAge'] = maxAge.toString();
+
+    final response = await getMethodWithQueryParam(
+      ApiEndPoint.getAllPatient,
+      queryParams: queryParams,
+    );
+
+    debugPrint("Get All Patient - $response");
     return response;
   }
 

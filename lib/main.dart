@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,11 +17,24 @@ import 'module/authentication/role_selection_screen.dart';
 import 'module/dashboards/Technician/technician_dashboard_setup.dart';
 import 'module/dashboards/bottom_bav_provider.dart';
 import 'module/dashboards/patient/patient_dashboard_setup.dart';
+import 'notification.dart';
+
 
 final NavigationService navigationService = NavigationService();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  if (Platform.isIOS) {
+    await Firebase.initializeApp();
+  } else {
+    await Firebase.initializeApp(
+        options: const FirebaseOptions(
+          apiKey: "AIzaSyBUtgtLLkjxiFLrK46OLJYNAQGViVL5zBY",
+          appId: "1:936649424706:android:d8a0ee94e6d2e1381752db",
+          messagingSenderId: "936649424706",
+          projectId: "medizii-8997a",
+        ));
+  }
   await PreferenceService().init();
   runApp(
     MultiProvider(
@@ -25,6 +42,46 @@ Future<void> main() async {
       child: MyApp(),
     ),
   );
+
+  initializeLocalNotifications();
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print("Received message in foreground: ${message.notification?.title}");
+    if (message.notification != null) {
+      showFlutterLocalNotification(message);
+    }
+  });
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+}
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print('Handling a background message: ${message.notification?.title}');
+}
+
+Future<void> requestNotificationPermission() async {
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+
+  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+    print("User granted permission");
+  } else {
+    print("User denied or not accepted permission");
+  }
+  if (Platform.isIOS) {
+    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {

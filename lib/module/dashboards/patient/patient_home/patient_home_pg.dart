@@ -9,7 +9,7 @@ import 'package:medizii/gen/assets.gen.dart';
 import 'package:medizii/main.dart';
 import 'package:medizii/module/dashboards/bottom_bav_provider.dart';
 import 'package:medizii/module/dashboards/patient/patient_home/pt_reposts_upload_pg.dart';
-import 'package:medizii/notification.dart';
+import 'package:medizii/notification_pg.dart';
 
 class PatientHomePage extends StatelessWidget {
    PatientHomePage({super.key});

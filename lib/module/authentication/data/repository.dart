@@ -11,6 +11,8 @@ import 'package:medizii/module/authentication/model/hospitals_response.dart';
 import 'package:medizii/module/authentication/model/login_request.dart';
 import 'package:medizii/module/authentication/model/login_response.dart';
 import 'package:medizii/module/authentication/model/nearest_hospital_response.dart';
+import 'package:medizii/module/dashboards/patient/model/ems_booking_request.dart';
+import 'package:medizii/module/dashboards/patient/model/ems_booking_response.dart';
 
 class AuthRepository {
   AuthRepository({required AuthDatasource authDatasource}) : _authDatasource = authDatasource;
@@ -167,4 +169,5 @@ class AuthRepository {
       return ApiResult.failure(error: message);
     }
   }
+
 }

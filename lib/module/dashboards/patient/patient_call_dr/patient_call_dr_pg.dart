@@ -1,3 +1,4 @@
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,8 +15,6 @@ import 'package:medizii/module/dashboards/patient/bloc/patient_bloc.dart';
 import 'package:medizii/module/dashboards/patient/data/patient_datasource.dart';
 import 'package:medizii/module/dashboards/patient/data/patient_repository.dart';
 import 'package:medizii/module/dashboards/patient/model/get_all_doctor_response.dart';
-import 'package:agora_rtc_engine/agora_rtc_engine.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../../../../components/custom_loading_wrapper.dart';
 
@@ -42,14 +41,14 @@ class _PatientCallDrPageState extends State<PatientCallDrPage> {
   PatientBloc patientBloc = PatientBloc(PatientRepository(patientDatasource: PatientDatasource()));
 
   // Agora Configuration
-  static const String agoraAppId = AgoraString.agoraAppId;
+  //static const String agoraAppId = AgoraString.agoraAppId;
   RtcEngine? _engine;
 
   @override
   void initState() {
     super.initState();
     patientBloc.add(GetAllDoctorEvent());
-    _initAgora();
+    // _initAgora();
   }
 
   @override
@@ -58,7 +57,7 @@ class _PatientCallDrPageState extends State<PatientCallDrPage> {
     super.dispose();
   }
 
-  Future<void> _initAgora() async {
+/*  Future<void> _initAgora() async {
     // Request permissions
     await [Permission.microphone, Permission.camera].request();
 
@@ -72,27 +71,22 @@ class _PatientCallDrPageState extends State<PatientCallDrPage> {
     // Enable video
     await _engine!.enableVideo();
     await _engine!.enableAudio();
-  }
+  }*/
 
   Future<void> _dispose() async {
     await _engine?.leaveChannel();
     await _engine?.release();
   }
 
-  void filterDoctorsByType(String type) {
-    setState(() {
-      filteredDoctors = doctors?.where((doctor) => doctor.type == type).toList();
-    });
-  }
 
   // Generate channel name based on doctor and patient IDs
-  String _generateChannelName(DoctorData doctor) {
+  /*String _generateChannelName(DoctorData doctor) {
     // You can customize this based on your requirements
     return "call_${doctor.sId}_${DateTime.now().millisecondsSinceEpoch}";
-  }
+  }*/
 
   // Start Audio Call
-  Future<void> _startAudioCall(DoctorData doctor) async {
+  /*Future<void> _startAudioCall(DoctorData doctor) async {
     print("222222222222222 ---  ${doctor.sId}");
     try {
       final channelName = _generateChannelName(doctor);
@@ -111,10 +105,10 @@ class _PatientCallDrPageState extends State<PatientCallDrPage> {
     } catch (e) {
       Helpers.showSnackBar(context, "Failed to start audio call: $e");
     }
-  }
+  }*/
 
   // Start Video Call
-  Future<void> _startVideoCall(DoctorData doctor) async {
+  /*Future<void> _startVideoCall(DoctorData doctor) async {
     try {
       final channelName = _generateChannelName(doctor);
 
@@ -133,7 +127,7 @@ class _PatientCallDrPageState extends State<PatientCallDrPage> {
     } catch (e) {
       Helpers.showSnackBar(context, "Failed to start video call: $e");
     }
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +153,8 @@ class _PatientCallDrPageState extends State<PatientCallDrPage> {
             if (doctorResponse != null) {
               doctors = doctorResponse?.doctorData;
               doctorsTypes = doctors!.map((doc) => doc.type.toString()).toSet().toList();
-              filterDoctorsByType(selectedSpecialtyNotifier.value);
+              //filterDoctorsByType(selectedSpecialtyNotifier.value);
+              filteredDoctors = doctors?.where((doctor) => doctor.type == selectedSpecialtyNotifier.value).toList();
             }
           }
         },
@@ -202,7 +197,6 @@ class _PatientCallDrPageState extends State<PatientCallDrPage> {
                                 selectedSpecialtyNotifier.value = doctorsTypes![index];
                                 final selectedType = doctorsTypes![index];
                                 selectedSpecialtyNotifier.value = selectedType;
-                                filterDoctorsByType(selectedType);
                               },
                               child: Container(
                                 margin: EdgeInsets.only(right: 12.sp),
@@ -236,8 +230,15 @@ class _PatientCallDrPageState extends State<PatientCallDrPage> {
                       itemBuilder: (context, index) {
                         return DoctorCard(
                           doctor: filteredDoctors?[index],
-                          onAudioCall: () => _startAudioCall(filteredDoctors![index]),
-                          onVideoCall: () => _startVideoCall(filteredDoctors![index]),
+                          onAudioCall: () async {
+                            Helpers.startCall(filteredDoctors![index].phone);
+                            // _startAudioCall(filteredDoctors![index]);
+                            /*launchUrlString("tel://${filteredDoctors![index].phone}",
+                                mode: LaunchMode.platformDefault);*/
+                          },
+                          onVideoCall: () {
+                            //_startVideoCall(filteredDoctors![index]);
+                          },
                         );
                       },
                     ),
@@ -514,6 +515,7 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
   }
 }
 
+/*
 // Video Call Screen
 class VideoCallScreen extends StatefulWidget {
   final String channelName;
@@ -762,4 +764,4 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       ),
     );
   }
-}
+}*/

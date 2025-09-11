@@ -1,46 +1,35 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:medizii/components/custom_appbar.dart';
-import 'package:medizii/constants/app_colours/app_colors.dart';
-import 'package:medizii/constants/strings.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-class NotificationPage extends StatefulWidget {
-  const NotificationPage({super.key});
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-  @override
-  State<NotificationPage> createState() => _NotificationPageState();
+void initializeLocalNotifications() {
+  const AndroidInitializationSettings androidInitializationSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+
+  final DarwinInitializationSettings iosInitializationSettings = DarwinInitializationSettings();
+
+  InitializationSettings initializationSettings =
+      InitializationSettings(android: androidInitializationSettings, iOS: iosInitializationSettings);
+
+  flutterLocalNotificationsPlugin.initialize(initializationSettings);
 }
 
-class _NotificationPageState extends State<NotificationPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.whiteColor,
-      appBar: CustomAppBar(title: LabelString.labelNotification, isBack: true, isNotification: false),
+Future<void> showFlutterLocalNotification(RemoteMessage message) async {
+  const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+    'channel_id',
+    'channel_name',
+    importance: Importance.high,
+    priority: Priority.high,
+  );
 
-      body: ListView.separated(
-        padding: EdgeInsets.symmetric(horizontal: 18.sp, vertical: 8.sp),
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return Container(
-            padding: EdgeInsets.all(14.sp),
-            decoration: BoxDecoration(color: AppColors.greyBg, borderRadius: BorderRadius.circular(15.0)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-                  style: GoogleFonts.dmSans(fontSize: 14.sp, fontWeight: FontWeight.w500, color: AppColors.black),
-                ),
-                5.verticalSpace,
-                Text("25 Jan 2025", style: GoogleFonts.dmSans(fontSize: 12.sp, fontWeight: FontWeight.w500, color: AppColors.gray)),
-              ],
-            ),
-          );
-        },
-        separatorBuilder: (_, __) => SizedBox(height: 12.sp),
-      ),
-    );
-  }
+  const DarwinNotificationDetails iosDetails = DarwinNotificationDetails();
+
+  const NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidDetails);
+
+  await flutterLocalNotificationsPlugin.show(
+    0, // Notification ID
+    message.notification?.title,
+    message.notification?.body,
+    platformChannelSpecifics,
+  );
 }

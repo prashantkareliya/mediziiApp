@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,6 +23,7 @@ import 'package:medizii/module/dashboards/doctor/model/get_all_doctor_response.d
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import '../../../../components/custom_loading_wrapper.dart';
+import 'dr_patient_pg.dart';
 
 class DoctorPatientPage extends StatefulWidget {
   const DoctorPatientPage({super.key});
@@ -38,11 +41,19 @@ class _DoctorPatientPageState extends State<DoctorPatientPage> {
   bool showSpinner = false;
   GetAllPatientResponse? patientResponse;
   List<PatientData>? patients = [];
+  final debounce = Debounce(milliseconds: 800);
+  Key _gridKey = UniqueKey();
 
   @override
   void initState() {
     super.initState();
-    doctorBloc.add(GetAllPatientEvent());
+    doctorBloc.add(GetAllPatientEvent(name: searchController.text));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    searchController.dispose();
   }
 
   @override
@@ -70,6 +81,14 @@ class _DoctorPatientPageState extends State<DoctorPatientPage> {
                 child: Assets.icIcons.search.svg(colorFilter: ColorFilter.mode(AppColors.redColor, BlendMode.srcIn)),
               ),
               hintText: LabelString.labelSearchHint,
+              onChange: (value) {
+                debounce.run(() {
+                  doctorBloc.add(GetAllPatientEvent(name: searchController.text));
+                  setState(() {
+                    _gridKey = UniqueKey(); // Forces GridView to rebuild
+                  });
+                });
+              },
             ),
             8.verticalSpace,
             BlocConsumer<DoctorBloc, DoctorState>(
@@ -95,6 +114,7 @@ class _DoctorPatientPageState extends State<DoctorPatientPage> {
                   child: LoadingWrapper(
                     showSpinner: showSpinner,
                     child: GridView.builder(
+                      key: _gridKey,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
                         crossAxisSpacing: 10.sp,
@@ -129,5 +149,22 @@ class _DoctorPatientPageState extends State<DoctorPatientPage> {
         ),
       ),
     );
+  }
+}
+
+
+class Debounce {
+  final int milliseconds;
+  Timer? _timer;
+
+  Debounce({required this.milliseconds});
+
+  void run(VoidCallback action) {
+    _timer?.cancel();
+    _timer = Timer(Duration(milliseconds: milliseconds), action);
+  }
+
+  void dispose() {
+    _timer?.cancel();
   }
 }

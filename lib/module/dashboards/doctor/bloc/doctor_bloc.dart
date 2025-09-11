@@ -38,7 +38,13 @@ class DoctorBloc extends Bloc<DoctorEvent, DoctorState> {
 
   _getAllPatient(GetAllPatientEvent event, Emitter<DoctorState> emit) async {
     emit(LoadingState(true));
-    final response = await doctorRepository.getAllPatient();
+    final response = await doctorRepository.getAllPatient(
+      name: event.name,
+      sex: event.sex,
+      blood: event.blood,
+      minAge: event.minAge,
+      maxAge: event.maxAge,
+    );
     response.when(
       success: (success) {
         emit(LoadingState(false));

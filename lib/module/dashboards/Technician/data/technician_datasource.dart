@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medizii/constants/constants.dart';
 import 'package:medizii/http_actions/app_http.dart';
+import 'package:medizii/module/dashboards/Technician/model/tc_accept_reject_request.dart';
 
 class TechnicianDatasource extends HttpActions {
   Future<dynamic> getTechnicianById(String id) async {
@@ -12,6 +13,18 @@ class TechnicianDatasource extends HttpActions {
   Future<dynamic> deleteTechnician(String id) async {
     final response = await deleteMethodWithQueryParam(ApiEndPoint.technicianDelete(id));
     debugPrint("technician delete -  $response");
+    return response;
+  }
+
+  Future<dynamic> emsAccept({required TechnicianAcceptRejectRequest technicianAcceptRejectRequest}) async {
+    final response = await postMethod(ApiEndPoint.emsBookingAccept, data: technicianAcceptRejectRequest.toJson());
+    debugPrint("Booking Accept -  $response");
+    return response;
+  }
+
+  Future<dynamic> emsReject({required TechnicianAcceptRejectRequest technicianAcceptRejectRequest}) async {
+    final response = await postMethod(ApiEndPoint.emsBookingReject, data: technicianAcceptRejectRequest.toJson());
+    debugPrint("Booking Reject -  $response");
     return response;
   }
 }

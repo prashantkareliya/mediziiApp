@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'app_colours/app_colors.dart';
 
@@ -34,5 +34,17 @@ class Helpers {
         backgroundColor: AppColors.errorRed.withOpacity(0.9),
         textColor: AppColors.whiteColor,
         fontSize: 16.0);
+  }
+
+  static void startCall(String? phone) async {
+    final url = Uri.parse('https://wa.me/91$phone');
+    if (await canLaunchUrl(url)) {
+      await launchUrl(
+        url,
+        mode: LaunchMode.externalApplication,
+      );
+    } else {
+      throw 'Could not launch WhatsApp';
+    }
   }
 }

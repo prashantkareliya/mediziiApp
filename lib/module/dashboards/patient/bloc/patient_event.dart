@@ -24,3 +24,9 @@ class UploadReportImagesEvent extends PatientEvent {
 
   UploadReportImagesEvent(this.id, this.uploadReportRequest);
 }
+
+//EmsBookingEvent
+class EmsBookingEvent extends PatientEvent {
+  final EmsBookingRequest emsBookingRequest;
+  EmsBookingEvent(this.emsBookingRequest);
+}

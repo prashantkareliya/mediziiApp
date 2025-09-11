@@ -7,6 +7,7 @@ import 'package:medizii/components/custom_button.dart';
 import 'package:medizii/components/custom_dropdown_field.dart';
 import 'package:medizii/components/custom_loader.dart';
 import 'package:medizii/components/cutom_textfield.dart';
+import 'package:medizii/components/sharedPreferences_service.dart';
 import 'package:medizii/constants/app_colours/app_colors.dart';
 import 'package:medizii/constants/helpers.dart';
 import 'package:medizii/constants/strings.dart';
@@ -34,6 +35,8 @@ class RegisterTab extends StatefulWidget {
 }
 
 class _RegisterTabState extends State<RegisterTab> {
+  final prefs = PreferenceService().prefs;
+
   final TextEditingController nameCtrl = TextEditingController();
   final TextEditingController emailCtrl = TextEditingController();
   final TextEditingController phoneCtrl = TextEditingController();
@@ -411,7 +414,7 @@ class _RegisterTabState extends State<RegisterTab> {
       createUserRequest.email = emailCtrl.text.trim();
       createUserRequest.phone = phoneCtrl.text;
       createUserRequest.password = passCtrl.text;
-      createUserRequest.role = widget.selectedRole;
+      createUserRequest.role = prefs.getString(PreferenceString.prefsRole);
       createUserRequest.sex = _selectSex.value;
       createUserRequest.age = int.parse(ageCtrl.text.trim());
 

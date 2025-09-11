@@ -30,9 +30,21 @@ class DoctorRepository {
     }
   }
 
-  Future<ApiResult<GetAllPatientResponse>> getAllPatient() async {
+  Future<ApiResult<GetAllPatientResponse>> getAllPatient({
+    String? name,
+    String? sex,
+    String? blood,
+    int? minAge,
+    int? maxAge,
+  }) async {
     try {
-      final result = await _doctorDatasource.getAllPatient();
+      final result = await _doctorDatasource.getAllPatient(
+        name: name,
+        sex: sex,
+        blood: blood,
+        minAge: minAge,
+        maxAge: maxAge,
+      );
 
       GetAllPatientResponse getAllPatientResponse = GetAllPatientResponse.fromJson(result);
 

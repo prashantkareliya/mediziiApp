@@ -15,6 +15,7 @@ class CustomTextField extends StatelessWidget {
   final int? maxLength;
   final TextInputType? textInputType;
   final Function()? onTap;
+  final Function(String)? onChange;
   final bool readOnly;
   final FocusNode? focus;
 
@@ -31,6 +32,7 @@ class CustomTextField extends StatelessWidget {
     this.maxLength,
     this.textInputType = TextInputType.text,
     this.onTap,
+    this.onChange,
     this.readOnly = false,
     this.focus
   });
@@ -58,6 +60,7 @@ class CustomTextField extends StatelessWidget {
           keyboardType: textInputType,
           onTap: onTap,
           readOnly: readOnly,
+          onChanged: onChange,
           style: GoogleFonts.dmSans(textStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 12.sp, color: AppColors.textSecondary)),
           onTapOutside: (d) {
             FocusScope.of(context).requestFocus(FocusNode());

@@ -37,7 +37,7 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
   @override
   void initState() {
     super.initState();
-    doctorBloc.add(GetAllPatientEvent());
+    doctorBloc.add(GetAllPatientEvent(name: ""));
   }
 
 

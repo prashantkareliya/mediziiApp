@@ -53,7 +53,7 @@ class _DoctorPatientDetailPgState extends State<DoctorPatientDetailPg> {
           children: [
             GestureDetector(
               onTap: () async {
-                makePhoneCall("+91${patientDetail?.patientDetailData?.phone ?? ""}");
+                Helpers.startCall(patientDetail?.patientDetailData?.phone);
               },
               child: Container(
                 decoration: BoxDecoration(color: AppColors.greyBg, shape: BoxShape.circle),
@@ -63,7 +63,9 @@ class _DoctorPatientDetailPgState extends State<DoctorPatientDetailPg> {
             ),
             10.horizontalSpace,
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Helpers.startCall(patientDetail?.patientDetailData?.phone);
+              },
               child: Container(
                 decoration: BoxDecoration(color: AppColors.greyBg, shape: BoxShape.circle),
                 padding: EdgeInsets.all(6.sp),

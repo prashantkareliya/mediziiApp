@@ -16,7 +16,7 @@ import 'package:medizii/module/dashboards/patient/bloc/patient_bloc.dart';
 import 'package:medizii/module/dashboards/patient/data/patient_datasource.dart';
 import 'package:medizii/module/dashboards/patient/data/patient_repository.dart';
 import 'package:medizii/module/dashboards/patient/patient_setting/pt_profile_pg.dart';
-import 'package:medizii/notification.dart';
+import 'package:medizii/notification_pg.dart';
 
 class PatientSettingPage extends StatelessWidget {
   PatientSettingPage({super.key});

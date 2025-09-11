@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "936649424706",
+    "project_id": "medizii-8997a",
+    "storage_bucket": "medizii-8997a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:936649424706:android:d8a0ee94e6d2e1381752db",
+        "android_client_info": {
+          "package_name": "com.example.medizii"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUtgtLLkjxiFLrK46OLJYNAQGViVL5zBY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

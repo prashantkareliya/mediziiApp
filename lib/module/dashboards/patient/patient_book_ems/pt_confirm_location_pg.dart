@@ -25,6 +25,18 @@ import 'package:medizii/module/authentication/model/hospitals_response.dart';
 import 'package:medizii/module/authentication/model/nearest_hospital_response.dart';
 
 import '../../../../components/custom_loading_wrapper.dart';
+import 'pt_book_ems_form_pg.dart';
+
+class LatLangForDrawMap {
+
+  double? startLat;
+  double? startLang;
+  double? endLat;
+  double? endLang;
+
+  LatLangForDrawMap({this.startLat, this.startLang, this.endLat, this.endLang});
+}
+
 
 class PtConfirmLocationPage extends StatefulWidget {
   const PtConfirmLocationPage({super.key});
@@ -34,8 +46,9 @@ class PtConfirmLocationPage extends StatefulWidget {
 }
 
 class _PtConfirmLocationPageState extends State<PtConfirmLocationPage> {
+  LatLangForDrawMap langForDrawMap = LatLangForDrawMap();
   final prefs = PreferenceService().prefs;
-
+  final _formKey = GlobalKey<FormState>();
   TextEditingController pickLocationController = TextEditingController();
   TextEditingController dropLocationController = TextEditingController();
 
@@ -56,6 +69,9 @@ class _PtConfirmLocationPageState extends State<PtConfirmLocationPage> {
   String? _currentLat;
   String? _currentLang;
 
+  double? distanceInKm;
+
+
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -67,7 +83,7 @@ class _PtConfirmLocationPageState extends State<PtConfirmLocationPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _openBottomSheet();
     });
-    authBloc.add(FetchHospitalsEvent());
+    //authBloc.add(FetchHospitalsEvent());
     _getCurrentLocation();
   }
 
@@ -94,10 +110,13 @@ class _PtConfirmLocationPageState extends State<PtConfirmLocationPage> {
       _currentPosition = LatLng(position.latitude, position.longitude);
       _currentLat = position.latitude.toString();
       _currentLang = position.longitude.toString();
+      langForDrawMap.startLat = position.latitude;
+      langForDrawMap.startLang = position.longitude;
     });
     String address = await getAddressFromLatLng(position.latitude, position.longitude);
-    print(address);
+    debugPrint(address);
     pickLocationController.text = address;
+    authBloc.add(NearestHospitalEvent(lat: "77.2043418", lang: "28.5686110"));
   }
 
   Future<String> getAddressFromLatLng(double latitude, double longitude) async {
@@ -145,47 +164,16 @@ class _PtConfirmLocationPageState extends State<PtConfirmLocationPage> {
           if (state is LoadedState) {
             showSpinner = false;
 
-            if (state.data is HospitalResponse) {
-              hospitalResponse = state.data;
-              hospitalList = hospitalResponse?.data;
+            nearestHospitalResponse = state.data;
+            nearestHospital = nearestHospitalResponse?.nearestHospitals;
 
-              for (var hospital in hospitalList!) {
-                final coordinates = hospital.location?.coordinates;
-                final LatLng position = LatLng(coordinates![1], coordinates[0]); // [lng, lat]
-                final String name = hospital.name ?? "";
-                final String address = hospital.address ?? "";
+            for (var hospital in nearestHospital!) {
+              final coordinates = hospital.location?.coordinates;
+              final LatLng position = LatLng(coordinates![1], coordinates[0]);
+              final String name = hospital.name ?? "";
+              final String address = hospital.address ?? "";
 
-                _markers.add(
-                  Marker(
-                      markerId: MarkerId(hospital.sId ?? ""),
-                      position: position,
-                      infoWindow: InfoWindow(title: name, snippet: address),
-                      icon: await BitmapDescriptor.fromAssetImage(
-                        const ImageConfiguration(size: Size(15, 15),),
-                        'assets/ic_icons/ic_hospital.png',
-                      )
-                  ),
-                );
-                /* mapController?.animateCamera(
-                  CameraUpdate.newCameraPosition(
-                    CameraPosition(
-                      target: _currentPosition ?? LatLng(28.6139, 77.2090),
-                      zoom: 12,
-                    ),
-                  ),
-                );*/
-              }
-            } else {
-              nearestHospitalResponse = state.data;
-              nearestHospital = nearestHospitalResponse?.nearestHospitals;
-
-              for (var hospital in nearestHospital!) {
-                final coordinates = hospital.location?.coordinates;
-                final LatLng position = LatLng(coordinates![1], coordinates[0]);
-                final String name = hospital.name ?? "";
-                final String address = hospital.address ?? "";
-
-                final marker = Marker(
+              final marker = Marker(
                   markerId: MarkerId(hospital.name ?? UniqueKey().toString()),
                   position: position,
                   infoWindow: InfoWindow(title: name, snippet: address),
@@ -193,21 +181,26 @@ class _PtConfirmLocationPageState extends State<PtConfirmLocationPage> {
                     const ImageConfiguration(size: Size(15, 15)),
                     'assets/ic_icons/ic_hospital.png',
                   ),
-                );
-                newMarkers.add(marker);
-              }
-
-              setState(() {
-                _markers.clear();
-                _markers.addAll(newMarkers);
-
-                if (newMarkers.isNotEmpty) {
-                  mapController?.animateCamera(
-                    CameraUpdate.newLatLngZoom(newMarkers.first.position, 10),
-                  );
-                }
-              });
+                  onTap: () {
+                    dropLocationController.text = hospital.name ?? "";
+                    distanceInKm = (hospital.distanceInMeters! / 1000);
+                    print('Distance: ${distanceInKm?.toStringAsFixed(2)} km');
+                    _openBottomSheet();
+                  }
+              );
+              newMarkers.add(marker);
             }
+
+            setState(() {
+              _markers.clear();
+              _markers.addAll(newMarkers);
+
+              if (newMarkers.isNotEmpty) {
+                mapController?.animateCamera(
+                  CameraUpdate.newLatLngZoom(newMarkers.first.position, 10),
+                );
+              }
+            });
           }
         },
         builder: (context, state) {
@@ -268,89 +261,109 @@ class _PtConfirmLocationPageState extends State<PtConfirmLocationPage> {
     showModalBottomSheet(
         context: context,
         isScrollControlled: true,
+        constraints: BoxConstraints(
+          maxHeight: context.height() * 0.55,
+          maxWidth: context.height() * 0.45,
+        ),
         builder: (BuildContext ctx) {
-          return Padding(
-            padding: EdgeInsets.only(bottom: MediaQuery
-                .of(context)
-                .viewInsets
-                .bottom),
-            child: Container(
-              height: context.height() * 0.45,
-              padding: const EdgeInsets.all(20),
-              decoration: const BoxDecoration(color: AppColors.greyBg, borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Center(
-                    child: Text(
-                      LabelString.labelSelectAddress,
-                      style: GoogleFonts.dmSans(color: AppColors.redColor, fontSize: 18.sp, fontWeight: GoogleFontWeight.semiBold),
-                    ),
-                  ),
-                  20.verticalSpace,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        children: [
-                          Assets.icIcons.location1.svg(colorFilter: ColorFilter.mode(AppColors.blueColor, BlendMode.srcIn)),
-                          DottedLine(
-                            direction: Axis.vertical,
-                            lineLength: 0.073.sh,
-                            lineThickness: 1.5,
-                            dashLength: 6.0,
-                            dashColor: Colors.black,
-                            dashGapLength: 1.5,
-                          ),
-                          Assets.icIcons.location.svg(colorFilter: ColorFilter.mode(AppColors.redColor, BlendMode.srcIn)),
-                        ],
+          return Form(
+            key: _formKey,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: MediaQuery
+                  .of(context)
+                  .viewInsets
+                  .bottom),
+              child: Container(
+
+                padding: const EdgeInsets.all(20),
+                decoration: const BoxDecoration(color: AppColors.greyBg, borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Center(
+                      child: Text(
+                        LabelString.labelSelectAddress,
+                        style: GoogleFonts.dmSans(color: AppColors.redColor, fontSize: 18.sp, fontWeight: GoogleFontWeight.semiBold),
                       ),
-                      12.horizontalSpace,
-                      Expanded(
-                        child: Column(
+                    ),
+                    20.verticalSpace,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Column(
                           children: [
-                            CustomTextField(
-                              maxLine: 1,
-                              label: LabelString.labelPickupLocation,
-                              controller: pickLocationController,
-                              hintText: LabelString.labelEnterPickupLocation,
-                              suffixIcon: Padding(padding: EdgeInsets.all(8.sp), child: Assets.icIcons.location.svg()),
+                            Assets.icIcons.location1.svg(colorFilter: ColorFilter.mode(AppColors.blueColor, BlendMode.srcIn)),
+                            DottedLine(
+                              direction: Axis.vertical,
+                              lineLength: 0.073.sh,
+                              lineThickness: 1.5,
+                              dashLength: 6.0,
+                              dashColor: Colors.black,
+                              dashGapLength: 1.5,
                             ),
-                            10.horizontalSpace,
-                            Column(
-                              children: [
-                                CustomTextField(
-                                  maxLine: 1,
-                                  label: LabelString.labelDropLocation,
-                                  controller: dropLocationController,
-                                  hintText: LabelString.labelEnterDropLocation,
-                                ),
-                                3.verticalSpace,
-                                GestureDetector(
-                                  onTap: () {
-                                    authBloc.add(NearestHospitalEvent(lat: "77.2043418", lang: "28.5686110"));
-                                  },
-                                  child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Text(
-                                      LabelString.labelNearbyHospital,
-                                      style: GoogleFonts.dmSans(color: AppColors.blueColor, fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            15.verticalSpace,
+                            Assets.icIcons.location.svg(colorFilter: ColorFilter.mode(AppColors.redColor, BlendMode.srcIn)),
                           ],
                         ),
+                        12.horizontalSpace,
+                        Expanded(
+                          child: Column(
+                            children: [
+                              CustomTextField(
+                                maxLine: 1,
+                                label: LabelString.labelPickupLocation,
+                                controller: pickLocationController,
+                                hintText: LabelString.labelEnterPickupLocation,
+                                readOnly: true,
+                                suffixIcon: Padding(padding: EdgeInsets.all(8.sp), child: Assets.icIcons.location.svg()),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return ErrorString.pickupLocationErr;
+                                  }
+                                  return null;
+                                },
+                              ),
+                              10.horizontalSpace,
+                              Column(
+                                children: [
+                                  CustomTextField(
+                                    maxLine: 1,
+                                    label: LabelString.labelDropLocation,
+                                    controller: dropLocationController,
+                                    hintText: LabelString.labelEnterDropLocation,
+                                    readOnly: true,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return ErrorString.dropLocationErr;
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    3.verticalSpace,
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        "${LabelString.labelDistance}: ${distanceInKm?.toStringAsFixed(2)} km",
+                        style: GoogleFonts.dmSans(color: AppColors.red, fontWeight: FontWeight.w700),
                       ),
-                    ],
-                  ),
-                  CustomButton(onPressed: () {
-                    navigationService.pop();
-                  }, text: LabelString.labelConfirmLocation),
-                ],
+                    ),
+                    10.verticalSpace,
+                    CustomButton(onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        //navigationService.pop();
+                        navigationService.push(PatientBookEmsFormPage(langForDrawMap));
+                      }
+                    }, text: LabelString.labelConfirmLocation),
+                    10.verticalSpace,
+                  ],
+                ),
               ),
             ),
           );

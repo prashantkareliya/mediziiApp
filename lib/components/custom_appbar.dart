@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:medizii/constants/app_colours/app_colors.dart';
 import 'package:medizii/gen/assets.gen.dart';
 import 'package:medizii/main.dart';
-import 'package:medizii/notification.dart';
+import 'package:medizii/notification_pg.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;

@@ -9,6 +9,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "85.0.0"
+  _flutterfire_internals:
+    dependency: transitive
+    description:
+      name: _flutterfire_internals
+      sha256: "948f7d74f41dd6f2d563ea9f4c21d7ea764f8e047d2b24138974c19c24d37eb6"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.61"
   agora_rtc_engine:
     dependency: "direct main"
     description:
@@ -377,6 +385,54 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.3+4"
+  firebase_core:
+    dependency: "direct main"
+    description:
+      name: firebase_core
+      sha256: "967dae9a65f69377beb9f4ab292ea63ce5befa1ce24682cab1b69ca4b7a46927"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.1.0"
+  firebase_core_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_core_platform_interface
+      sha256: "5dbc900677dcbe5873d22ad7fbd64b047750124f1f9b7ebe2a33b9ddccc838eb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.0"
+  firebase_core_web:
+    dependency: transitive
+    description:
+      name: firebase_core_web
+      sha256: f7ee08febc1c4451588ce58ffcf28edaee857e9a196fee88b85deb889990094a
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0"
+  firebase_messaging:
+    dependency: "direct main"
+    description:
+      name: firebase_messaging
+      sha256: aad5dcdea5698499b70d74d5a53b1f6a9972f85f97225e4b7ac006dd8d4f9bac
+      url: "https://pub.dev"
+    source: hosted
+    version: "16.0.1"
+  firebase_messaging_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_messaging_platform_interface
+      sha256: "825bc11767bf50a43dccf49b3026f847ec31d0f176139bfc48d662cc128b5014"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.7.1"
+  firebase_messaging_web:
+    dependency: transitive
+    description:
+      name: firebase_messaging_web
+      sha256: db8dbdd79921245c4de02407e33cae2d1868683be18a5ba948d2af5311e3ef5d
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.1"
   fixnum:
     dependency: transitive
     description:
@@ -438,6 +494,38 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.0.0"
+  flutter_local_notifications:
+    dependency: "direct main"
+    description:
+      name: flutter_local_notifications
+      sha256: a9966c850de5e445331b854fa42df96a8020066d67f125a5964cbc6556643f68
+      url: "https://pub.dev"
+    source: hosted
+    version: "19.4.1"
+  flutter_local_notifications_linux:
+    dependency: transitive
+    description:
+      name: flutter_local_notifications_linux
+      sha256: e3c277b2daab8e36ac5a6820536668d07e83851aeeb79c446e525a70710770a5
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.0"
+  flutter_local_notifications_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_local_notifications_platform_interface
+      sha256: "277d25d960c15674ce78ca97f57d0bae2ee401c844b6ac80fcd972a9c99d09fe"
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.1.0"
+  flutter_local_notifications_windows:
+    dependency: transitive
+    description:
+      name: flutter_local_notifications_windows
+      sha256: ed46d7ae4ec9d19e4c8fa2badac5fe27ba87a3fe387343ce726f927af074ec98
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -446,6 +534,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.29"
+  flutter_polyline_points:
+    dependency: "direct main"
+    description:
+      name: flutter_polyline_points
+      sha256: b67399f144784fcec86d947357ce05ac0c1ef86e928578faa697559c3f72b183
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.1"
   flutter_screenutil:
     dependency: "direct main"
     description:
@@ -1245,6 +1341,22 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  socket_io_client:
+    dependency: "direct main"
+    description:
+      name: socket_io_client
+      sha256: c8471c2c6843cf308a5532ff653f2bcdb7fa9ae79d84d1179920578a06624f0d
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.2"
+  socket_io_common:
+    dependency: transitive
+    description:
+      name: socket_io_common
+      sha256: "162fbaecbf4bf9a9372a62a341b3550b51dcef2f02f3e5830a297fd48203d45b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.1"
   source_span:
     dependency: transitive
     description:
@@ -1365,6 +1477,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.5"
+  timezone:
+    dependency: transitive
+    description:
+      name: timezone
+      sha256: dd14a3b83cfd7cb19e7888f1cbc20f258b8d71b54c06f79ac585f14093a287d1
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.10.1"
   timing:
     dependency: transitive
     description:

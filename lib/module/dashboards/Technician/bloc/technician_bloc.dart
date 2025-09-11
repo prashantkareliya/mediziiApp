@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:medizii/module/dashboards/Technician/data/technician_repository.dart';
 import 'package:medizii/module/dashboards/Technician/model/get_technician_by_id.dart';
+import 'package:medizii/module/dashboards/Technician/model/tc_accept_reject_request.dart';
+import 'package:medizii/module/dashboards/Technician/model/tc_accept_reject_response.dart';
 import 'package:medizii/module/dashboards/doctor/model/delete_doctor_response.dart';
 import 'package:meta/meta.dart';
 
@@ -15,6 +17,9 @@ class TechnicianBloc extends Bloc<TechnicianEvent, TechnicianState> {
 
     on<GetTechnicianByIdEvent>((event, emit) => _getTechnician(event, emit));
     on<DeleteTechnicianEvent>((event, emit) => _deleteTechnician(event, emit));
+    on<EmsBookingAcceptEvent>((event, emit) => emsBookingAccept(event, emit));
+    on<EmsBookingRejectEvent>((event, emit) => emsBookingReject(event, emit));
+
   }
 
   _getTechnician(GetTechnicianByIdEvent? event, Emitter<TechnicianState> emit) async {
@@ -46,4 +51,40 @@ class TechnicianBloc extends Bloc<TechnicianEvent, TechnicianState> {
       },
     );
   }
+
+  emsBookingAccept(EmsBookingAcceptEvent event, Emitter<TechnicianState> emit) async {
+    emit(LoadingState(true));
+    final response = await technicianRepository.emsBookingAccept(
+      technicianAcceptRejectRequest: event.technicianAcceptRejectRequest,
+    );
+    response.when(
+      success: (success) {
+        emit(LoadingState(false));
+        emit(LoadedState<TechnicianAcceptRejectResponse>(data: success));
+      },
+      failure: (failure) {
+        emit(LoadingState(false));
+        emit(FailureState(failure.toString()));
+      },
+    );
+  }
+
+  emsBookingReject(EmsBookingRejectEvent event, Emitter<TechnicianState> emit) async {
+    emit(LoadingState(true));
+    final response = await technicianRepository.emsBookingReject(
+      technicianAcceptRejectRequest: event.technicianAcceptRejectRequest,
+    );
+    response.when(
+      success: (success) {
+        emit(LoadingState(false));
+        emit(LoadedState<TechnicianAcceptRejectResponse>(data: success));
+      },
+      failure: (failure) {
+        emit(LoadingState(false));
+        emit(FailureState(failure.toString()));
+      },
+    );
+  }
+
+
 }
