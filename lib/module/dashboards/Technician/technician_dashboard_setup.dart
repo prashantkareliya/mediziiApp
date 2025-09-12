@@ -47,7 +47,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
   Future<void> initFcmAndSocket() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
     NotificationSettings settings = await messaging.requestPermission();
-    fcmToken = await messaging.getToken();
+    fcmToken = await messaging.getAPNSToken();
     print("FCM token: $fcmToken");
 
     // connect socket
@@ -85,13 +85,44 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
 
   void startSendingLocation() {
     timer = Timer.periodic(Duration(seconds: 10), (_) async {
-      Position pos = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-      socket.emit("technician_location_update", {
-        "technicianId": prefs.getString(PreferenceString.prefsUserId),
-        "lat": pos.longitude,
-        "lng": pos.latitude
-      });
-      debugPrint("Sent location ${pos.longitude}, ${pos.latitude}");
+      try {
+        // Check if location services are enabled
+        bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+        if (!serviceEnabled) {
+          debugPrint('Location services are disabled.');
+          return;
+        }
+
+        // Check permissions
+        LocationPermission permission = await Geolocator.checkPermission();
+        if (permission == LocationPermission.denied) {
+          permission = await Geolocator.requestPermission();
+          if (permission == LocationPermission.denied) {
+            debugPrint('Location permission denied by user.');
+            return;
+          }
+        }
+
+        if (permission == LocationPermission.deniedForever) {
+          debugPrint('Location permission permanently denied.');
+          await Geolocator.openAppSettings(); // Optional: Prompt user to enable it manually
+          return;
+        }
+
+        // Get current position safely
+        Position pos = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+        // Emit to socket
+        socket.emit("technician_location_update", {
+          "technicianId": prefs.getString(PreferenceString.prefsUserId),
+          "lat": pos.longitude,
+          "lng": pos.latitude,
+        });
+
+        debugPrint("Sent location ${pos.longitude}, ${pos.latitude}");
+      } catch (e) {
+        debugPrint("Error getting location: $e");
+      }
     });
   }
 
@@ -102,28 +133,26 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
   void _showAcceptDialog(dynamic data) {
     final bookingId = data['bookingId'];
     PlatformAwareDialog.show(
-        context: context,
-        title: "New Booking",
-        content: "Patient nearby. Accept?",
-        confirmText: "Accept",
-        cancelText: "Decline",
-        onCancel: () {
-          TechnicianAcceptRejectRequest technicianAcceptRejectRequest =
-              TechnicianAcceptRejectRequest(
-                bookingId: bookingId,
-                technicianId: prefs.getString(PreferenceString.prefsUserId)
-              );
-          technicianBloc.add(EmsBookingRejectEvent(technicianAcceptRejectRequest));
-        },
-        onConfirm: () {
-          TechnicianAcceptRejectRequest technicianAcceptRejectRequest =
-          TechnicianAcceptRejectRequest(
-              bookingId: bookingId,
-              technicianId: prefs.getString(PreferenceString.prefsUserId)
-          );
-          technicianBloc.add(EmsBookingRejectEvent(technicianAcceptRejectRequest));
-          socket.emit("accept_booking", {"technicianId": prefs.getString(PreferenceString.prefsUserId), "bookingId": bookingId});
-        }
+      context: context,
+      title: "New Booking",
+      content: "Patient nearby. Accept?",
+      confirmText: "Accept",
+      cancelText: "Decline",
+      onCancel: () {
+        TechnicianAcceptRejectRequest technicianAcceptRejectRequest = TechnicianAcceptRejectRequest(
+          bookingId: bookingId,
+          technicianId: prefs.getString(PreferenceString.prefsUserId),
+        );
+        technicianBloc.add(EmsBookingRejectEvent(technicianAcceptRejectRequest));
+      },
+      onConfirm: () {
+        TechnicianAcceptRejectRequest technicianAcceptRejectRequest = TechnicianAcceptRejectRequest(
+          bookingId: bookingId,
+          technicianId: prefs.getString(PreferenceString.prefsUserId),
+        );
+        technicianBloc.add(EmsBookingAcceptEvent(technicianAcceptRejectRequest));
+        socket.emit("accept_booking", {"technicianId": prefs.getString(PreferenceString.prefsUserId), "bookingId": bookingId});
+      },
     );
   }
 
@@ -133,7 +162,6 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
     socket.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
