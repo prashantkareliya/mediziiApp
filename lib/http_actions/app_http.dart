@@ -43,6 +43,28 @@ class HttpActions {
     }
   }
 
+  Future<dynamic> getMethodWithBody(String url,
+      {Map<String, String>? headers, Map<String, dynamic>? body}) async {
+    if ((await checkConnection()) != ConnectivityResult.none) {
+      headers = getSessionData(headers ?? {}, prefs.getString(PreferenceString.prefsToken));
+      headers['Content-Type'] = 'application/json';
+
+      // Create the request manually
+      var uri = Uri.parse(endPoint + url);
+      var request = http.Request('GET', uri);
+      request.headers.addAll(headers);
+      request.body = jsonEncode(body);
+
+      // Send the request
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return jsonDecode(utf8.decode(response.bodyBytes));
+    } else {
+      return Future.error(ErrorString.noInternet);
+    }
+  }
+
   Future<dynamic> getMethodWithQueryParam(
       String url, {
         Map<String, String>? headers,

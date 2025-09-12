@@ -17,8 +17,10 @@ import 'package:medizii/main.dart';
 import 'package:medizii/module/dashboards/patient/bloc/patient_bloc.dart';
 import 'package:medizii/module/dashboards/patient/data/patient_datasource.dart';
 import 'package:medizii/module/dashboards/patient/data/patient_repository.dart';
+import 'package:medizii/module/dashboards/patient/model/ems_booking_detail_request.dart';
 import 'package:medizii/module/dashboards/patient/model/ems_booking_request.dart';
 import 'package:medizii/module/dashboards/patient/model/ems_booking_response.dart';
+import 'package:medizii/module/dashboards/patient/model/get_booking_detail_response.dart';
 import 'package:medizii/module/dashboards/patient/patient_book_ems/pt_confirm_location_pg.dart';
 import 'package:medizii/module/dashboards/patient/patient_book_ems/pt_draw_map_pg.dart';
 
@@ -73,6 +75,7 @@ class _PatientBookEmsFormPageState extends State<PatientBookEmsFormPage> {
   bool showSpinner = false;
 
   EmsBookingResponse? emsBookingResponse;
+  GetBookingDetailResponse? getBookingDetailResponse;
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +84,7 @@ class _PatientBookEmsFormPageState extends State<PatientBookEmsFormPage> {
       appBar: CustomAppBar(title: LabelString.labelBookEms, isNotification: false, isBack: true),
       body: BlocConsumer<PatientBloc, PatientState>(
         bloc: patientBloc,
-        listener: (context, state) {
+        listener: (context, state) async {
           if (state is FailureState) {
             showSpinner = false;
             Helpers.showSnackBar(context, state.error);
@@ -90,10 +93,18 @@ class _PatientBookEmsFormPageState extends State<PatientBookEmsFormPage> {
             showSpinner = true;
           }
           if (state is LoadedState) {
-            showSpinner = false;
-            emsBookingResponse = state.data;
-            Helpers.showSnackBar(context, emsBookingResponse?.message ?? "");
-            navigationService.push(PatientDrawMapPage(widget.langForDrawMap));
+            if (state.data is GetBookingDetailResponse) {
+              showSpinner = false;
+              getBookingDetailResponse = state.data;
+              navigationService.push(PatientDrawMapPage(widget.langForDrawMap, getBookingDetailResponse));
+            } else {
+              emsBookingResponse = state.data;
+              Helpers.showSnackBar(context, emsBookingResponse?.message ?? "");
+              if (state.data != null) {
+                GetBookingDetailRequest getBookingDetailRequest = GetBookingDetailRequest(bookingId: emsBookingResponse?.bookingId);
+                patientBloc.add(BookingDetailEvent(getBookingDetailRequest));
+              }
+            }
           }
         },
         builder: (context, state) {

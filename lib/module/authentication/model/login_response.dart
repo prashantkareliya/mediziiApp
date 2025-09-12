@@ -14,90 +14,96 @@ class LoginResponse {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['error'] = this.error;
-    data['message'] = this.message;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['error'] = error;
+    data['message'] = message;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
-    data['token'] = this.token;
+    data['token'] = token;
     return data;
   }
 }
 
 class Data {
   Location? location;
+  CurrentBooking? currentBooking;
+  String? deviceType;
   String? sId;
   String? name;
+  String? sex;
   int? age;
-  String? type;
-  String? hospital;
-  String? occupation;
-  int? experience;
+  String? blood;
   String? phone;
   String? email;
   String? role;
-  String? sex;
   String? createdAt;
   String? updatedAt;
   int? iV;
+  String? deviceToken;
 
   Data(
       {this.location,
+        this.currentBooking,
+        this.deviceType,
         this.sId,
         this.name,
+        this.sex,
         this.age,
-        this.type,
-        this.hospital,
-        this.occupation,
-        this.experience,
+        this.blood,
         this.phone,
         this.email,
         this.role,
-        this.sex,
         this.createdAt,
         this.updatedAt,
-        this.iV});
+        this.iV,
+        this.deviceToken});
 
   Data.fromJson(Map<String, dynamic> json) {
     location = json['location'] != null
         ? new Location.fromJson(json['location'])
         : null;
+    currentBooking = json['currentBooking'] != null
+        ? new CurrentBooking.fromJson(json['currentBooking'])
+        : null;
+    deviceType = json['device_type'];
+
     sId = json['_id'];
     name = json['name'];
+    sex = json['sex'];
     age = json['age'];
-    type = json['type'];
-    hospital = json['hospital'];
-    occupation = json['occupation'];
-    experience = json['experience'];
+    blood = json['blood'];
     phone = json['phone'];
     email = json['email'];
     role = json['role'];
-    sex = json['sex'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
+    deviceToken = json['device_token'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.location != null) {
-      data['location'] = this.location!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (location != null) {
+      data['location'] = location!.toJson();
     }
-    data['_id'] = this.sId;
-    data['name'] = this.name;
-    data['age'] = this.age;
-    data['type'] = this.type;
-    data['hospital'] = this.hospital;
-    data['occupation'] = this.occupation;
-    data['experience'] = this.experience;
-    data['phone'] = this.phone;
-    data['email'] = this.email;
-    data['role'] = this.role;
-    data['sex'] = this.sex;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    data['__v'] = this.iV;
+    if (currentBooking != null) {
+      data['currentBooking'] = currentBooking!.toJson();
+    }
+    data['device_type'] = deviceType;
+
+    data['_id'] = sId;
+    data['name'] = name;
+    data['sex'] = sex;
+    data['age'] = age;
+    data['blood'] = blood;
+    data['phone'] = phone;
+    data['email'] = email;
+    data['role'] = role;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['__v'] = iV;
+    data['device_token'] = deviceToken;
     return data;
   }
 }
@@ -114,9 +120,25 @@ class Location {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['type'] = this.type;
-    data['coordinates'] = this.coordinates;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['type'] = type;
+    data['coordinates'] = coordinates;
+    return data;
+  }
+}
+
+class CurrentBooking {
+  Null? status;
+
+  CurrentBooking({this.status});
+
+  CurrentBooking.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
     return data;
   }
 }

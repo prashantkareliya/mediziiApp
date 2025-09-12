@@ -183,6 +183,8 @@ class _PtConfirmLocationPageState extends State<PtConfirmLocationPage> {
                   ),
                   onTap: () {
                     dropLocationController.text = hospital.name ?? "";
+                    langForDrawMap.endLat = hospital.location?.coordinates?[0].toDouble();
+                    langForDrawMap.endLang = hospital.location?.coordinates?[1].toDouble();
                     distanceInKm = (hospital.distanceInMeters! / 1000);
                     print('Distance: ${distanceInKm?.toStringAsFixed(2)} km');
                     _openBottomSheet();
@@ -194,7 +196,6 @@ class _PtConfirmLocationPageState extends State<PtConfirmLocationPage> {
             setState(() {
               _markers.clear();
               _markers.addAll(newMarkers);
-
               if (newMarkers.isNotEmpty) {
                 mapController?.animateCamera(
                   CameraUpdate.newLatLngZoom(newMarkers.first.position, 10),
@@ -350,7 +351,7 @@ class _PtConfirmLocationPageState extends State<PtConfirmLocationPage> {
                     Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        "${LabelString.labelDistance}: ${distanceInKm?.toStringAsFixed(2)} km",
+                        "${LabelString.labelDistance}: ${distanceInKm?.toStringAsFixed(2) ?? ""} km",
                         style: GoogleFonts.dmSans(color: AppColors.red, fontWeight: FontWeight.w700),
                       ),
                     ),
@@ -358,6 +359,7 @@ class _PtConfirmLocationPageState extends State<PtConfirmLocationPage> {
                     CustomButton(onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         //navigationService.pop();
+
                         navigationService.push(PatientBookEmsFormPage(langForDrawMap));
                       }
                     }, text: LabelString.labelConfirmLocation),

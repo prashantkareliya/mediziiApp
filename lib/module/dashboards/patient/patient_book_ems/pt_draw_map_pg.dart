@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
@@ -10,13 +8,16 @@ import 'package:medizii/constants/app_colours/app_colors.dart';
 import 'package:medizii/constants/helpers.dart';
 import 'package:medizii/constants/strings.dart';
 import 'package:medizii/gen/assets.gen.dart';
-import 'package:medizii/module/dashboards/patient/model/ems_booking_response.dart';
+import 'package:medizii/module/dashboards/patient/model/get_booking_detail_response.dart';
 import 'package:medizii/module/dashboards/patient/patient_book_ems/pt_confirm_location_pg.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 class PatientDrawMapPage extends StatefulWidget {
   LatLangForDrawMap? langForDrawMap;
-  PatientDrawMapPage(this.langForDrawMap, {super.key});
+  GetBookingDetailResponse? getBookingDetailResponse;
+
+  PatientDrawMapPage(this.langForDrawMap, this.getBookingDetailResponse, {super.key});
 
   @override
   State<PatientDrawMapPage> createState() => _PatientDrawMapPageState();
@@ -144,7 +145,7 @@ class _PatientDrawMapPageState extends State<PatientDrawMapPage> {
                               children: [
                                 GestureDetector(
                                   onTap: () {
-                                    Helpers.startCall(" ");
+                                    Helpers.startCall(widget.getBookingDetailResponse?.booking?.technician?.phone);
                                   },
                                   child: Container(
                                     padding: EdgeInsets.all(8.sp),
@@ -153,10 +154,14 @@ class _PatientDrawMapPageState extends State<PatientDrawMapPage> {
                                   ),
                                 ),
                                 10.horizontalSpace,
-                                Container(
-                                  padding: EdgeInsets.all(8.sp),
-                                  decoration: BoxDecoration(color: AppColors.iconBgColor, borderRadius: BorderRadius.circular(25)),
-                                  child: Assets.icIcons.location.svg(colorFilter: ColorFilter.mode(AppColors.redColor, BlendMode.srcIn)),
+                                GestureDetector(
+                                  onTap: (){
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.all(8.sp),
+                                    decoration: BoxDecoration(color: AppColors.iconBgColor, borderRadius: BorderRadius.circular(25)),
+                                    child: Assets.icIcons.location.svg(colorFilter: ColorFilter.mode(AppColors.redColor, BlendMode.srcIn)),
+                                  ),
                                 ),
                               ],
                             ),
@@ -185,7 +190,7 @@ class _PatientDrawMapPageState extends State<PatientDrawMapPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Prashant K",
+                                  widget.getBookingDetailResponse?.booking?.technician?.name ?? "",
                                   style: GoogleFonts.dmSans(fontSize: 12.sp, fontWeight: FontWeight.bold, color: AppColors.blackColor),
                                 ),
                                 Text(

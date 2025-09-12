@@ -1,11 +1,11 @@
-import 'dart:convert';
+import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medizii/components/custom_button.dart';
-import 'package:medizii/components/custom_loader.dart';
 import 'package:medizii/components/custom_loading_wrapper.dart';
 import 'package:medizii/components/cutom_textfield.dart';
 import 'package:medizii/components/sharedPreferences_service.dart';
@@ -22,7 +22,6 @@ import 'package:medizii/module/authentication/model/login_response.dart';
 import 'package:medizii/module/dashboards/Technician/technician_dashboard_setup.dart';
 import 'package:medizii/module/dashboards/doctor/dr_dashboard_setup.dart';
 import 'package:medizii/module/dashboards/patient/patient_dashboard_setup.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import 'bloc/auth_state.dart';
 import 'forgot_password_screeen.dart';
@@ -48,6 +47,7 @@ class _LoginTabState extends State<LoginTab> {
 
   LoginRequest loginRequest = LoginRequest();
   LoginResponse? user;
+  String? fcmToken;
 
   @override
   void dispose() {
@@ -55,6 +55,19 @@ class _LoginTabState extends State<LoginTab> {
     emailCtrl.dispose();
     passCtrl.dispose();
     _obscureTextNotifier.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initFcm();
+  }
+
+  void initFcm() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    await messaging.requestPermission();
+    fcmToken = await messaging.getToken();
+    print("Patient FCM token $fcmToken");
   }
 
   @override
@@ -165,6 +178,8 @@ class _LoginTabState extends State<LoginTab> {
                         if (_formKey.currentState!.validate()) {
                           loginRequest.phone = emailCtrl.text.trim();
                           loginRequest.password = passCtrl.text;
+                          loginRequest.deviceToken = fcmToken;
+                          loginRequest.deviceType = Platform.isAndroid ? "android" : "ios";
                           authBloc.add(LoginUserEvent(loginRequest, widget.selectedRole.toString()));
                           debugPrint("Login request for ${widget.selectedRole}: ${loginRequest.toJson()}");
                         }

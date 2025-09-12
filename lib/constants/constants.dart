@@ -73,6 +73,7 @@ class ApiEndPoint {
   static const String getAllHospital = "hospital/all";
   static const String getAllPatient = "patient/detail/all";
   static const String getAllTechnician = "technician/detail/all";
+  static const String getEmsBookingDetail = "patient/bookingdetail";
 
   static String getNearestHospital(String lat, String lang) => "patient/nearest-hospital?lng=$lat&lat=$lang";
 }

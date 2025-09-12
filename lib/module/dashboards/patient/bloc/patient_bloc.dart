@@ -2,9 +2,11 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:medizii/module/dashboards/doctor/model/delete_doctor_response.dart';
 import 'package:medizii/module/dashboards/patient/data/patient_repository.dart';
+import 'package:medizii/module/dashboards/patient/model/ems_booking_detail_request.dart';
 import 'package:medizii/module/dashboards/patient/model/ems_booking_request.dart';
 import 'package:medizii/module/dashboards/patient/model/ems_booking_response.dart';
 import 'package:medizii/module/dashboards/patient/model/get_all_doctor_response.dart';
+import 'package:medizii/module/dashboards/patient/model/get_booking_detail_response.dart';
 import 'package:medizii/module/dashboards/patient/model/upload_document_response.dart';
 import 'package:medizii/module/dashboards/patient/model/upload_report_request.dart';
 import 'package:meta/meta.dart';
@@ -22,6 +24,7 @@ class PatientBloc extends Bloc<PatientEvent, PatientState> {
     on<DeletePatientEvent>((event, emit) => _deletePatient(event, emit));
     on<UploadReportImagesEvent>((event, emit) => _uploadReport(event, emit));
     on<EmsBookingEvent>((event, emit) => emsBooking(event, emit));
+    on<BookingDetailEvent>((event, emit) => bookingDetail(event, emit));
 
   }
 
@@ -83,6 +86,23 @@ class PatientBloc extends Bloc<PatientEvent, PatientState> {
       success: (success) {
         emit(LoadingState(false));
         emit(LoadedState<EmsBookingResponse>(data: success));
+      },
+      failure: (failure) {
+        emit(LoadingState(false));
+        emit(FailureState(failure.toString()));
+      },
+    );
+  }
+
+  bookingDetail(BookingDetailEvent event, Emitter<PatientState> emit) async {
+    emit(LoadingState(true));
+
+    final response = await patientRepository.getBookingDetail(getBookingDetailRequest: event.getBookingDetailRequest);
+
+    response.when(
+      success: (success) {
+        emit(LoadingState(false));
+        emit(LoadedState<GetBookingDetailResponse>(data: success));
       },
       failure: (failure) {
         emit(LoadingState(false));

@@ -30,3 +30,9 @@ class EmsBookingEvent extends PatientEvent {
   final EmsBookingRequest emsBookingRequest;
   EmsBookingEvent(this.emsBookingRequest);
 }
+
+class BookingDetailEvent extends PatientEvent {
+  GetBookingDetailRequest getBookingDetailRequest;
+
+  BookingDetailEvent(this.getBookingDetailRequest);
+}
