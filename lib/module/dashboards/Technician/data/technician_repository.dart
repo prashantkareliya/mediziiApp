@@ -7,16 +7,10 @@ import 'package:medizii/module/dashboards/Technician/model/get_technician_by_id.
 import 'package:medizii/module/dashboards/Technician/model/tc_accept_reject_request.dart';
 import 'package:medizii/module/dashboards/Technician/model/tc_accept_reject_response.dart';
 import 'package:medizii/module/dashboards/doctor/model/delete_doctor_response.dart';
-import 'package:medizii/module/dashboards/patient/data/patient_datasource.dart';
-import 'package:medizii/module/dashboards/patient/model/get_all_doctor_response.dart';
-
-import '../../doctor/model/get_patient_detail.dart';
 
 class TechnicianRepository {
   TechnicianRepository({required TechnicianDatasource technicianDatasource}) : _technicianDatasource = technicianDatasource;
   final TechnicianDatasource _technicianDatasource;
-
-
 
   Future<ApiResult<GetTechnicianByIdResponse>> getTechnicianById(String id) async {
     try {
@@ -52,11 +46,11 @@ class TechnicianRepository {
     }
   }
 
-  Future<ApiResult<TechnicianAcceptRejectResponse>> emsBookingAccept(
-      {required TechnicianAcceptRejectRequest technicianAcceptRejectRequest}) async {
+  Future<ApiResult<TechnicianAcceptRejectResponse>> emsBookingAccept({
+    required TechnicianAcceptRejectRequest technicianAcceptRejectRequest,
+  }) async {
     try {
-      final result =
-      await _technicianDatasource.emsAccept(technicianAcceptRejectRequest: technicianAcceptRejectRequest);
+      final result = await _technicianDatasource.emsAccept(technicianAcceptRejectRequest: technicianAcceptRejectRequest);
 
       TechnicianAcceptRejectResponse technicianAcceptRejectResponse = TechnicianAcceptRejectResponse.fromJson(result);
 
@@ -71,12 +65,11 @@ class TechnicianRepository {
     }
   }
 
-
-  Future<ApiResult<TechnicianAcceptRejectResponse>> emsBookingReject(
-      {required TechnicianAcceptRejectRequest technicianAcceptRejectRequest}) async {
+  Future<ApiResult<TechnicianAcceptRejectResponse>> emsBookingReject({
+    required TechnicianAcceptRejectRequest technicianAcceptRejectRequest,
+  }) async {
     try {
-      final result =
-      await _technicianDatasource.emsAccept(technicianAcceptRejectRequest: technicianAcceptRejectRequest);
+      final result = await _technicianDatasource.emsReject(technicianAcceptRejectRequest: technicianAcceptRejectRequest);
 
       TechnicianAcceptRejectResponse technicianAcceptRejectResponse = TechnicianAcceptRejectResponse.fromJson(result);
 
