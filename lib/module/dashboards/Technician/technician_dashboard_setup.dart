@@ -59,7 +59,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
 
     socket.onConnect((_) {
       print("Socket connected: ${socket.id}");
-      socket.emit("technician_online", {"technicianId": prefs.getString(PreferenceString.prefsUserId), "fcmToken": fcmToken});
+      socket.emit("technician_online", {"technicianId": prefs.getString(PreferenceString.prefsUserId), "device_token": fcmToken});
       startSendingLocation();
     });
 
@@ -186,12 +186,12 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
         listener: (context, state) {
           if (state is LoadedState) {
             technicianAcceptRejectResponse = state.data;
-            socket.emit("booking_confirmed", {
+            /*socket.emit("booking_confirmed", {
               "bookingId": technicianAcceptRejectResponse?.booking?.sId,
               "technician": prefs.getString(PreferenceString.prefsUserId),
               "hospital": technicianAcceptRejectResponse?.booking?.hospitalId,
               "message": "Your ambulance is on the way 🚑",
-            });
+            });*/
           }
         },
         builder: (context, state) {

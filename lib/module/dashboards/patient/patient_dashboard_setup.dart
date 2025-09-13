@@ -51,7 +51,14 @@ class _PatientDashboardState extends State<PatientDashboard> {
 
     socket.onConnect((_) {
       print("Socket connected: ${socket.id}");
-      socket.emit("patient_online", {"patientId": prefs.getString(PreferenceString.prefsUserId), "fcmToken": fcmToken});
+      socket.emit("patient_online", {"patientId": prefs.getString(PreferenceString.prefsUserId), "device_token": fcmToken});
+    });
+
+    socket.on("booking_confirmed", (data) {
+      print("📩 Booking confirmed: $data");
+      // show notification in-app
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(data['message'] ?? "Ambulance confirmed 🚑")));
+      // You can also navigate to tracking screen with bookingId
     });
 
     // handle when the app is opened from FCM (background/terminated)
