@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:medizii/constants/constants.dart';
 import 'package:medizii/constants/strings.dart';
 import 'package:medizii/http_actions/api_result.dart';
@@ -59,8 +60,9 @@ class TechnicianRepository {
       } else {
         return ApiResult.failure(error: technicianAcceptRejectResponse.message.toString());
       }
-    } catch (e) {
+    } catch (e, stack) {
       final message = HandleAPI.handleAPIError(e);
+      debugPrintStack(stackTrace: stack, label: "######### $e");
       return ApiResult.failure(error: message);
     }
   }

@@ -44,4 +44,22 @@ class AuthDatasource extends HttpActions {
     debugPrint("Nearest Hospital -  $response");
     return response;
   }
+
+  getAboutUs() async {
+    final response = await getMethod(ApiEndPoint.getAboutUs);
+    debugPrint("getAboutUs ==== > $response");
+    return response;
+  }
+
+  getContactUs() async {
+    final response = await getMethod(ApiEndPoint.getContactUs);
+    debugPrint("getContactUs ==== > $response");
+    return response;
+  }
+
+  getPrivacyOPolicy() async {
+    final response = await getMethod(ApiEndPoint.getPrivacyPolicy);
+    debugPrint("getPrivacyPolicy ==== > $response");
+    return response;
+  }
 }

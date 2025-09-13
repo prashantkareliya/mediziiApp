@@ -38,3 +38,16 @@ class NearestHospitalEvent extends AuthEvent {
   String lang;
   NearestHospitalEvent({required this.lat, required this.lang});
 }
+
+
+class ContactUsEvent extends AuthEvent {
+  ContactUsEvent();
+}
+
+class AboutUsEvent extends AuthEvent {
+  AboutUsEvent();
+}
+
+class PrivacyPolicyEvent extends AuthEvent {
+  PrivacyPolicyEvent();
+}

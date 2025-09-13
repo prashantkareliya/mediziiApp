@@ -47,7 +47,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
   Future<void> initFcmAndSocket() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
     NotificationSettings settings = await messaging.requestPermission();
-    fcmToken = await messaging.getAPNSToken();
+    fcmToken = await messaging.getToken();
     print("FCM token: $fcmToken");
 
     // connect socket
@@ -132,6 +132,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
 
   void _showAcceptDialog(dynamic data) {
     final bookingId = data['bookingId'];
+
     PlatformAwareDialog.show(
       context: context,
       title: "New Booking",
@@ -145,13 +146,21 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
         );
         technicianBloc.add(EmsBookingRejectEvent(technicianAcceptRejectRequest));
       },
-      onConfirm: () {
+      onConfirm: () async {
         TechnicianAcceptRejectRequest technicianAcceptRejectRequest = TechnicianAcceptRejectRequest(
-          bookingId: bookingId,
-          technicianId: prefs.getString(PreferenceString.prefsUserId),
+          bookingId: bookingId.toString(),
+          technicianId: prefs.getString(PreferenceString.prefsUserId).toString(),
         );
-        technicianBloc.add(EmsBookingAcceptEvent(technicianAcceptRejectRequest));
-        socket.emit("accept_booking", {"technicianId": prefs.getString(PreferenceString.prefsUserId), "bookingId": bookingId});
+         technicianBloc.add(EmsBookingAcceptEvent(technicianAcceptRejectRequest));
+        /*socket.emit("accept_booking", {"technicianId": prefs.getString(PreferenceString.prefsUserId), "bookingId": bookingId});
+        if (technicianId != null && bookingId != null) {
+          socket.emit("accept_booking", {
+            "technicianId": technicianId,
+            "bookingId": bookingId
+          });
+        } else {
+          print("Error: technicianId or bookingId is null");
+        }*/
       },
     );
   }

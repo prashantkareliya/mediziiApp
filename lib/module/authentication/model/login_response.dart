@@ -128,7 +128,7 @@ class Location {
 }
 
 class CurrentBooking {
-  Null? status;
+  String? status;
 
   CurrentBooking({this.status});
 

@@ -12,6 +12,9 @@ import 'package:medizii/constants/strings.dart';
 import 'package:medizii/gen/assets.gen.dart';
 import 'package:medizii/main.dart';
 import 'package:medizii/module/authentication/auth_screen.dart';
+import 'package:medizii/module/comman/about_us.dart';
+import 'package:medizii/module/comman/contact_us.dart';
+import 'package:medizii/module/comman/privacy_policy.dart';
 import 'package:medizii/module/dashboards/Technician/bloc/technician_bloc.dart';
 import 'package:medizii/module/dashboards/Technician/data/technician_datasource.dart';
 import 'package:medizii/module/dashboards/Technician/data/technician_repository.dart';
@@ -81,13 +84,13 @@ class TechnicianSettingPage extends StatelessWidget {
                               navigationService.push(NotificationPage());
                               break;
                             case 'About Us':
-                              print('About Us');
+                              navigationService.push(AboutUs());
                               break;
                             case 'Contact Us':
-                              print('Contact Us');
+                              navigationService.push(ContactUs());
                               break;
                             case 'Privacy Policy':
-                              print('Privacy Policy');
+                              navigationService.push(PrivacyPolicy());
                               break;
                             default:
                             // fallback

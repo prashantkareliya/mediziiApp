@@ -19,11 +19,10 @@ class HttpActions {
     if ((await checkConnection()) != ConnectivityResult.none) {
       debugPrint("data $data");
       debugPrint("URL -- ${endPoint + url}");
-      debugPrint(Uri.parse(endPoint + url).toString());
       http.Response response = await http.post(
         Uri.parse(endPoint + url),
+        headers: {'Content-Type': 'application/json'},
         body: jsonEncode(data),
-        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
       );
       return jsonDecode(utf8.decode(response.bodyBytes));
     } else {

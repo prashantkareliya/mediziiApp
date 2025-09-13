@@ -4,6 +4,7 @@ import 'package:medizii/constants/strings.dart';
 import 'package:medizii/http_actions/api_result.dart';
 import 'package:medizii/http_actions/handle_api_error.dart';
 import 'package:medizii/module/authentication/data/datasource.dart';
+import 'package:medizii/module/authentication/model/comman_data_response.dart';
 import 'package:medizii/module/authentication/model/create_user_request.dart';
 import 'package:medizii/module/authentication/model/create_user_response.dart';
 import 'package:medizii/module/authentication/model/forget_password_response.dart';
@@ -11,8 +12,6 @@ import 'package:medizii/module/authentication/model/hospitals_response.dart';
 import 'package:medizii/module/authentication/model/login_request.dart';
 import 'package:medizii/module/authentication/model/login_response.dart';
 import 'package:medizii/module/authentication/model/nearest_hospital_response.dart';
-import 'package:medizii/module/dashboards/patient/model/ems_booking_request.dart';
-import 'package:medizii/module/dashboards/patient/model/ems_booking_response.dart';
 
 class AuthRepository {
   AuthRepository({required AuthDatasource authDatasource}) : _authDatasource = authDatasource;
@@ -170,4 +169,54 @@ class AuthRepository {
     }
   }
 
+  Future<ApiResult<CommonDataResponse>> getAboutUs() async {
+    try {
+      final result = await _authDatasource.getAboutUs();
+
+      CommonDataResponse commonDataResponse = CommonDataResponse.fromJson(result);
+
+      if (commonDataResponse.error == ResponseStatus.success) {
+        return ApiResult.success(data: commonDataResponse);
+      } else {
+        return ApiResult.failure(error: ErrorString.somethingWentWrong);
+      }
+    } catch (e) {
+      final message = HandleAPI.handleAPIError(e);
+      return ApiResult.failure(error: message);
+    }
+  }
+
+  Future<ApiResult<CommonDataResponse>> getContactUs() async {
+    try {
+      final result = await _authDatasource.getContactUs();
+
+      CommonDataResponse commonDataResponse = CommonDataResponse.fromJson(result);
+
+      if (commonDataResponse.error == ResponseStatus.success) {
+        return ApiResult.success(data: commonDataResponse);
+      } else {
+        return ApiResult.failure(error: ErrorString.somethingWentWrong);
+      }
+    } catch (e) {
+      final message = HandleAPI.handleAPIError(e);
+      return ApiResult.failure(error: message);
+    }
+  }
+
+  Future<ApiResult<CommonDataResponse>> privacyPolicy() async {
+    try {
+      final result = await _authDatasource.getPrivacyOPolicy();
+
+      CommonDataResponse commonDataResponse = CommonDataResponse.fromJson(result);
+
+      if (commonDataResponse.error == ResponseStatus.success) {
+        return ApiResult.success(data: commonDataResponse);
+      } else {
+        return ApiResult.failure(error: ErrorString.somethingWentWrong);
+      }
+    } catch (e) {
+      final message = HandleAPI.handleAPIError(e);
+      return ApiResult.failure(error: message);
+    }
+  }
 }

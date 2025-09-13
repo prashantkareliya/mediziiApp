@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:medizii/module/authentication/data/repository.dart';
+import 'package:medizii/module/authentication/model/comman_data_response.dart';
 import 'package:medizii/module/authentication/model/create_user_response.dart';
 import 'package:medizii/module/authentication/model/forget_password_response.dart';
 import 'package:medizii/module/authentication/model/hospitals_response.dart';
@@ -21,6 +22,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     on<FetchHospitalsEvent>((event, emit) => getHospitals(event, emit));
     on<NearestHospitalEvent>((event, emit) => getNearestHospitals(event, emit));
+
+    on<ContactUsEvent>((event, emit) => contactUs(event, emit));
+    on<AboutUsEvent>((event, emit) => aboutUs(event, emit));
+    on<PrivacyPolicyEvent>((event, emit) => privacyPolicy(event, emit));
   }
 
 
@@ -109,6 +114,51 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       success: (success) {
         emit(LoadingState(false));
         emit(LoadedState<GetNearestHospitalResponse>(data: success));
+      },
+      failure: (failure) {
+        emit(LoadingState(false));
+        emit(FailureState(failure.toString()));
+      },
+    );
+  }
+
+  contactUs(ContactUsEvent event, Emitter<AuthState> emit) async {
+    emit(LoadingState(true));
+    final response = await authRepository.getContactUs();
+    response.when(
+      success: (success) {
+        emit(LoadingState(false));
+        emit(LoadedState<CommonDataResponse>(data: success));
+      },
+      failure: (failure) {
+        emit(LoadingState(false));
+        emit(FailureState(failure.toString()));
+      },
+    );
+  }
+
+  aboutUs(AboutUsEvent event, Emitter<AuthState> emit) async {
+    emit(LoadingState(true));
+    final response = await authRepository.getAboutUs();
+    response.when(
+      success: (success) {
+        emit(LoadingState(false));
+        emit(LoadedState<CommonDataResponse>(data: success));
+      },
+      failure: (failure) {
+        emit(LoadingState(false));
+        emit(FailureState(failure.toString()));
+      },
+    );
+  }
+
+  privacyPolicy(PrivacyPolicyEvent event, Emitter<AuthState> emit) async {
+    emit(LoadingState(true));
+    final response = await authRepository.privacyPolicy();
+    response.when(
+      success: (success) {
+        emit(LoadingState(false));
+        emit(LoadedState<CommonDataResponse>(data: success));
       },
       failure: (failure) {
         emit(LoadingState(false));

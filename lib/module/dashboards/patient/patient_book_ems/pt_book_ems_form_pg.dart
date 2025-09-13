@@ -225,7 +225,7 @@ class _PatientBookEmsFormPageState extends State<PatientBookEmsFormPage> {
       lng: widget.langForDrawMap?.startLang.toString(),
       destLat: widget.langForDrawMap?.endLat.toString(),
       destLng: widget.langForDrawMap?.endLang.toString(),
-      deviceToken: fcmToken,
+      deviceToken: fcmToken ?? "",
       deviceType: Platform.isAndroid ? "android" : "ios",
     );
     patientBloc.add(EmsBookingEvent(emsBookingRequest));
