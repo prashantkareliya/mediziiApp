@@ -65,9 +65,16 @@ class _LoginTabState extends State<LoginTab> {
 
   void initFcm() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
-    await messaging.requestPermission();
-    fcmToken = await messaging.getToken();
-    print("Patient FCM token $fcmToken");
+    if (Platform.isIOS) {
+      String? apnsToken = await messaging.getAPNSToken();
+      if (apnsToken != null) {
+        fcmToken = await messaging.getToken();
+        print("@@@@@@@@@@@@ $fcmToken");
+      }
+    } else {
+      fcmToken = await messaging.getToken();
+      print("@@@@@@@@@@@@ $fcmToken");
+    }
   }
 
   @override

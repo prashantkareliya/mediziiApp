@@ -132,6 +132,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
 
   void _showAcceptDialog(dynamic data) {
     final bookingId = data['bookingId'];
+    final technicianId = prefs.getString(PreferenceString.prefsUserId);
 
     PlatformAwareDialog.show(
       context: context,
@@ -151,7 +152,7 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
           bookingId: bookingId.toString(),
           technicianId: prefs.getString(PreferenceString.prefsUserId).toString(),
         );
-         technicianBloc.add(EmsBookingAcceptEvent(technicianAcceptRejectRequest));
+        technicianBloc.add(EmsBookingAcceptEvent(technicianAcceptRejectRequest));
         /*socket.emit("accept_booking", {"technicianId": prefs.getString(PreferenceString.prefsUserId), "bookingId": bookingId});
         if (technicianId != null && bookingId != null) {
           socket.emit("accept_booking", {

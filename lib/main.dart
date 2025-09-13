@@ -19,7 +19,6 @@ import 'module/dashboards/bottom_bav_provider.dart';
 import 'module/dashboards/patient/patient_dashboard_setup.dart';
 import 'notification.dart';
 
-
 final NavigationService navigationService = NavigationService();
 
 Future<void> main() async {
@@ -28,12 +27,13 @@ Future<void> main() async {
     await Firebase.initializeApp();
   } else {
     await Firebase.initializeApp(
-        options: const FirebaseOptions(
-          apiKey: "AIzaSyBUtgtLLkjxiFLrK46OLJYNAQGViVL5zBY",
-          appId: "1:936649424706:android:d8a0ee94e6d2e1381752db",
-          messagingSenderId: "936649424706",
-          projectId: "medizii-8997a",
-        ));
+      options: const FirebaseOptions(
+        apiKey: "AIzaSyBUtgtLLkjxiFLrK46OLJYNAQGViVL5zBY",
+        appId: "1:936649424706:android:d8a0ee94e6d2e1381752db",
+        messagingSenderId: "936649424706",
+        projectId: "medizii-8997a",
+      ),
+    );
   }
   await PreferenceService().init();
   runApp(
@@ -42,7 +42,7 @@ Future<void> main() async {
       child: MyApp(),
     ),
   );
-
+  await requestNotificationPermission();
   initializeLocalNotifications();
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print("Received message in foreground: ${message.notification?.title}");
@@ -76,16 +76,11 @@ Future<void> requestNotificationPermission() async {
     print("User denied or not accepted permission");
   }
   if (Platform.isIOS) {
-    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
+    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
   }
 }
 
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
@@ -108,7 +103,8 @@ class MyApp extends StatelessWidget {
           home: child,
         );
       },
-        child: SplashScreen());
+      child: SplashScreen(),
+    );
   }
 }
 
@@ -158,6 +154,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return const Scaffold(body: Center(child: CustomLoader()));
   }
 }
+
 ///Add this in pod file for permission handler
 /*
 post_install do |installer|
