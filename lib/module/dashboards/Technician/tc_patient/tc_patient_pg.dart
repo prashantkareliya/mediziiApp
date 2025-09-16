@@ -72,7 +72,7 @@ class _TechnicianPatientPageState extends State<TechnicianPatientPage> {
                 padding: EdgeInsets.all(12.sp),
                 child: Assets.icIcons.search.svg(colorFilter: ColorFilter.mode(AppColors.redColor, BlendMode.srcIn)),
               ),
-              hintText: LabelString.labelSearchHint,
+              hintText: LabelString.labelSearchPatient,
               onChange: (value) {
                 debounce.run(() {
                   setState(() {

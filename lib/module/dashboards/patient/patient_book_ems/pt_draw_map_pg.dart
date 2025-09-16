@@ -1,23 +1,27 @@
+import 'dart:async';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:medizii/components/custom_loading_wrapper.dart';
+import 'package:medizii/components/sharedPreferences_service.dart';
 import 'package:medizii/constants/app_colours/app_colors.dart';
 import 'package:medizii/constants/helpers.dart';
 import 'package:medizii/constants/strings.dart';
 import 'package:medizii/gen/assets.gen.dart';
 import 'package:medizii/module/dashboards/patient/model/get_booking_detail_response.dart';
 import 'package:medizii/module/dashboards/patient/patient_book_ems/pt_confirm_location_pg.dart';
-import 'package:url_launcher/url_launcher.dart';
-
+import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 class PatientDrawMapPage extends StatefulWidget {
-  LatLangForDrawMap? langForDrawMap;
+
   GetBookingDetailResponse? getBookingDetailResponse;
 
-  PatientDrawMapPage(this.langForDrawMap, this.getBookingDetailResponse, {super.key});
+  PatientDrawMapPage(this.getBookingDetailResponse, {super.key});
 
   @override
   State<PatientDrawMapPage> createState() => _PatientDrawMapPageState();
@@ -28,24 +32,76 @@ class _PatientDrawMapPageState extends State<PatientDrawMapPage> {
 
   Set<Polyline> _polylines = {};
   Set<Marker> _markers = {};
+  late IO.Socket socket;
+  Timer? timer;
+  String? fcmToken;
+  final prefs = PreferenceService().prefs;
+  double? startLat, startLang, endLat, endLang;
 
   @override
   void initState() {
     super.initState();
-    _setMarkersAndPolyline();
+    initFcmAndSocket();
     _calculateDistance();
+    WakelockPlus.enable();
+  }
 
+  Future<void> initFcmAndSocket() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    fcmToken = await messaging.getToken();
+    print("FCM token:============= $fcmToken");
+
+    socket = IO.io("https://medizii.onrender.com", <String, dynamic>{
+      'transports': ['websocket'],
+      'autoConnect': true,
+    });
+
+    socket.onConnect((_) {
+      print("Socket connected --- : ${socket.id}");
+      socket.emit("patient_online", {
+        "patientId": prefs.getString(PreferenceString.prefsUserId).toString(),
+        "device_token": fcmToken
+      });
+    });
+
+    socket.on("technician_location_live", (data) {
+      print("🚑 Technician live location: $data");
+
+
+      if (data["latitude"] != null && data["longitude"] != null) {
+        final newLatLng =
+        LatLng(data["longitude"].toDouble(), data["latitude"].toDouble());
+
+        setState(() {
+          _markers.removeWhere((m) => m.markerId.value == "technician");
+          _markers.add(Marker(
+            markerId: MarkerId("technician"),
+            position: newLatLng,
+            infoWindow: InfoWindow(title: "Ambulance"),
+            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+          ));
+        });
+
+        _mapController?.animateCamera(CameraUpdate.newLatLng(newLatLng));
+        _setMarkersAndPolyline(data["longitude"].toDouble(), data["latitude"].toDouble());
+      }
+
+    });
   }
 
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
   }
 
-  void _setMarkersAndPolyline() {
+  void _setMarkersAndPolyline(endLat, endLang) {
+    startLat = widget.getBookingDetailResponse?.booking?.patientLocation?.coordinates?[1];
+    startLang = widget.getBookingDetailResponse?.booking?.patientLocation?.coordinates?[0];
+    endLat = widget.getBookingDetailResponse?.booking?.destinationLocation?.coordinates?[1];
+    endLang = widget.getBookingDetailResponse?.booking?.destinationLocation?.coordinates?[0];
     _markers.add(
       Marker(
         markerId: MarkerId('start'),
-        position: LatLng(widget.langForDrawMap!.startLat!.toDouble(), widget.langForDrawMap!.startLang!.toDouble()),
+        position: LatLng(startLat ?? 0.0, startLang ?? 0.0),
         infoWindow: InfoWindow(title: 'Patient'),
       ),
     );
@@ -53,8 +109,8 @@ class _PatientDrawMapPageState extends State<PatientDrawMapPage> {
     _markers.add(
       Marker(
         markerId: MarkerId('end'),
-        position: LatLng(widget.langForDrawMap!.endLang!.toDouble(), widget.langForDrawMap!.endLat!.toDouble()),
-        infoWindow: InfoWindow(title: 'Hospital'),
+        position: LatLng(endLat ?? 0.0, endLang ?? 0.0),
+        infoWindow: InfoWindow(title: 'Technician'),
 
       ),
     );
@@ -66,27 +122,33 @@ class _PatientDrawMapPageState extends State<PatientDrawMapPage> {
         jointType: JointType.round,
 
         points: [
-          LatLng(widget.langForDrawMap!.startLat!.toDouble(), widget.langForDrawMap!.startLang!.toDouble()),
-          LatLng(widget.langForDrawMap!.endLang!.toDouble(), widget.langForDrawMap!.endLat!.toDouble()),
+          LatLng(startLat ?? 0.0, startLang ?? 0.0),
+          LatLng(endLat ?? 0.0, endLang ?? 0.0),
         ],
         color: Colors.red,
         width: 4,
       ),
     );
+
   }
 
   void _calculateDistance() {
     double distanceInMeters = Geolocator.distanceBetween(
-      widget.langForDrawMap!.startLat!.toDouble(),
-      widget.langForDrawMap!.startLang!.toDouble(),
-      widget.langForDrawMap!.endLang!.toDouble(),
-      widget.langForDrawMap!.endLat!.toDouble(),
+        startLat ?? 0.0, startLang ?? 0.0,
+        endLat ?? 0.0, endLang ?? 0.0
     );
 
     double distanceInKm = distanceInMeters / 1000;
     print('Distance: ${distanceInKm.toStringAsFixed(2)} km');
   }
 
+  @override
+  void dispose() {
+    socket.dispose();
+    timer?.cancel();
+    WakelockPlus.disable();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +161,7 @@ class _PatientDrawMapPageState extends State<PatientDrawMapPage> {
             GoogleMap(
               onMapCreated: _onMapCreated,
               initialCameraPosition: CameraPosition(
-                target: LatLng(widget.langForDrawMap!.startLat!.toDouble(), widget.langForDrawMap!.startLang!.toDouble()),
+                target: LatLng(startLat ?? 0.0, startLang ?? 0.0),
                 zoom: 11.0,
               ),
               markers: _markers,

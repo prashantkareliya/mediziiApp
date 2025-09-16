@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medizii/components/custom_loader.dart';
 import 'package:medizii/components/custom_loading_wrapper.dart';
+import 'package:medizii/components/no_data_screen.dart';
 import 'package:medizii/components/sharedPreferences_service.dart';
 import 'package:medizii/constants/app_colours/app_colors.dart';
 import 'package:medizii/constants/helpers.dart';
@@ -16,6 +17,7 @@ import 'package:medizii/module/dashboards/doctor/data/doctor_datasource.dart';
 import 'package:medizii/module/dashboards/doctor/data/doctor_repository.dart';
 import 'package:medizii/module/dashboards/doctor/dr_home/dr_patient_detail_pg.dart';
 import 'package:medizii/module/dashboards/doctor/model/get_all_doctor_response.dart';
+import 'package:medizii/module/dashboards/doctor/model/get_recent_patient_response.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 
@@ -31,13 +33,13 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
 
   DoctorBloc doctorBloc = DoctorBloc(DoctorRepository(doctorDatasource: DoctorDatasource()));
   bool showSpinner = false;
-  GetAllPatientResponse? patientResponse;
-  List<PatientData>? patients = [];
+  GetRecentPatientResponse? recentPatientResponse;
+
 
   @override
   void initState() {
     super.initState();
-    doctorBloc.add(GetAllPatientEvent(name: ""));
+    doctorBloc.add(RecentPatientEvent());
   }
 
 
@@ -107,10 +109,7 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
               }
               if (state is LoadedState) {
                 showSpinner = false;
-                patientResponse = state.data;
-                if (patientResponse != null) {
-                  patients = patientResponse?.patientData;
-                }
+                recentPatientResponse = state.data;
               }
             },
             builder: (context, state) {
@@ -126,12 +125,13 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                             style: GoogleFonts.dmSans(fontSize: 16.sp, fontWeight: FontWeight.w700, color: Colors.black87)),
                       ),
                       Expanded(
-                        child: ListView.separated(
+                        child: (recentPatientResponse?.patients ?? []).isEmpty ? NoDataScreen(textString: "No recent patient"):
+                        ListView.separated(
                           padding: EdgeInsets.fromLTRB(18.sp, 10.sp, 18.sp, 10.sp),
-                          itemCount: patients?.length ?? 0,
+                          itemCount: recentPatientResponse?.patients?.length ?? 0,
                           separatorBuilder: (_, __) => 12.verticalSpace,
                           itemBuilder: (context, index) {
-                            final patient = patients?[index];
+                            final patient = recentPatientResponse?.patients?[index];
                             return GestureDetector(
                               onTap: () {
                                 navigationService.push(DoctorPatientDetailPg(patient?.sId));

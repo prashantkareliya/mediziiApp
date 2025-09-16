@@ -4,8 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 
 class NoDataScreen extends StatelessWidget {
   String? data;
+  String? textString;
 
-  NoDataScreen({this.data, super.key});
+  NoDataScreen({this.data, this.textString, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class NoDataScreen extends StatelessWidget {
             Image.asset("assets/images/profile.png", height: 70.sp),
             SizedBox(height: 20.sp),
             Text(
-              "No data \nPlease search",
+              textString ?? "No data \nPlease search",
               textAlign: TextAlign.center,
               maxLines: 2,
               style: GoogleFonts.dmSans(

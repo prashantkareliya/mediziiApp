@@ -94,7 +94,7 @@ class PatientHomePage extends StatelessWidget {
                         BoxShadow(color: Colors.grey.withOpacity(0.1), spreadRadius: 2, blurRadius: 10, offset: const Offset(0, 5)),
                       ],
                     ),
-                    child: Column(
+                    child: /*Column(
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -173,7 +173,7 @@ class PatientHomePage extends StatelessWidget {
                           ),
                         ),
                       ],
-                    ),
+                    )*/Assets.images.noActiveRide.image()
                   ),
                   20.verticalSpace,
                   _buildHealthCard(

@@ -4,6 +4,7 @@ import 'package:medizii/module/dashboards/Technician/model/get_technician_by_id.
 import 'package:medizii/module/dashboards/Technician/model/tc_accept_reject_request.dart';
 import 'package:medizii/module/dashboards/Technician/model/tc_accept_reject_response.dart';
 import 'package:medizii/module/dashboards/doctor/model/delete_doctor_response.dart';
+import 'package:medizii/module/dashboards/patient/model/get_ride_history_response.dart';
 import 'package:meta/meta.dart';
 
 part 'technician_event.dart';
@@ -19,6 +20,7 @@ class TechnicianBloc extends Bloc<TechnicianEvent, TechnicianState> {
     on<DeleteTechnicianEvent>((event, emit) => _deleteTechnician(event, emit));
     on<EmsBookingAcceptEvent>((event, emit) => emsBookingAccept(event, emit));
     on<EmsBookingRejectEvent>((event, emit) => emsBookingReject(event, emit));
+    on<GetRideHistoryEvent>((event, emit) => getRideHistory(event, emit));
 
   }
 
@@ -86,5 +88,19 @@ class TechnicianBloc extends Bloc<TechnicianEvent, TechnicianState> {
     );
   }
 
+  getRideHistory(GetRideHistoryEvent event, Emitter<TechnicianState> emit) async {
+    emit(LoadingState(true));
+    final response = await technicianRepository.getRideHistory(event.id);
+    response.when(
+      success: (success) {
+        emit(LoadingState(false));
+        emit(LoadedState<GetRideHistoryResponse>(data: success));
+      },
+      failure: (failure) {
+        emit(LoadingState(false));
+        emit(FailureState(failure.toString()));
+      },
+    );
+  }
 
 }

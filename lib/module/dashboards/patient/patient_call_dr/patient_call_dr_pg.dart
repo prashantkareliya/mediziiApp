@@ -26,7 +26,7 @@ class PatientCallDrPage extends StatefulWidget {
 }
 
 class _PatientCallDrPageState extends State<PatientCallDrPage> {
-  String selectedSpecialty = 'Cardiologist';
+  //String selectedSpecialty = 'Cardiologist';
   final prefs = PreferenceService().prefs;
 
   TextEditingController searchController = TextEditingController();
@@ -135,7 +135,7 @@ class _PatientCallDrPageState extends State<PatientCallDrPage> {
       backgroundColor: AppColors.whiteColor,
       appBar: CustomAppBar(
         title: LabelString.labelCallDoctor,
-        isNotification: true,
+        isNotification: false,
       ),
       body: BlocConsumer<PatientBloc, PatientState>(
         bloc: patientBloc,
@@ -150,11 +150,14 @@ class _PatientCallDrPageState extends State<PatientCallDrPage> {
           if (state is LoadedState) {
             showSpinner = false;
             doctorResponse = state.data;
+
             if (doctorResponse != null) {
-              doctors = doctorResponse?.doctorData;
+              doctors = doctorResponse?.doctorData ?? [];
               doctorsTypes = doctors!.map((doc) => doc.type.toString()).toSet().toList();
-              //filterDoctorsByType(selectedSpecialtyNotifier.value);
-              filteredDoctors = doctors?.where((doctor) => doctor.type == selectedSpecialtyNotifier.value).toList();
+              doctorsTypes!.sort();
+              doctorsTypes!.insert(0, 'All');
+              filteredDoctors = List.from(doctors!);
+              selectedSpecialtyNotifier.value = 'All';
             }
           }
         },
@@ -194,9 +197,16 @@ class _PatientCallDrPageState extends State<PatientCallDrPage> {
                             bool isSelected = doctorsTypes?[index] == selectedSpecialty;
                             return GestureDetector(
                               onTap: () {
-                                selectedSpecialtyNotifier.value = doctorsTypes![index];
                                 final selectedType = doctorsTypes![index];
                                 selectedSpecialtyNotifier.value = selectedType;
+                                setState(() {
+                                  if (selectedType == 'All') {
+                                    filteredDoctors = List.from(doctors!);
+                                  } else {
+                                    filteredDoctors = doctors?.where((doctor) =>
+                                    doctor.type?.toLowerCase().trim() == selectedType.toLowerCase().trim()).toList();
+                                  }
+                                });
                               },
                               child: Container(
                                 margin: EdgeInsets.only(right: 12.sp),
@@ -212,8 +222,7 @@ class _PatientCallDrPageState extends State<PatientCallDrPage> {
                                     style: GoogleFonts.dmSans(
                                       color: isSelected ? AppColors.blueColor : AppColors.blackColor,
                                       fontSize: 12.sp,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                        fontWeight: FontWeight.w600),
                                   ),
                                 ),
                               ),
@@ -230,14 +239,11 @@ class _PatientCallDrPageState extends State<PatientCallDrPage> {
                       itemBuilder: (context, index) {
                         return DoctorCard(
                           doctor: filteredDoctors?[index],
-                          onAudioCall: () async {
+                          onAudioCall: () {
                             Helpers.startCall(filteredDoctors![index].phone);
-                            // _startAudioCall(filteredDoctors![index]);
-                            /*launchUrlString("tel://${filteredDoctors![index].phone}",
-                                mode: LaunchMode.platformDefault);*/
                           },
                           onVideoCall: () {
-                            //_startVideoCall(filteredDoctors![index]);
+                            Helpers.startCall(filteredDoctors![index].phone);
                           },
                         );
                       },

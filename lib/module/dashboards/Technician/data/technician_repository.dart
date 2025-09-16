@@ -8,6 +8,7 @@ import 'package:medizii/module/dashboards/Technician/model/get_technician_by_id.
 import 'package:medizii/module/dashboards/Technician/model/tc_accept_reject_request.dart';
 import 'package:medizii/module/dashboards/Technician/model/tc_accept_reject_response.dart';
 import 'package:medizii/module/dashboards/doctor/model/delete_doctor_response.dart';
+import 'package:medizii/module/dashboards/patient/model/get_ride_history_response.dart';
 
 class TechnicianRepository {
   TechnicianRepository({required TechnicianDatasource technicianDatasource}) : _technicianDatasource = technicianDatasource;
@@ -79,6 +80,23 @@ class TechnicianRepository {
         return ApiResult.success(data: technicianAcceptRejectResponse);
       } else {
         return ApiResult.failure(error: technicianAcceptRejectResponse.message.toString());
+      }
+    } catch (e) {
+      final message = HandleAPI.handleAPIError(e);
+      return ApiResult.failure(error: message);
+    }
+  }
+
+  Future<ApiResult<GetRideHistoryResponse>> getRideHistory(String id) async {
+    try {
+      final result = await _technicianDatasource.getRideHistory(id);
+
+      GetRideHistoryResponse getRideHistoryResponse = GetRideHistoryResponse.fromJson(result);
+
+      if (getRideHistoryResponse.error == ResponseStatus.success) {
+        return ApiResult.success(data: getRideHistoryResponse);
+      } else {
+        return ApiResult.failure(error: ErrorString.somethingWentWrong);
       }
     } catch (e) {
       final message = HandleAPI.handleAPIError(e);

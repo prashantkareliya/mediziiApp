@@ -5,7 +5,7 @@ class GetNearestHospitalResponse {
   GetNearestHospitalResponse({this.userLocation, this.nearestHospitals});
 
   GetNearestHospitalResponse.fromJson(Map<String, dynamic> json) {
-    userLocation = json['userLocation'].cast<double>();
+  //  userLocation = json['userLocation'].cast<double>() ?? [];
     if (json['nearestHospitals'] != null) {
       nearestHospitals = <NearestHospitals>[];
       json['nearestHospitals'].forEach((v) {

@@ -41,4 +41,10 @@ class PatientDatasource extends HttpActions {
     debugPrint("ems booking detail-  $response");
     return response;
   }
+
+  Future<dynamic> getRideHistory(String id) async {
+    final response = await getMethodWithQueryParam(ApiEndPoint.technicianRideHistory("68b588927332382a9925a6e6"));
+    debugPrint("get ride history-  $response");
+    return response;
+  }
 }

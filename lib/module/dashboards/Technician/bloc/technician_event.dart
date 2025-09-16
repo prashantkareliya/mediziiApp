@@ -24,3 +24,9 @@ class EmsBookingRejectEvent extends TechnicianEvent {
   final TechnicianAcceptRejectRequest technicianAcceptRejectRequest;
   EmsBookingRejectEvent(this.technicianAcceptRejectRequest);
 }
+
+class GetRideHistoryEvent extends TechnicianEvent {
+  String id;
+
+  GetRideHistoryEvent(this.id);
+}

@@ -88,6 +88,10 @@ class $AssetsIcIconsGen {
   /// File path: assets/ic_icons/close.svg
   SvgGenImage get close => const SvgGenImage('assets/ic_icons/close.svg');
 
+  /// File path: assets/ic_icons/ic_hospital.png
+  AssetGenImage get icHospital =>
+      const AssetGenImage('assets/ic_icons/ic_hospital.png');
+
   /// File path: assets/ic_icons/ic_placeholder.svg
   SvgGenImage get icPlaceholder =>
       const SvgGenImage('assets/ic_icons/ic_placeholder.svg');
@@ -97,7 +101,7 @@ class $AssetsIcIconsGen {
       const SvgGenImage('assets/ic_icons/upload_file.svg');
 
   /// List of all assets
-  List<SvgGenImage> get values => [
+  List<dynamic> get values => [
     amulance,
     callDoc,
     call,
@@ -121,6 +125,7 @@ class $AssetsIcIconsGen {
     upload,
     video,
     close,
+    icHospital,
     icPlaceholder,
     uploadFile,
   ];
@@ -139,8 +144,15 @@ class $AssetsImagesGen {
   /// File path: assets/images/home_bg.png
   AssetGenImage get homeBg => const AssetGenImage('assets/images/home_bg.png');
 
+  /// File path: assets/images/no_active_ride.png
+  AssetGenImage get noActiveRide =>
+      const AssetGenImage('assets/images/no_active_ride.png');
+
   /// File path: assets/images/no_ride.png
   AssetGenImage get noRide => const AssetGenImage('assets/images/no_ride.png');
+
+  /// File path: assets/images/profile.png
+  AssetGenImage get profile => const AssetGenImage('assets/images/profile.png');
 
   /// File path: assets/images/technician_bg.png
   AssetGenImage get technicianBg =>
@@ -151,7 +163,9 @@ class $AssetsImagesGen {
     bg,
     drHomeBg,
     homeBg,
+    noActiveRide,
     noRide,
+    profile,
     technicianBg,
   ];
 }

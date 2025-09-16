@@ -9,6 +9,7 @@ import 'package:medizii/module/dashboards/patient/model/ems_booking_request.dart
 import 'package:medizii/module/dashboards/patient/model/ems_booking_response.dart';
 import 'package:medizii/module/dashboards/patient/model/get_all_doctor_response.dart';
 import 'package:medizii/module/dashboards/patient/model/get_booking_detail_response.dart';
+import 'package:medizii/module/dashboards/patient/model/get_ride_history_response.dart';
 import 'package:medizii/module/dashboards/patient/model/upload_document_response.dart';
 import 'package:medizii/module/dashboards/patient/model/upload_report_request.dart';
 
@@ -114,6 +115,23 @@ class PatientRepository {
 
       if (getBookingDetailResponse.success == ResponseStatus.failed) {
         return ApiResult.success(data: getBookingDetailResponse);
+      } else {
+        return ApiResult.failure(error: ErrorString.somethingWentWrong);
+      }
+    } catch (e) {
+      final message = HandleAPI.handleAPIError(e);
+      return ApiResult.failure(error: message);
+    }
+  }
+
+  Future<ApiResult<GetRideHistoryResponse>> getRideHistory(String id) async {
+    try {
+      final result = await _patientDatasource.getRideHistory(id);
+
+      GetRideHistoryResponse getRideHistoryResponse = GetRideHistoryResponse.fromJson(result);
+
+      if (getRideHistoryResponse.error == ResponseStatus.success) {
+        return ApiResult.success(data: getRideHistoryResponse);
       } else {
         return ApiResult.failure(error: ErrorString.somethingWentWrong);
       }

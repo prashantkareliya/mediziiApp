@@ -23,6 +23,7 @@ import 'package:medizii/module/dashboards/patient/model/ems_booking_response.dar
 import 'package:medizii/module/dashboards/patient/model/get_booking_detail_response.dart';
 import 'package:medizii/module/dashboards/patient/patient_book_ems/pt_confirm_location_pg.dart';
 import 'package:medizii/module/dashboards/patient/patient_book_ems/pt_draw_map_pg.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class PatientBookEmsFormPage extends StatefulWidget {
   LatLangForDrawMap? langForDrawMap;
@@ -61,14 +62,7 @@ class _PatientBookEmsFormPageState extends State<PatientBookEmsFormPage> {
     super.initState();
     nameCtrl.text = (prefs.getString(PreferenceString.prefsName) ?? "").toString();
     phoneCtrl.text = (prefs.getString(PreferenceString.prefsPhone) ?? "").toString();
-    initFcm();
-  }
-
-  void initFcm() async {
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
-    await messaging.requestPermission();
-    fcmToken = await messaging.getToken();
-    print("Patient FCM token $fcmToken");
+    initFcmAndSocket();
   }
 
   PatientBloc patientBloc = PatientBloc(PatientRepository(patientDatasource: PatientDatasource()));
@@ -76,6 +70,45 @@ class _PatientBookEmsFormPageState extends State<PatientBookEmsFormPage> {
 
   EmsBookingResponse? emsBookingResponse;
   GetBookingDetailResponse? getBookingDetailResponse;
+
+  late IO.Socket socket;
+
+  Future<void> initFcmAndSocket() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    NotificationSettings settings = await messaging.requestPermission();
+    fcmToken = await messaging.getToken();
+    print("FCM token: $fcmToken");
+
+    socket = IO.io("https://medizii.onrender.com", <String, dynamic>{
+      'transports': ['websocket'],
+      'autoConnect': true,
+    });
+
+    socket.onConnect((_) {
+      print("Socket connected: ${socket.id}");
+      socket.emit("patient_online", {"patientId": prefs.getString(PreferenceString.prefsUserId), "device_token": fcmToken});
+    });
+
+    socket.on("booking_confirmed", (data) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(data['message'] ?? "Ambulance confirmed 🚑")));
+      if (data != null) {
+        GetBookingDetailRequest getBookingDetailRequest = GetBookingDetailRequest(bookingId: emsBookingResponse?.bookingId);
+        patientBloc.add(BookingDetailEvent(getBookingDetailRequest));
+      }
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('Message clicked!: ${message.data}');
+      final bookingId = message.data['patientId'];
+    });
+  }
+
+  @override
+  void dispose() {
+    socket.dispose();
+    socket.disconnected;
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,14 +129,10 @@ class _PatientBookEmsFormPageState extends State<PatientBookEmsFormPage> {
             if (state.data is GetBookingDetailResponse) {
               showSpinner = false;
               getBookingDetailResponse = state.data;
-              navigationService.push(PatientDrawMapPage(widget.langForDrawMap, getBookingDetailResponse));
+              navigationService.push(PatientDrawMapPage(getBookingDetailResponse));
             } else {
               emsBookingResponse = state.data;
               Helpers.showSnackBar(context, emsBookingResponse?.message ?? "");
-              if (state.data != null) {
-                GetBookingDetailRequest getBookingDetailRequest = GetBookingDetailRequest(bookingId: emsBookingResponse?.bookingId);
-                patientBloc.add(BookingDetailEvent(getBookingDetailRequest));
-              }
             }
           }
         },

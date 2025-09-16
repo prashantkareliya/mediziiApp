@@ -6,6 +6,7 @@ import 'package:medizii/module/dashboards/doctor/model/delete_doctor_response.da
 import 'package:medizii/module/dashboards/doctor/model/get_all_doctor_response.dart';
 import 'package:medizii/module/dashboards/doctor/model/get_doctor_by_id_response.dart';
 import 'package:medizii/module/dashboards/doctor/model/get_patient_detail.dart';
+import 'package:medizii/module/dashboards/doctor/model/get_recent_patient_response.dart';
 
 import 'doctor_datasource.dart';
 
@@ -93,5 +94,20 @@ class DoctorRepository {
     }
   }
 
+  Future<ApiResult<GetRecentPatientResponse>> recentPatient() async {
+    try {
+      final result = await _doctorDatasource.getRecentPatient();
 
+      GetRecentPatientResponse getRecentPatientResponse = GetRecentPatientResponse.fromJson(result);
+
+      if (getRecentPatientResponse.success == ResponseStatus.failed) {
+        return ApiResult.success(data: getRecentPatientResponse);
+      } else {
+        return ApiResult.failure(error: ErrorString.somethingWentWrong);
+      }
+    } catch (e) {
+      final message = HandleAPI.handleAPIError(e);
+      return ApiResult.failure(error: message);
+    }
+  }
 }

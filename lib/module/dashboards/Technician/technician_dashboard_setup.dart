@@ -23,6 +23,7 @@ import 'package:medizii/module/dashboards/Technician/tc_setting/tc_setting_pg.da
 import 'package:medizii/module/dashboards/Technician/tc_upload_reports/tc_search_patient_pg.dart';
 import 'package:medizii/module/dashboards/bottom_bav_provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 class TechnicianDashboard extends StatefulWidget {
   TechnicianDashboard({super.key});
@@ -43,6 +44,8 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
   void initState() {
     super.initState();
     initFcmAndSocket();
+    WakelockPlus.enable();
+
   }
 
   Future<void> initFcmAndSocket() async {
@@ -170,6 +173,8 @@ class _TechnicianDashboardState extends State<TechnicianDashboard> {
   void dispose() {
     stopSendingLocation();
     socket.dispose();
+    socket.disconnected;
+    WakelockPlus.disable();
     super.dispose();
   }
 

@@ -63,6 +63,9 @@ class ApiEndPoint {
   static String patientDelete(String id) => "patient/delete/$id";
   static String technicianDelete(String id) => "technician/delete/$id";
 
+  static String technicianRideHistory(String id) => "technician/ridehistory/$id";
+  static String patientRideHistory(String id) => "patient/ridehistory/$id";
+
 
   static String uploadReport(String id) => "report/upload/$id";
 
@@ -77,6 +80,7 @@ class ApiEndPoint {
   static const String getContactUs = "api/contact-us";
   static const String getAboutUs = "api/about-us";
   static const String getPrivacyPolicy = "api/privacy-policy";
+  static const String getRecentPatient = "doctor/recentpatient";
 
   static String getNearestHospital(String lat, String lang) => "patient/nearest-hospital?lng=$lat&lat=$lang";
 }

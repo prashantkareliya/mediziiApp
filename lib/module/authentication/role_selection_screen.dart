@@ -59,7 +59,7 @@ class RoleSelectionScreen extends StatelessWidget {
             height: 45.h,
             text: LabelString.labelContinue,
             onPressed: () {
-              navigationService.push(AuthScreen(true, selectedRole: selectedRole));
+              navigationService.pushReplacement(AuthScreen(true, selectedRole: selectedRole));
             },
           ),
         ],

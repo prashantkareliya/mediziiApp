@@ -45,4 +45,10 @@ class DoctorDatasource extends HttpActions {
     debugPrint("doctor delete -  $response");
     return response;
   }
+
+  getRecentPatient() async {
+    final response = await getMethod(ApiEndPoint.getRecentPatient);
+    debugPrint("get Recent Patient ==== > $response");
+    return response;
+  }
 }

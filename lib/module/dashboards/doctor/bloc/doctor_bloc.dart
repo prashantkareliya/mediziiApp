@@ -4,6 +4,7 @@ import 'package:medizii/module/dashboards/doctor/data/doctor_repository.dart';
 import 'package:medizii/module/dashboards/doctor/model/delete_doctor_response.dart';
 import 'package:medizii/module/dashboards/doctor/model/get_all_doctor_response.dart';
 import 'package:medizii/module/dashboards/doctor/model/get_doctor_by_id_response.dart';
+import 'package:medizii/module/dashboards/doctor/model/get_recent_patient_response.dart';
 
 import '../model/get_patient_detail.dart';
 import 'doctor_event.dart';
@@ -19,6 +20,7 @@ class DoctorBloc extends Bloc<DoctorEvent, DoctorState> {
     on<GetAllPatientEvent>((event, emit) => _getAllPatient(event, emit));
     on<GetDoctorByIdEvent>((event, emit) => _getDoctor(event, emit));
     on<DeleteDoctorEvent>((event, emit) => _deleteDoctor(event, emit));
+    on<RecentPatientEvent>((event, emit) => _recentPatient(event, emit));
   }
 
   _getPatient(GetPatientByIdEvent event, Emitter<DoctorState> emit) async {
@@ -79,6 +81,21 @@ class DoctorBloc extends Bloc<DoctorEvent, DoctorState> {
       success: (success) {
         emit(LoadingState(false));
         emit(LoadedState<DeleteDoctorResponse>(data: success));
+      },
+      failure: (failure) {
+        emit(LoadingState(false));
+        emit(FailureState(failure.toString()));
+      },
+    );
+  }
+
+  _recentPatient(RecentPatientEvent event, Emitter<DoctorState> emit) async {
+    emit(LoadingState(true));
+    final response = await doctorRepository.recentPatient();
+    response.when(
+      success: (success) {
+        emit(LoadingState(false));
+        emit(LoadedState<GetRecentPatientResponse>(data: success));
       },
       failure: (failure) {
         emit(LoadingState(false));

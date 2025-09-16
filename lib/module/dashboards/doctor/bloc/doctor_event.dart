@@ -34,3 +34,7 @@ class DeleteDoctorEvent extends DoctorEvent {
   String id;
   DeleteDoctorEvent(this.id);
 }
+
+class RecentPatientEvent extends DoctorEvent {
+  RecentPatientEvent();
+}

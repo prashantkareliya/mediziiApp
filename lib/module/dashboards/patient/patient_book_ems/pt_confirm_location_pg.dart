@@ -65,7 +65,7 @@ class _PtConfirmLocationPageState extends State<PtConfirmLocationPage> {
   GoogleMapController? mapController;
   final Set<Marker> _markers = {};
   Set<Marker> newMarkers = {};
-  LatLng? _currentPosition;
+  LatLng _currentPosition =  LatLng(28.6139, 77.2090);
   String? _currentLat;
   String? _currentLang;
 
@@ -116,7 +116,7 @@ class _PtConfirmLocationPageState extends State<PtConfirmLocationPage> {
     String address = await getAddressFromLatLng(position.latitude, position.longitude);
     debugPrint(address);
     pickLocationController.text = address;
-    authBloc.add(NearestHospitalEvent(lat: "77.2043418", lang: "28.5686110"));
+    authBloc.add(NearestHospitalEvent(lat: position.longitude.toString(), lang: position.latitude.toString()));
   }
 
   Future<String> getAddressFromLatLng(double latitude, double longitude) async {
@@ -167,9 +167,9 @@ class _PtConfirmLocationPageState extends State<PtConfirmLocationPage> {
             nearestHospitalResponse = state.data;
             nearestHospital = nearestHospitalResponse?.nearestHospitals;
 
-            for (var hospital in nearestHospital!) {
+            for (var hospital in nearestHospital ?? []) {
               final coordinates = hospital.location?.coordinates;
-              final LatLng position = LatLng(coordinates![1], coordinates[0]);
+              final LatLng position = LatLng(coordinates![0], coordinates[1]);
               final String name = hospital.name ?? "";
               final String address = hospital.address ?? "";
 
@@ -202,6 +202,7 @@ class _PtConfirmLocationPageState extends State<PtConfirmLocationPage> {
                 );
               }
             });
+
           }
         },
         builder: (context, state) {
@@ -213,7 +214,7 @@ class _PtConfirmLocationPageState extends State<PtConfirmLocationPage> {
                 GoogleMap(
                     onMapCreated: _onMapCreated,
                     initialCameraPosition: CameraPosition(
-                        target: _currentPosition ?? LatLng(28.6139, 77.2090),
+                        target: _currentPosition,
                         zoom: 10.0
                     ),
                     markers: _markers,

@@ -7,6 +7,7 @@ import 'package:medizii/module/dashboards/patient/model/ems_booking_request.dart
 import 'package:medizii/module/dashboards/patient/model/ems_booking_response.dart';
 import 'package:medizii/module/dashboards/patient/model/get_all_doctor_response.dart';
 import 'package:medizii/module/dashboards/patient/model/get_booking_detail_response.dart';
+import 'package:medizii/module/dashboards/patient/model/get_ride_history_response.dart';
 import 'package:medizii/module/dashboards/patient/model/upload_document_response.dart';
 import 'package:medizii/module/dashboards/patient/model/upload_report_request.dart';
 import 'package:meta/meta.dart';
@@ -25,6 +26,7 @@ class PatientBloc extends Bloc<PatientEvent, PatientState> {
     on<UploadReportImagesEvent>((event, emit) => _uploadReport(event, emit));
     on<EmsBookingEvent>((event, emit) => emsBooking(event, emit));
     on<BookingDetailEvent>((event, emit) => bookingDetail(event, emit));
+    on<GetRideHistoryEvent>((event, emit) => getRideHistory(event, emit));
 
   }
 
@@ -103,6 +105,21 @@ class PatientBloc extends Bloc<PatientEvent, PatientState> {
       success: (success) {
         emit(LoadingState(false));
         emit(LoadedState<GetBookingDetailResponse>(data: success));
+      },
+      failure: (failure) {
+        emit(LoadingState(false));
+        emit(FailureState(failure.toString()));
+      },
+    );
+  }
+
+  getRideHistory(GetRideHistoryEvent event, Emitter<PatientState> emit) async {
+    emit(LoadingState(true));
+    final response = await patientRepository.getRideHistory(event.id);
+    response.when(
+      success: (success) {
+        emit(LoadingState(false));
+        emit(LoadedState<GetRideHistoryResponse>(data: success));
       },
       failure: (failure) {
         emit(LoadingState(false));

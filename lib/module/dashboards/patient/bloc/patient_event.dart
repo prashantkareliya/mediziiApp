@@ -36,3 +36,8 @@ class BookingDetailEvent extends PatientEvent {
 
   BookingDetailEvent(this.getBookingDetailRequest);
 }
+
+class GetRideHistoryEvent extends PatientEvent {
+  String id;
+  GetRideHistoryEvent(this.id);
+}

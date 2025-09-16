@@ -76,7 +76,7 @@ class _DoctorSearchPatientPageState extends State<DoctorSearchPatientPage> {
                 padding: EdgeInsets.all(12.sp),
                 child: Assets.icIcons.search.svg(colorFilter: ColorFilter.mode(AppColors.redColor, BlendMode.srcIn)),
               ),
-              hintText: LabelString.labelSearchHint,
+              hintText: LabelString.labelSearchPatient,
               onChange: (value) {
                 debounce.run(() {
                   doctorBloc.add(GetAllPatientEvent(name: searchController.text));
@@ -113,7 +113,7 @@ class _DoctorSearchPatientPageState extends State<DoctorSearchPatientPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
-                          child: searchController.text.isEmpty ? NoDataScreen() :
+                          child: searchController.text.isEmpty ? NoDataScreen(textString: "Search Patient & \nupload document") :
                           ListView.separated(
                             itemCount: patients?.length ?? 0,
                             separatorBuilder: (_, __) => 12.verticalSpace,

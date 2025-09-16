@@ -1,12 +1,8 @@
-import 'dart:async';
-
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:medizii/components/sharedPreferences_service.dart';
 import 'package:medizii/constants/app_colours/app_colors.dart';
 import 'package:medizii/constants/strings.dart';
 import 'package:medizii/gen/assets.gen.dart';
@@ -14,7 +10,6 @@ import 'package:medizii/module/dashboards/patient/patient_book_ems/patient_book_
 import 'package:medizii/module/dashboards/patient/patient_call_dr/patient_call_dr_pg.dart';
 import 'package:medizii/module/dashboards/patient/patient_home/patient_home_pg.dart';
 import 'package:medizii/module/dashboards/patient/patient_setting/patient_setting_pg.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../bottom_bav_provider.dart';
 
@@ -27,54 +22,6 @@ class PatientDashboard extends StatefulWidget {
 
 class _PatientDashboardState extends State<PatientDashboard> {
   final List<Widget> _screens = [PatientHomePage(), PatientCallDrPage(), PatientBookEmsPage(), PatientSettingPage()];
-
-  final prefs = PreferenceService().prefs;
-  late IO.Socket socket;
-  String? fcmToken;
-
-  @override
-  void initState() {
-    super.initState();
-    initFcmAndSocket();
-  }
-
-  Future<void> initFcmAndSocket() async {
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
-    NotificationSettings settings = await messaging.requestPermission();
-    fcmToken = await messaging.getToken();
-    print("FCM token: $fcmToken");
-    // connect socket
-    socket = IO.io("https://medizii.onrender.com", <String, dynamic>{
-      'transports': ['websocket'],
-      'autoConnect': true,
-    });
-
-    socket.onConnect((_) {
-      print("Socket connected: ${socket.id}");
-      socket.emit("patient_online", {"patientId": prefs.getString(PreferenceString.prefsUserId), "device_token": fcmToken});
-    });
-
-    socket.on("booking_confirmed", (data) {
-      print("📩 Booking confirmed: $data");
-      // show notification in-app
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(data['message'] ?? "Ambulance confirmed 🚑")));
-      // You can also navigate to tracking screen with bookingId
-    });
-
-    // handle when the app is opened from FCM (background/terminated)
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('Message clicked!: ${message.data}');
-      // You can navigate to booking screen and then accept via socket
-      final bookingId = message.data['patientId'];
-      // show accept UI too
-    });
-  }
-
-  @override
-  void dispose() {
-    socket.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {

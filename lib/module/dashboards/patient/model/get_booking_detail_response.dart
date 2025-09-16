@@ -231,7 +231,7 @@ class Technician {
   String? createdAt;
   String? updatedAt;
   int? iV;
-  Null? socketId;
+  String? socketId;
   String? fcmToken;
   CurrentBooking? currentBooking;
 
